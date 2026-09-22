@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SiNG BOX Noraebang – premium private Korean karaoke rooms in Helsinki.">
+  <title>SiNG BOX | Premium Korean Karaoke Helsinki</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Outfit:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="style-new.css">
+</head>
+
+<body>
+
+  <!-- =========================
+       HEADER
+  ========================== -->
+
+  <header class="site-header" id="top">
+
+    <div class="header-inner">
+
+      <a class="brand" href="#home" aria-label="SiNG BOX home">
+        <span class="brand-name">SiNG BOX</span>
+        <span class="brand-sub">NORAEBANG</span>
+      </a>
+
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-label="Open menu"
+        aria-expanded="false"
+      >
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="main-nav" aria-label="Main navigation">
+
+        <a href="#home" data-i18n="nav.home">
+          Home
+        </a>
+
+        <a href="#rooms" data-i18n="nav.rooms">
+          Rooms
+        </a>
+
+        <a href="#food" data-i18n="nav.food">
+          Food & Drinks
+        </a>
+
+        <a href="#experience" data-i18n="nav.experience">
+          Experience
+        </a>
+
+        <a href="#about" data-i18n="nav.about">
+          About
+        </a>
+
+        <a href="#contact" data-i18n="nav.contact">
+          Contact
+        </a>
+
+      </nav>
+
+      <div class="header-actions">
+
+        <div class="language-switcher" aria-label="Language">
+
+          <button
+            type="button"
+            class="lang-btn"
+            data-lang="fi"
+          >
+            FI
+          </button>
+
+          <span aria-hidden="true">|</span>
+
+          <button
+            type="button"
+            class="lang-btn active"
+            data-lang="en"
+          >
+            EN
+          </button>
+
+        </div>
+
+        <a class="outline-button header-book" href="#contact">
+
+          <span data-i18n="common.bookNow">
+            Book now
+          </span>
+
+          <span aria-hidden="true">→</span>
+
+        </a>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- =========================
+       MAIN
+  ========================== -->
+
+  <main>
+
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <section class="hero" id="home">
+
+      <div class="hero-copy">
+
+        <p
+          class="eyebrow"
+          data-i18n="hero.eyebrow"
+        >
+          Premium Korean karaoke in Helsinki
+        </p>
+
+        <h1 data-i18n="hero.title">
+          A little Seoul<br>
+          in your day.
+        </h1>
+
+        <div class="gold-line"></div>
+
+        <p
+          class="spaced-copy"
+          data-i18n="hero.tags"
+        >
+          Karaoke · Food · Drinks · Friends
+        </p>
+
+        <a class="pink-button" href="#rooms">
+
+          <span data-i18n="common.bookRoom">
+            Book a room
+          </span>
+
+          <span aria-hidden="true">→</span>
+
+        </a>
+
+        <span
+          class="scroll-label"
+          data-i18n="hero.scroll"
+        >
+          Scroll
+        </span>
+
+      </div>
+
+
+      <div
+        class="hero-image"
+        role="img"
+        aria-label="SiNG BOX premium karaoke entrance"
+      >
+
+        <div
+          class="hero-side-copy"
+          data-i18n="hero.side"
+        >
+          Good<br>
+          people<br>
+          good<br>
+          songs
+        </div>
+
+        <div
+          class="hero-city"
+          data-i18n="common.helsinki"
+        >
+          Helsinki
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         ROOMS INTRO
+    ========================== -->
+
+    <section
+      class="split-section rooms-intro"
+      id="rooms"
+    >
+
+      <div class="split-copy">
+
+        <p
+          class="eyebrow"
+          data-i18n="rooms.eyebrow"
+        >
+          Private karaoke rooms
+        </p>
+
+        <h2 data-i18n="rooms.title">
+          Find your<br>
+          vibe.
+        </h2>
+
+        <div class="gold-line"></div>
+
+        <p data-i18n="rooms.text">
+          Different rooms. Same great feeling.
+        </p>
+
+        <a
+          class="outline-button"
+          href="#room-list"
+        >
+
+          <span data-i18n="rooms.cta">
+            Explore rooms
+          </span>
+
+          <span aria-hidden="true">→</span>
+
+        </a>
+
+      </div>
+
+
+      <div
+        class="split-image rooms-image"
+        role="img"
+        aria-label="Private karaoke room"
+      >
+
+        <p
+          class="vertical-message"
+          data-i18n="rooms.imageText"
+        >
+          Music<br>
+          brings<br>
+          people<br>
+          together
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         ROOM LIST
+    ========================== -->
+
+    <section
+      class="room-list"
+      id="room-list"
+      aria-labelledby="room-list-title"
+    >
+
+      <div class="section-heading">
+
+        <p
+          class="eyebrow"
+          data-i18n="roomList.eyebrow"
+        >
+          Four atmospheres
+        </p>
+
+        <h2
+          id="room-list-title"
+          data-i18n="roomList.title"
+        >
+          Choose your room
+        </h2>
+
+        <p data-i18n="roomList.text">
+          From intimate nights to bigger celebrations.
+        </p>
+
+      </div>
+
+
+      <div class="room-grid">
+
+
+        <!-- GANGNAM -->
+
+        <article class="room-card">
+
+          <img
+            src="images/gangnam.png"
+            alt="Gangnam Lounge"
+          >
+
+          <div class="room-card-copy">
+
+            <h3 data-i18n="room.gangnam.name">
+              Gangnam Lounge
+            </h3>
+
+            <p data-i18n="room.gangnam.guests">
+              Up to 6 guests
+            </p>
+
+            <p data-i18n="room.gangnam.text">
+              Warm gold tones and a polished lounge atmosphere.
+            </p>
+
+          </div>
+
+        </article>
+
+
+        <!-- SEOUL -->
+
+        <article class="room-card">
+
+          <img
+            src="images/seoul.png"
+            alt="Seoul Lounge"
+          >
+
+          <div class="room-card-copy">
+
+            <h3 data-i18n="room.seoul.name">
+              Seoul Lounge
+            </h3>
+
+            <p data-i18n="room.seoul.guests">
+              Up to 6 guests
+            </p>
+
+            <p data-i18n="room.seoul.text">
+              Bold pink details with modern Seoul energy.
+            </p>
+
+          </div>
+
+        </article>
+
+
+        <!-- HONGDAE -->
+
+        <article class="room-card">
+
+          <img
+            src="images/hongdae.png"
+            alt="Hongdae Neon"
+          >
+
+          <div class="room-card-copy">
+
+            <h3 data-i18n="room.hongdae.name">
+              Hongdae Neon
+            </h3>
+
+            <p data-i18n="room.hongdae.guests">
+              Up to 4 guests
+            </p>
+
+            <p data-i18n="room.hongdae.text">
+              An intimate neon room inspired by Hongdae nightlife.
+            </p>
+
+          </div>
+
+        </article>
+
+
+        <!-- ITAEWON -->
+
+        <article class="room-card">
+
+          <img
+            src="images/itaewon.png"
+            alt="Itaewon Gold"
+          >
+
+          <div class="room-card-copy">
+
+            <h3 data-i18n="room.itaewon.name">
+              Itaewon Gold
+            </h3>
+
+            <p data-i18n="room.itaewon.guests">
+              Up to 4 guests
+            </p>
+
+            <p data-i18n="room.itaewon.text">
+              A darker, luxurious room with golden details.
+            </p>
+
+          </div>
+
+        </article>
+
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         FOOD & DRINKS
+    ========================== -->
+
+    <section
+      class="split-section food-section"
+      id="food"
+    >
+
+      <div
+        class="split-image food-image"
+        role="img"
+        aria-label="Korean food and cocktails"
+      ></div>
+
+
+      <div class="split-copy">
+
+        <p
+          class="eyebrow"
+          data-i18n="food.eyebrow"
+        >
+          Food & Drinks
+        </p>
+
+        <h2 data-i18n="food.title">
+          Good food.<br>
+          Better company.
+        </h2>
+
+        <div class="gold-line"></div>
+
+        <p data-i18n="food.text">
+          Korean flavours, creative cocktails and the perfect karaoke vibe.
+        </p>
+
+        <a
+          class="outline-button"
+          href="#menu"
+        >
+
+          <span data-i18n="food.cta">
+            View menu
+          </span>
+
+          <span aria-hidden="true">→</span>
+
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         MENU
+    ========================== -->
+
+    <section
+      class="menu-section"
+      id="menu"
+    >
+
+      <div class="section-heading">
+
+        <p
+          class="eyebrow"
+          data-i18n="menu.eyebrow"
+        >
+          Something for the table
+        </p>
+
+        <h2 data-i18n="menu.title">
+          Menu
+        </h2>
+
+        <p data-i18n="menu.text">
+          Drinks, snacks and sweets served directly to your karaoke room.
+        </p>
+
+      </div>
+
+
+      <div class="menu-columns">
+
+
+        <!-- NON ALCOHOLIC -->
+
+        <div class="menu-column">
+
+          <h3 data-i18n="menu.soft">
+            Non-alcoholic
+          </h3>
+
+          <p>
+            <span>Pepsi Max 0.5 l</span>
+            <strong>€3.50</strong>
+          </p>
+
+          <p>
+            <span>Jaffa</span>
+            <strong>€3.50</strong>
+          </p>
+
+          <p>
+            <span>
+              Novelle Plus Raspberry 0.33 l
+            </span>
+            <strong>€3.00</strong>
+          </p>
+
+        </div>
+
+
+        <!-- HOT DRINKS -->
+
+        <div class="menu-column">
+
+          <h3 data-i18n="menu.hot">
+            Hot drinks
+          </h3>
+
+          <p>
+
+            <span data-i18n="menu.coffee">
+              Coffee
+            </span>
+
+            <strong>€2.50</strong>
+
+          </p>
+
+          <p>
+
+            <span data-i18n="menu.tea">
+              Tea
+            </span>
+
+            <strong>€2.50</strong>
+
+          </p>
+
+        </div>
+
+
+        <!-- SNACKS -->
+
+        <div class="menu-column">
+
+          <h3 data-i18n="menu.snacks">
+            Snacks
+          </h3>
+
+          <p>
+
+            <span data-i18n="menu.popcorn">
+              Popcorn 0.5 l
+            </span>
+
+            <strong>€3.50</strong>
+
+          </p>
+
+          <p>
+
+            <span data-i18n="menu.fries">
+              French fries
+            </span>
+
+            <strong>€3.50</strong>
+
+          </p>
+
+          <p>
+
+            <span data-i18n="menu.nachos">
+              Nachos + salsa
+            </span>
+
+            <strong>€3.50</strong>
+
+          </p>
+
+        </div>
+
+
+        <!-- ALCOHOL -->
+
+        <div class="menu-column">
+
+          <h3 data-i18n="menu.alcohol">
+            Alcohol
+          </h3>
+
+          <p>
+            <span>Heineken 5% 0.5 l</span>
+            <strong>€8.50</strong>
+          </p>
+
+          <p>
+            <span>
+              Happy Joe Dry Apple 4.7% 0.5 l
+            </span>
+            <strong>€8.50</strong>
+          </p>
+
+          <p>
+            <span>
+              Long Drink Grapefruit 5.5% 0.5 l
+            </span>
+            <strong>€8.50</strong>
+          </p>
+
+        </div>
+
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         EXPERIENCE
+    ========================== -->
+
+    <section
+      class="experience-section"
+      id="experience"
+    >
+
+      <div class="section-heading narrow">
+
+        <p
+          class="eyebrow"
+          data-i18n="experience.eyebrow"
+        >
+          More than karaoke
+        </p>
+
+        <h2 data-i18n="experience.title">
+          Your own room.<br>
+          Your own night.
+        </h2>
+
+        <p data-i18n="experience.text">
+          Sing, eat, drink and spend the evening together
+          in your own private space.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         ABOUT
+    ========================== -->
+
+    <section
+      class="about-section"
+      id="about"
+    >
+
+      <div class="about-copy">
+
+        <p
+          class="eyebrow"
+          data-i18n="about.eyebrow"
+        >
+          A little Seoul in Helsinki
+        </p>
+
+        <h2 data-i18n="about.title">
+          Korean noraebang,<br>
+          made for your night.
+        </h2>
+
+        <p data-i18n="about.text">
+          SiNG BOX brings the private-room karaoke culture
+          of Korea to Helsinki with premium interiors,
+          food, drinks and a relaxed atmosphere.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         FINAL CTA
+    ========================== -->
+
+    <section
+      class="cta-section"
+      id="contact"
+    >
+
+      <div class="cta-content">
+
+        <p
+          class="eyebrow pink"
+          data-i18n="cta.eyebrow"
+        >
+          It's more than karaoke
+        </p>
+
+        <h2 data-i18n="cta.title">
+          Ready to sing?
+        </h2>
+
+        <a
+          class="pink-button"
+          href="mailto:booking@singbox.fi"
+        >
+
+          <span data-i18n="cta.button">
+            Book your room
+          </span>
+
+          <span aria-hidden="true">→</span>
+
+        </a>
+
+      </div>
+
+    </section>
+
+
+  </main>
+
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+
+  <footer class="site-footer">
+
+    <a
+      class="brand footer-brand"
+      href="#top"
+    >
+
+      <span class="brand-name">
+        SiNG BOX
+      </span>
+
+      <span class="brand-sub">
+        NORAEBANG
+      </span>
+
+    </a>
+
+
+    <nav
+      class="footer-nav"
+      aria-label="Footer navigation"
+    >
+
+      <a
+        href="#home"
+        data-i18n="nav.home"
+      >
+        Home
+      </a>
+
+      <a
+        href="#rooms"
+        data-i18n="nav.rooms"
+      >
+        Rooms
+      </a>
+
+      <a
+        href="#food"
+        data-i18n="nav.food"
+      >
+        Food & Drinks
+      </a>
+
+      <a
+        href="#experience"
+        data-i18n="nav.experience"
+      >
+        Experience
+      </a>
+
+      <a
+        href="#about"
+        data-i18n="nav.about"
+      >
+        About
+      </a>
+
+      <a
+        href="#contact"
+        data-i18n="nav.contact"
+      >
+        Contact
+      </a>
+
+    </nav>
+
+
+    <div
+      class="footer-socials"
+      aria-label="Social media"
+    >
+
+      <a href="#" aria-label="Instagram">
+        IG
+      </a>
+
+      <a href="#" aria-label="TikTok">
+        TT
+      </a>
+
+      <a href="#" aria-label="Spotify">
+        SP
+      </a>
+
+    </div>
+
+
+    <div class="footer-location">
+
+      <span data-i18n="common.helsinki">
+        Helsinki
+      </span>
+
+      <br>
+
+      <span data-i18n="common.finland">
+        Finland
+      </span>
+
+    </div>
+
+  </footer>
+
+
+  <!--
+    Kaikki käännettävät tekstit käyttävät data-i18n-avaimia.
+
+    script-new.js vaihtaa myöhemmin KAIKKI nämä tekstit
+    suomen ja englannin välillä.
+
+    Samalla vaihdetaan:
+    document.documentElement.lang = "fi" / "en"
+
+    Kielivalinta voidaan myös tallentaa localStorageen,
+    jolloin sivusto muistaa käyttäjän valitseman kielen.
+  -->
+
+  <script src="script-new.js"></script>
+
+</body>
+</html>
