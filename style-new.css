@@ -577,7 +577,7 @@ h2 {
 
 
 /* =========================================================
-   HERO PHOTO — photo1.jpg
+   HERO PHOTO — photo1.png
 ========================================================= */
 
 .hero-photo {
@@ -593,7 +593,7 @@ h2 {
             rgba(0, 20, 14, 0.14) 0%,
             rgba(0, 0, 0, 0) 18%
         ),
-        url("images/photo1.jpg");
+        url("images/photo1.png");
 
     background-size: cover;
 
@@ -730,7 +730,7 @@ h2 {
 
 
 /* =========================================================
-   ROOMS PHOTO — photo2.jpg
+   ROOMS PHOTO — photo2.png
 ========================================================= */
 
 .rooms-photo {
@@ -744,7 +744,7 @@ h2 {
             rgba(0, 16, 11, 0.08),
             transparent 20%
         ),
-        url("images/photo2.jpg");
+        url("images/photo2.png");
 
     background-size: cover;
 
@@ -951,7 +951,7 @@ h2 {
 
 
 /* =========================================================
-   FOOD PHOTO — photo3.jpg
+   FOOD PHOTO — photo3.png
 ========================================================= */
 
 .food-photo {
@@ -963,7 +963,7 @@ h2 {
             rgba(0, 0, 0, 0.02),
             rgba(0, 15, 10, 0.08)
         ),
-        url("images/photo3.jpg");
+        url("images/photo3.png");
 
     background-size: cover;
 
@@ -1191,7 +1191,7 @@ h2 {
 
 
 /* =========================================================
-   FINAL CTA — photo4.jpg
+   FINAL CTA — photo4.png
 ========================================================= */
 
 .cta-section {
@@ -1222,7 +1222,7 @@ h2 {
             rgba(0, 17, 12, 0.18),
             rgba(0, 13, 9, 0.22)
         ),
-        url("images/photo4.jpg");
+        url("images/photo4.png");
 
     background-size: cover;
 
