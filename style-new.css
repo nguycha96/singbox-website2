@@ -926,10 +926,7 @@ h2 {
 .pricing-section {
     position: relative;
 
-    padding:
-        105px
-        5%
-        115px;
+    padding: 105px 5% 115px;
 
     overflow: hidden;
 
@@ -939,23 +936,20 @@ h2 {
             rgba(8, 64, 47, 0.28),
             transparent 35%
         ),
-        radial-gradient(
-            circle at 85% 100%,
-            rgba(215, 168, 70, 0.06),
-            transparent 35%
-        ),
         #00140e;
 
     border-bottom: 1px solid var(--border);
 }
 
+
+/* =========================================================
+   PRICING HEADING
+========================================================= */
+
 .pricing-heading {
     width: min(1400px, 100%);
 
-    margin:
-        0
-        auto
-        48px;
+    margin: 0 auto 48px;
 }
 
 .pricing-heading h2 {
@@ -971,7 +965,7 @@ h2 {
 }
 
 
-/* Desktop doesn't need swipe text */
+/* Desktop doesn't need swipe hint */
 
 .pricing-scroll-hint {
     display: none;
@@ -979,7 +973,7 @@ h2 {
 
 
 /* =========================================================
-   PRICING TABLE WRAPPER
+   PRICING TABLE
 ========================================================= */
 
 .pricing-table-scroll {
@@ -987,63 +981,48 @@ h2 {
 
     margin: 0 auto;
 
-    border:
-        1px solid rgba(215, 168, 70, 0.32);
-
     overflow: hidden;
-
-    background:
-        rgba(0, 9, 6, 0.32);
 }
-
-
-/* =========================================================
-   PRICING TABLE
-========================================================= */
 
 .pricing-table {
     width: 100%;
 
-    border-collapse: collapse;
-    border-spacing: 0;
+    border-collapse: separate;
+    border-spacing: 7px;
 
     table-layout: fixed;
 }
 
+
+/* All cells */
+
 .pricing-table th,
 .pricing-table td {
-    padding:
-        22px
-        20px;
+    padding: 22px 20px;
 
-    border-right:
-        1px solid rgba(215, 168, 70, 0.14);
+    border: 1px solid rgba(215, 168, 70, 0.20);
 
-    border-bottom:
-        1px solid rgba(215, 168, 70, 0.14);
+    background: rgba(0, 19, 14, 0.72);
 
     text-align: center;
     vertical-align: middle;
-}
 
-.pricing-table tr > *:last-child {
-    border-right: 0;
-}
-
-.pricing-table tbody tr:last-child > * {
-    border-bottom: 0;
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
 }
 
 
-/* Top headings */
+/* =========================================================
+   TABLE HEADER
+========================================================= */
 
 .pricing-table thead th {
-    padding:
-        26px
-        18px;
+    height: 108px;
 
-    background:
-        rgba(215, 168, 70, 0.07);
+    padding: 24px 18px;
+
+    background: rgba(7, 36, 26, 0.72);
 
     color: var(--cream);
 
@@ -1063,7 +1042,7 @@ h2 {
     font-family: var(--sans);
 
     font-size: 0.70rem;
-    font-weight: 500;
+    font-weight: 600;
 
     letter-spacing: 0.18em;
 
@@ -1073,7 +1052,7 @@ h2 {
 .pricing-table thead small {
     display: block;
 
-    margin-top: 4px;
+    margin-top: 7px;
 
     color: rgba(255, 255, 255, 0.48);
 
@@ -1088,13 +1067,14 @@ h2 {
 }
 
 
-/* Left time column */
+/* =========================================================
+   TIME COLUMN
+========================================================= */
 
 .pricing-table tbody th {
-    background:
-        rgba(0, 0, 0, 0.14);
-
     color: var(--cream);
+
+    font-family: var(--sans);
 
     font-size: 0.73rem;
     font-weight: 500;
@@ -1112,7 +1092,7 @@ h2 {
 .pricing-table tbody th small {
     display: block;
 
-    margin-top: 4px;
+    margin-top: 5px;
 
     color: var(--gold);
 
@@ -1123,42 +1103,39 @@ h2 {
 }
 
 
-/* Prices */
+/* =========================================================
+   PRICES
+========================================================= */
 
 .pricing-table tbody td {
+    height: 78px;
+
     color: var(--cream);
 
     font-family: var(--serif);
 
-    font-size: 1.55rem;
+    font-size: 1.45rem;
     font-weight: 500;
 
     white-space: nowrap;
 }
 
 
-/* Slight alternating row */
+/* No separate alternating / evening row backgrounds */
 
-.pricing-table tbody tr:nth-child(odd) {
-    background:
-        rgba(255, 255, 255, 0.012);
-}
-
-
-/* Evening rows */
-
+.pricing-table tbody tr:nth-child(odd),
 .pricing-table tbody tr.pricing-highlight {
-    background:
-        rgba(215, 168, 70, 0.065);
+    background: transparent;
 }
 
-.pricing-table tbody tr {
-    transition: background 0.2s ease;
-}
 
-.pricing-table tbody tr:hover {
-    background:
-        rgba(215, 168, 70, 0.10);
+/* Hover follows the booking-calendar feel */
+
+.pricing-table tbody tr:hover th,
+.pricing-table tbody tr:hover td {
+    background: rgba(5, 39, 27, 0.78);
+
+    border-color: rgba(215, 168, 70, 0.46);
 }
 
 
@@ -1169,10 +1146,7 @@ h2 {
 .pricing-notes {
     width: min(1400px, 100%);
 
-    margin:
-        25px
-        auto
-        0;
+    margin: 28px auto 0;
 
     display: flex;
 
@@ -2387,30 +2361,25 @@ h2 {
         text-transform: uppercase;
     }
 
-    .pricing-table-scroll {
-        width: 100%;
+.pricing-table-scroll {
+    width: 100%;
 
-        margin: 0;
+    margin: 0;
 
-        border-left: 0;
-        border-right: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
 
-        overflow-x: auto;
-        overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
 
-        -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+}
 
-        /*
-           Makes horizontal swipe feel
-           more intentional on mobile.
-        */
-        scroll-snap-type: x proximity;
-    }
+.pricing-table {
+    width: 850px;
+    min-width: 850px;
 
-    .pricing-table {
-        width: 850px;
-        min-width: 850px;
-    }
+    border-spacing: 6px;
+}
 
     .pricing-table th,
     .pricing-table td {
