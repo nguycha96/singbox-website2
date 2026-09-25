@@ -4,22 +4,22 @@
    ========================================================= */
 
 :root {
-    --green: #001c15;
+    --green: #001b14;
     --green-dark: #00130e;
-    --green-black: #000c09;
+    --green-black: #000b08;
 
-    --cream: #f1dfbd;
-    --gold: #d8a84f;
+    --cream: #f0dcb5;
+    --gold: #d7a846;
     --pink: #ff2f92;
-    --white: #f5f1e9;
-    --muted: #b9b5ab;
+    --white: #f7f2e8;
+    --muted: rgba(255, 255, 255, 0.68);
 
-    --border: rgba(216, 168, 79, 0.38);
+    --border: rgba(215, 168, 70, 0.30);
 
     --serif: "Cormorant Garamond", Georgia, serif;
     --sans: "Outfit", Arial, sans-serif;
 
-    --header-height: 92px;
+    --header-height: 108px;
 }
 
 
@@ -44,7 +44,6 @@ body {
 
     font-family: var(--sans);
     font-weight: 300;
-
     line-height: 1.6;
 
     overflow-x: hidden;
@@ -71,45 +70,40 @@ a {
 
 
 /* =========================================================
-   GLOBAL TYPOGRAPHY
+   TYPOGRAPHY
 ========================================================= */
 
 h1,
 h2 {
     font-family: var(--serif);
-
     font-weight: 500;
 
     color: var(--cream);
 
     text-transform: uppercase;
 
-    line-height: 0.93;
-
+    line-height: 0.94;
     letter-spacing: -0.015em;
 }
 
 .eyebrow {
-    margin-bottom: 24px;
+    margin-bottom: 23px;
 
     color: var(--gold);
 
     font-size: 0.75rem;
-
     font-weight: 600;
 
     letter-spacing: 0.28em;
-
     text-transform: uppercase;
 }
 
 .section-description {
     max-width: 430px;
 
-    color: rgba(255, 255, 255, 0.74);
+    color: rgba(255, 255, 255, 0.75);
 
     font-size: 1rem;
-
     line-height: 1.75;
 }
 
@@ -152,26 +146,22 @@ h2 {
 }
 
 .button-arrow {
-    margin-left: 35px;
+    margin-left: 34px;
 
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     line-height: 1;
 }
-
-
-/* PINK BUTTON */
 
 .pink-button {
     min-width: 210px;
     min-height: 52px;
 
-    padding: 0 29px 0 35px;
+    padding: 0 27px 0 34px;
 
     border-radius: 999px;
 
     background: var(--pink);
-
-    color: #080608;
+    color: #090609;
 
     font-size: 0.73rem;
 
@@ -183,31 +173,27 @@ h2 {
     transform: translateY(-3px);
 
     box-shadow:
-        0 16px 38px rgba(255, 47, 146, 0.34);
+        0 15px 38px rgba(255, 47, 146, 0.35);
 }
 
-
-/* OUTLINE BUTTON */
-
 .outline-button {
-    min-width: 190px;
+    min-width: 195px;
     min-height: 49px;
 
-    padding: 0 25px 0 30px;
+    padding: 0 25px 0 29px;
 
     border: 1px solid var(--gold);
     border-radius: 999px;
 
     color: var(--cream);
 
-    font-size: 0.7rem;
+    font-size: 0.70rem;
 }
 
 .outline-button:hover {
     transform: translateY(-3px);
 
     background: var(--gold);
-
     color: var(--green-black);
 }
 
@@ -226,16 +212,17 @@ h2 {
 
     width: 100%;
 
-    background: rgba(0, 13, 10, 0.96);
+    background: rgba(0, 11, 8, 0.97);
 
-    border-bottom: 1px solid rgba(216, 168, 79, 0.18);
+    border-bottom:
+        1px solid rgba(215, 168, 70, 0.22);
 
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
 }
 
 .header-inner {
-    width: min(1480px, 94%);
+    width: min(1510px, 94%);
 
     height: var(--header-height);
 
@@ -244,13 +231,13 @@ h2 {
     display: grid;
 
     grid-template-columns:
-        230px
+        270px
         1fr
-        280px;
+        310px;
 
     align-items: center;
 
-    gap: 25px;
+    gap: 30px;
 }
 
 
@@ -266,18 +253,18 @@ h2 {
     flex-direction: column;
 
     align-items: center;
-
     justify-content: center;
 
     color: var(--cream);
 }
 
 .logo-main {
-    font-size: 1.95rem;
+    font-family: var(--sans);
 
+    font-size: 2.55rem;
     font-weight: 500;
 
-    line-height: 1;
+    line-height: 0.95;
 
     letter-spacing: 0.025em;
 }
@@ -285,19 +272,18 @@ h2 {
 .logo-bottom {
     width: 100%;
 
-    margin-top: 8px;
+    margin-top: 11px;
 
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
-    gap: 9px;
+    gap: 12px;
 }
 
 .logo-line {
-    width: 34px;
+    width: 43px;
     height: 1px;
 
     background: var(--gold);
@@ -306,11 +292,10 @@ h2 {
 .logo-sub {
     color: var(--gold);
 
-    font-size: 0.52rem;
-
+    font-size: 0.58rem;
     font-weight: 500;
 
-    letter-spacing: 0.4em;
+    letter-spacing: 0.48em;
 }
 
 
@@ -324,22 +309,24 @@ h2 {
     align-items: center;
     justify-content: center;
 
-    gap: clamp(24px, 2.25vw, 43px);
+    gap: clamp(29px, 2.35vw, 47px);
 }
 
 .main-nav a {
     position: relative;
 
-    padding: 35px 0 31px;
+    padding: 43px 0 39px;
 
-    color: rgba(255, 255, 255, 0.83);
+    color: rgba(255, 255, 255, 0.88);
 
-    font-size: 0.78rem;
-
+    font-size: 0.87rem;
     font-weight: 400;
 
-    white-space: nowrap;
+    line-height: 1;
 
+    letter-spacing: 0.01em;
+
+    white-space: nowrap;
     text-transform: uppercase;
 
     transition: color 0.25s ease;
@@ -348,7 +335,7 @@ h2 {
 .main-nav a:hover,
 .main-nav a.active,
 .main-nav a.current {
-    color: var(--white);
+    color: #ffffff;
 }
 
 .main-nav a::after {
@@ -357,10 +344,10 @@ h2 {
     position: absolute;
 
     left: 50%;
-    bottom: 20px;
+    bottom: 24px;
 
     width: 0;
-    height: 3px;
+    height: 4px;
 
     border-radius: 20px;
 
@@ -374,7 +361,7 @@ h2 {
 .main-nav a:hover::after,
 .main-nav a.active::after,
 .main-nav a.current::after {
-    width: 31px;
+    width: 36px;
 }
 
 
@@ -388,7 +375,7 @@ h2 {
     align-items: center;
     justify-content: flex-end;
 
-    gap: 28px;
+    gap: 31px;
 }
 
 .language-switcher {
@@ -396,11 +383,11 @@ h2 {
 
     align-items: center;
 
-    gap: 9px;
+    gap: 10px;
 }
 
 .language-divider {
-    color: rgba(255, 255, 255, 0.28);
+    color: rgba(255, 255, 255, 0.3);
 }
 
 .lang-btn {
@@ -410,11 +397,12 @@ h2 {
 
     background: transparent;
 
-    color: rgba(255, 255, 255, 0.52);
+    color: rgba(255, 255, 255, 0.62);
 
-    font-size: 0.7rem;
+    font-size: 0.78rem;
+    font-weight: 400;
 
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
 
     cursor: pointer;
 }
@@ -425,23 +413,31 @@ h2 {
 }
 
 .header-book {
-    min-width: 150px;
-    min-height: 47px;
+    min-width: 172px;
+    min-height: 52px;
 
-    padding: 0 22px 0 26px;
+    padding: 0 23px 0 28px;
 
     border: 1px solid var(--gold);
     border-radius: 999px;
 
     color: var(--cream);
 
-    font-size: 0.68rem;
+    font-size: 0.76rem;
+    font-weight: 500;
+
+    letter-spacing: 0.02em;
 }
 
 .header-book:hover {
     background: var(--gold);
-
     color: var(--green-black);
+}
+
+.header-book .button-arrow {
+    margin-left: 29px;
+
+    font-size: 1.3rem;
 }
 
 
@@ -480,7 +476,7 @@ h2 {
 ========================================================= */
 
 .hero {
-    min-height: 720px;
+    min-height: 760px;
 
     padding-top: var(--header-height);
 
@@ -493,49 +489,44 @@ h2 {
     border-bottom: 1px solid var(--border);
 }
 
-
-/* HERO LEFT */
-
 .hero-content {
     position: relative;
 
-    min-height: 628px;
+    min-height: 652px;
 
     padding:
-        72px
-        clamp(45px, 5.2vw, 88px)
+        68px
+        clamp(55px, 5vw, 90px)
         55px;
 
     display: flex;
 
     flex-direction: column;
 
-    justify-content: center;
-
     align-items: flex-start;
+    justify-content: center;
 
     background:
         radial-gradient(
-            circle at 15% 40%,
-            rgba(5, 58, 43, 0.45),
-            transparent 55%
+            circle at 10% 40%,
+            rgba(6, 57, 42, 0.42),
+            transparent 58%
         ),
         #001b14;
 }
 
 .hero h1 {
-    max-width: 520px;
+    max-width: 510px;
 
-    font-size: clamp(4.2rem, 5.25vw, 5.9rem);
+    font-size: clamp(4.35rem, 5.15vw, 5.85rem);
 }
 
 .hero-tags {
-    color: rgba(255, 255, 255, 0.82);
+    color: rgba(255, 255, 255, 0.84);
 
     font-size: 0.72rem;
 
-    letter-spacing: 0.33em;
-
+    letter-spacing: 0.32em;
     text-transform: uppercase;
 }
 
@@ -546,7 +537,7 @@ h2 {
 .scroll-indicator {
     position: absolute;
 
-    left: clamp(45px, 5.2vw, 88px);
+    left: clamp(55px, 5vw, 90px);
     bottom: 31px;
 
     display: flex;
@@ -558,11 +549,9 @@ h2 {
     color: var(--gold);
 
     font-size: 0.62rem;
-
     font-weight: 500;
 
     letter-spacing: 0.32em;
-
     text-transform: uppercase;
 }
 
@@ -583,21 +572,21 @@ h2 {
 .hero-photo {
     position: relative;
 
-    min-height: 628px;
+    min-height: 652px;
 
     overflow: hidden;
 
     background-image:
         linear-gradient(
             90deg,
-            rgba(0, 20, 14, 0.14) 0%,
-            rgba(0, 0, 0, 0) 18%
+            rgba(0, 18, 13, 0.12) 0%,
+            rgba(0, 0, 0, 0) 22%
         ),
         url("images/photo1.png");
 
     background-size: cover;
-
-    background-position: center center;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .hero-photo::after {
@@ -607,41 +596,14 @@ h2 {
 
     inset: 0;
 
-    pointer-events: none;
-
     background:
         linear-gradient(
             180deg,
-            rgba(0, 0, 0, 0.03),
-            rgba(0, 0, 0, 0.06)
+            rgba(0, 0, 0, 0.02),
+            rgba(0, 0, 0, 0.08)
         );
-}
 
-.hero-message {
-    position: absolute;
-
-    z-index: 2;
-
-    top: 18%;
-    right: 4.5%;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 8px;
-
-    color: var(--gold);
-
-    font-size: 0.82rem;
-
-    font-weight: 400;
-
-    letter-spacing: 0.13em;
-
-    text-transform: uppercase;
-
-    transform: rotate(-4deg);
+    pointer-events: none;
 }
 
 .hero-location {
@@ -649,8 +611,8 @@ h2 {
 
     z-index: 2;
 
-    right: 4.5%;
-    bottom: 8%;
+    right: 5%;
+    bottom: 7%;
 
     display: flex;
 
@@ -665,7 +627,6 @@ h2 {
     font-size: 0.64rem;
 
     letter-spacing: 0.35em;
-
     text-transform: uppercase;
 }
 
@@ -682,7 +643,7 @@ h2 {
 ========================================================= */
 
 .rooms-section {
-    min-height: 465px;
+    min-height: 475px;
 
     display: grid;
 
@@ -693,28 +654,24 @@ h2 {
     border-bottom: 1px solid var(--border);
 }
 
-
-/* LEFT */
-
 .rooms-copy {
-    min-height: 465px;
+    min-height: 475px;
 
     padding:
         65px
-        clamp(45px, 5vw, 85px);
+        clamp(55px, 5vw, 88px);
 
     display: flex;
 
     flex-direction: column;
 
     align-items: flex-start;
-
     justify-content: center;
 
     background:
         radial-gradient(
             circle at 0% 50%,
-            rgba(7, 64, 47, 0.35),
+            rgba(7, 64, 47, 0.34),
             transparent 60%
         ),
         #001710;
@@ -736,44 +693,19 @@ h2 {
 .rooms-photo {
     position: relative;
 
-    min-height: 465px;
+    min-height: 475px;
 
     background-image:
         linear-gradient(
             90deg,
-            rgba(0, 16, 11, 0.08),
+            rgba(0, 16, 11, 0.06),
             transparent 20%
         ),
         url("images/photo2.png");
 
     background-size: cover;
-
-    background-position: center center;
-}
-
-.rooms-photo-message {
-    position: absolute;
-
-    top: 50%;
-    left: 48%;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 8px;
-
-    transform: translate(-50%, -50%);
-
-    color: var(--gold);
-
-    font-size: 0.7rem;
-
-    letter-spacing: 0.24em;
-
-    text-align: center;
-
-    text-transform: uppercase;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 
@@ -810,7 +742,7 @@ h2 {
 }
 
 .room-selection-heading > p:last-child {
-    color: rgba(255, 255, 255, 0.68);
+    color: var(--muted);
 }
 
 .room-grid {
@@ -825,15 +757,13 @@ h2 {
     gap: 15px;
 }
 
-
-/* ROOM CARD */
-
 .room-card {
     position: relative;
 
     background: #00130e;
 
-    border: 1px solid rgba(216, 168, 79, 0.22);
+    border:
+        1px solid rgba(215, 168, 70, 0.22);
 
     overflow: hidden;
 
@@ -885,53 +815,370 @@ h2 {
 }
 
 .room-info {
-    position: relative;
-
-    padding: 26px 24px 30px;
+    padding: 25px 24px 30px;
 }
 
 .room-number {
     display: block;
 
-    margin-bottom: 8px;
+    margin-bottom: 7px;
 
     color: var(--pink);
 
     font-size: 0.62rem;
 
-    letter-spacing: 0.2em;
+    letter-spacing: 0.20em;
 }
 
 .room-info h3 {
-    margin-bottom: 7px;
+    margin-bottom: 15px;
 
     color: var(--cream);
 
     font-family: var(--serif);
 
-    font-size: 1.8rem;
-
+    font-size: 2rem;
     font-weight: 500;
 }
 
-.room-info p {
-    color: rgba(255, 255, 255, 0.63);
+.room-meta {
+    margin-bottom: 17px;
 
-    font-size: 0.82rem;
+    display: flex;
 
-    line-height: 1.55;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding:
+        12px
+        0;
+
+    border-top:
+        1px solid rgba(215, 168, 70, 0.16);
+
+    border-bottom:
+        1px solid rgba(215, 168, 70, 0.16);
 }
 
-.room-info .room-capacity {
-    margin-bottom: 11px;
-
-    color: var(--gold);
+.room-capacity {
+    color: rgba(255, 255, 255, 0.67);
 
     font-size: 0.68rem;
 
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.room-price {
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 6px;
+
+    color: var(--gold);
+
+    font-size: 0.65rem;
 
     text-transform: uppercase;
+
+    white-space: nowrap;
+}
+
+.room-price strong {
+    color: var(--cream);
+
+    font-family: var(--serif);
+
+    font-size: 1.25rem;
+    font-weight: 500;
+
+    text-transform: none;
+}
+
+.room-info > p {
+    color: rgba(255, 255, 255, 0.63);
+
+    font-size: 0.82rem;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   PRICING
+========================================================= */
+
+.pricing-section {
+    position: relative;
+
+    padding:
+        105px
+        5%
+        115px;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 15% 0%,
+            rgba(8, 64, 47, 0.28),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 85% 100%,
+            rgba(215, 168, 70, 0.06),
+            transparent 35%
+        ),
+        #00140e;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.pricing-heading {
+    width: min(1400px, 100%);
+
+    margin:
+        0
+        auto
+        48px;
+}
+
+.pricing-heading h2 {
+    margin-bottom: 22px;
+
+    font-size: clamp(3.8rem, 5vw, 5.3rem);
+}
+
+.pricing-heading > p:last-child {
+    color: rgba(255, 255, 255, 0.68);
+
+    font-size: 1rem;
+}
+
+
+/* Desktop doesn't need swipe text */
+
+.pricing-scroll-hint {
+    display: none;
+}
+
+
+/* =========================================================
+   PRICING TABLE WRAPPER
+========================================================= */
+
+.pricing-table-scroll {
+    width: min(1400px, 100%);
+
+    margin: 0 auto;
+
+    border:
+        1px solid rgba(215, 168, 70, 0.32);
+
+    overflow: hidden;
+
+    background:
+        rgba(0, 9, 6, 0.32);
+}
+
+
+/* =========================================================
+   PRICING TABLE
+========================================================= */
+
+.pricing-table {
+    width: 100%;
+
+    border-collapse: collapse;
+    border-spacing: 0;
+
+    table-layout: fixed;
+}
+
+.pricing-table th,
+.pricing-table td {
+    padding:
+        22px
+        20px;
+
+    border-right:
+        1px solid rgba(215, 168, 70, 0.14);
+
+    border-bottom:
+        1px solid rgba(215, 168, 70, 0.14);
+
+    text-align: center;
+    vertical-align: middle;
+}
+
+.pricing-table tr > *:last-child {
+    border-right: 0;
+}
+
+.pricing-table tbody tr:last-child > * {
+    border-bottom: 0;
+}
+
+
+/* Top headings */
+
+.pricing-table thead th {
+    padding:
+        26px
+        18px;
+
+    background:
+        rgba(215, 168, 70, 0.07);
+
+    color: var(--cream);
+
+    font-family: var(--serif);
+
+    font-size: 1.55rem;
+    font-weight: 500;
+
+    letter-spacing: 0.02em;
+}
+
+.pricing-table thead th:first-child {
+    width: 20%;
+
+    color: var(--gold);
+
+    font-family: var(--sans);
+
+    font-size: 0.70rem;
+    font-weight: 500;
+
+    letter-spacing: 0.18em;
+
+    text-transform: uppercase;
+}
+
+.pricing-table thead small {
+    display: block;
+
+    margin-top: 4px;
+
+    color: rgba(255, 255, 255, 0.48);
+
+    font-family: var(--sans);
+
+    font-size: 0.59rem;
+    font-weight: 300;
+
+    letter-spacing: 0.08em;
+
+    text-transform: uppercase;
+}
+
+
+/* Left time column */
+
+.pricing-table tbody th {
+    background:
+        rgba(0, 0, 0, 0.14);
+
+    color: var(--cream);
+
+    font-size: 0.73rem;
+    font-weight: 500;
+
+    letter-spacing: 0.10em;
+
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.pricing-table tbody th span {
+    display: block;
+}
+
+.pricing-table tbody th small {
+    display: block;
+
+    margin-top: 4px;
+
+    color: var(--gold);
+
+    font-size: 0.67rem;
+    font-weight: 400;
+
+    letter-spacing: 0.12em;
+}
+
+
+/* Prices */
+
+.pricing-table tbody td {
+    color: var(--cream);
+
+    font-family: var(--serif);
+
+    font-size: 1.55rem;
+    font-weight: 500;
+
+    white-space: nowrap;
+}
+
+
+/* Slight alternating row */
+
+.pricing-table tbody tr:nth-child(odd) {
+    background:
+        rgba(255, 255, 255, 0.012);
+}
+
+
+/* Evening rows */
+
+.pricing-table tbody tr.pricing-highlight {
+    background:
+        rgba(215, 168, 70, 0.065);
+}
+
+.pricing-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.pricing-table tbody tr:hover {
+    background:
+        rgba(215, 168, 70, 0.10);
+}
+
+
+/* =========================================================
+   PRICING NOTES
+========================================================= */
+
+.pricing-notes {
+    width: min(1400px, 100%);
+
+    margin:
+        25px
+        auto
+        0;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 30px;
+}
+
+.pricing-notes p {
+    max-width: 650px;
+
+    color: rgba(255, 255, 255, 0.54);
+
+    font-size: 0.73rem;
+    line-height: 1.6;
+}
+
+.pricing-notes p:first-child {
+    color: rgba(240, 220, 181, 0.72);
 }
 
 
@@ -966,32 +1213,28 @@ h2 {
         url("images/photo3.png");
 
     background-size: cover;
-
-    background-position: center center;
+    background-position: center;
+    background-repeat: no-repeat;
 }
-
-
-/* FOOD TEXT */
 
 .food-copy {
     min-height: 470px;
 
     padding:
         65px
-        clamp(40px, 4vw, 70px);
+        clamp(45px, 4vw, 72px);
 
     display: flex;
 
     flex-direction: column;
 
     align-items: flex-start;
-
     justify-content: center;
 
     background:
         radial-gradient(
             circle at 100% 50%,
-            rgba(6, 62, 44, 0.3),
+            rgba(6, 62, 44, 0.30),
             transparent 60%
         ),
         #00150f;
@@ -1033,7 +1276,7 @@ h2 {
 }
 
 .menu-heading > p:last-child {
-    color: rgba(255, 255, 255, 0.68);
+    color: var(--muted);
 }
 
 .menu-grid {
@@ -1052,9 +1295,12 @@ h2 {
     padding: 28px 25px;
 
     border-top: 1px solid var(--gold);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 
-    background: rgba(255, 255, 255, 0.015);
+    border-bottom:
+        1px solid rgba(255, 255, 255, 0.08);
+
+    background:
+        rgba(255, 255, 255, 0.015);
 }
 
 .menu-category h3 {
@@ -1065,7 +1311,6 @@ h2 {
     font-family: var(--serif);
 
     font-size: 1.65rem;
-
     font-weight: 500;
 }
 
@@ -1079,9 +1324,10 @@ h2 {
 
     gap: 20px;
 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom:
+        1px solid rgba(255, 255, 255, 0.06);
 
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.70);
 
     font-size: 0.78rem;
 }
@@ -1142,7 +1388,6 @@ h2 {
     color: rgba(255, 255, 255, 0.72);
 
     font-size: 1rem;
-
     line-height: 1.8;
 }
 
@@ -1184,7 +1429,7 @@ h2 {
 .about-inner > p:last-child {
     max-width: 600px;
 
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.70);
 
     line-height: 1.8;
 }
@@ -1225,8 +1470,8 @@ h2 {
         url("images/photo4.png");
 
     background-size: cover;
-
-    background-position: center center;
+    background-position: center;
+    background-repeat: no-repeat;
 
     transform: scale(1.01);
 }
@@ -1274,14 +1519,16 @@ h2 {
 ========================================================= */
 
 .site-footer {
-    min-height: 135px;
+    min-height: 145px;
 
-    padding: 28px max(4%, calc((100vw - 1450px) / 2));
+    padding:
+        28px
+        max(4%, calc((100vw - 1450px) / 2));
 
     display: grid;
 
     grid-template-columns:
-        220px
+        245px
         1fr
         auto
         120px;
@@ -1294,15 +1541,15 @@ h2 {
 }
 
 .footer-logo .logo-main {
-    font-size: 1.65rem;
+    font-size: 1.85rem;
 }
 
 .footer-logo .logo-sub {
-    font-size: 0.45rem;
+    font-size: 0.48rem;
 }
 
 .footer-logo .logo-line {
-    width: 28px;
+    width: 31px;
 }
 
 .footer-nav {
@@ -1316,7 +1563,7 @@ h2 {
 .footer-nav a {
     color: rgba(255, 255, 255, 0.68);
 
-    font-size: 0.65rem;
+    font-size: 0.67rem;
 
     text-transform: uppercase;
 
@@ -1382,7 +1629,7 @@ h2 {
 
 
 /* =========================================================
-   SCROLL REVEAL
+   REVEAL ANIMATION
 ========================================================= */
 
 .reveal-item {
@@ -1403,28 +1650,34 @@ h2 {
 
 
 /* =========================================================
-   LARGE / MEDIUM DESKTOP
+   MEDIUM DESKTOP
 ========================================================= */
 
-@media (max-width: 1250px) {
+@media (max-width: 1300px) {
 
     .header-inner {
         grid-template-columns:
-            190px
+            220px
             1fr
-            200px;
-    }
+            250px;
 
-    .logo-main {
-        font-size: 1.7rem;
-    }
-
-    .main-nav {
         gap: 20px;
     }
 
+    .logo-main {
+        font-size: 2rem;
+    }
+
+    .logo-line {
+        width: 34px;
+    }
+
+    .main-nav {
+        gap: 23px;
+    }
+
     .main-nav a {
-        font-size: 0.68rem;
+        font-size: 0.76rem;
     }
 
     .header-right {
@@ -1432,11 +1685,12 @@ h2 {
     }
 
     .header-book {
-        min-width: 130px;
+        min-width: 145px;
     }
 
     .room-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns:
+            repeat(2, 1fr);
 
         max-width: 900px;
     }
@@ -1446,17 +1700,17 @@ h2 {
     }
 
     .menu-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns:
+            repeat(2, 1fr);
 
         max-width: 900px;
     }
-
 }
 
 
 /* =========================================================
-   TABLET + MOBILE
-   ========================================================= */
+   TABLET / MOBILE
+========================================================= */
 
 @media (max-width: 950px) {
 
@@ -1469,9 +1723,7 @@ h2 {
     }
 
 
-    /* =========================
-       HEADER
-    ========================= */
+    /* HEADER */
 
     .site-header {
         height: var(--header-height);
@@ -1497,11 +1749,11 @@ h2 {
 
     .logo-main {
         font-size: 1.85rem;
-        line-height: 1;
     }
 
     .logo-bottom {
         margin-top: 9px;
+
         gap: 10px;
     }
 
@@ -1511,38 +1763,19 @@ h2 {
 
     .logo-sub {
         font-size: 0.45rem;
+
         letter-spacing: 0.42em;
     }
-
-
-    /* language */
 
     .header-right {
         margin-left: auto;
 
-        display: flex;
-
-        align-items: center;
-
         gap: 18px;
-    }
-
-    .language-switcher {
-        display: flex;
-
-        gap: 9px;
-    }
-
-    .lang-btn {
-        font-size: 0.72rem;
     }
 
     .header-book {
         display: none;
     }
-
-
-    /* hamburger */
 
     .menu-toggle {
         display: block;
@@ -1551,19 +1784,10 @@ h2 {
 
         width: 52px;
         height: 52px;
-
-        border: 1px solid var(--gold);
-        border-radius: 50%;
-    }
-
-    .menu-toggle span {
-        width: 20px;
-
-        margin: 6px auto;
     }
 
 
-    /* mobile navigation */
+    /* MOBILE NAV */
 
     .main-nav {
         position: fixed;
@@ -1592,7 +1816,8 @@ h2 {
 
         pointer-events: none;
 
-        background: rgba(0, 14, 10, 0.99);
+        background:
+            rgba(0, 14, 10, 0.99);
 
         border-bottom: 1px solid var(--border);
 
@@ -1618,10 +1843,10 @@ h2 {
 
         padding: 16px 0;
 
-        font-size: 0.8rem;
+        font-size: 0.80rem;
 
         border-bottom:
-            1px solid rgba(255,255,255,0.07);
+            1px solid rgba(255, 255, 255, 0.07);
     }
 
     .main-nav a::after {
@@ -1629,9 +1854,7 @@ h2 {
     }
 
 
-    /* =========================
-       HERO
-    ========================= */
+    /* HERO */
 
     .hero {
         min-height: auto;
@@ -1641,14 +1864,7 @@ h2 {
         display: flex;
 
         flex-direction: column;
-
-        border-bottom: 1px solid var(--border);
     }
-
-    /*
-       Text FIRST on mobile.
-       Image comes underneath.
-    */
 
     .hero-content {
         order: 1;
@@ -1670,18 +1886,14 @@ h2 {
         min-height: 520px;
 
         background-size: cover;
-
-        background-position: center center;
+        background-position: center;
     }
 
     .hero h1 {
         max-width: 600px;
 
-        font-size: clamp(
-            4rem,
-            13vw,
-            6.2rem
-        );
+        font-size:
+            clamp(4rem, 13vw, 6.2rem);
 
         line-height: 0.9;
     }
@@ -1696,30 +1908,12 @@ h2 {
         letter-spacing: 0.25em;
     }
 
-    .hero .pink-button {
-        margin-top: 28px;
-    }
-
     .scroll-indicator {
         display: none;
     }
 
-    .hero-message {
-        top: 11%;
-        right: 6%;
 
-        font-size: 0.68rem;
-    }
-
-    .hero-location {
-        right: 6%;
-        bottom: 6%;
-    }
-
-
-    /* =========================
-       ROOMS INTRO
-    ========================= */
+    /* ROOMS INTRO */
 
     .rooms-section {
         min-height: auto;
@@ -1741,13 +1935,8 @@ h2 {
     }
 
     .rooms-copy h2 {
-        font-size: clamp(
-            3.8rem,
-            12vw,
-            5.5rem
-        );
-
-        line-height: 0.91;
+        font-size:
+            clamp(3.8rem, 12vw, 5.5rem);
     }
 
     .rooms-photo {
@@ -1761,27 +1950,13 @@ h2 {
     }
 
 
-    /* =========================
-       ROOM CARDS
-    ========================= */
+    /* ROOM CARDS */
 
     .room-selection {
         padding:
             80px
             6%
             85px;
-    }
-
-    .room-selection-heading {
-        margin-bottom: 45px;
-    }
-
-    .room-selection-heading h2 {
-        font-size: clamp(
-            3.6rem,
-            11vw,
-            5rem
-        );
     }
 
     .room-grid {
@@ -1798,9 +1973,58 @@ h2 {
     }
 
 
-    /* =========================
-       FOOD
-    ========================= */
+    /* PRICING */
+
+    .pricing-section {
+        padding:
+            80px
+            6%
+            90px;
+    }
+
+    .pricing-heading {
+        margin-bottom: 35px;
+    }
+
+    .pricing-heading h2 {
+        font-size:
+            clamp(3.8rem, 11vw, 5rem);
+    }
+
+    .pricing-table-scroll {
+        /*
+           Important:
+           table can scroll sideways instead
+           of being squeezed into the screen.
+        */
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        -webkit-overflow-scrolling: touch;
+
+        scrollbar-width: thin;
+
+        overscroll-behavior-x: contain;
+    }
+
+    .pricing-table {
+        min-width: 850px;
+
+        table-layout: fixed;
+    }
+
+    .pricing-table thead th:first-child {
+        width: 170px;
+    }
+
+    .pricing-notes {
+        flex-direction: column;
+
+        gap: 10px;
+    }
+
+
+    /* FOOD */
 
     .food-section {
         min-height: auto;
@@ -1809,10 +2033,6 @@ h2 {
 
         flex-direction: column;
     }
-
-    /*
-       IMAGE FIRST, like reference.
-    */
 
     .food-photo {
         order: 1;
@@ -1823,9 +2043,8 @@ h2 {
         background-size: cover;
 
         /*
-           This pushes the crop toward
-           the actual food/table instead
-           of the baked-in left text.
+           photo3 has content toward
+           the right side.
         */
         background-position: 68% center;
     }
@@ -1842,31 +2061,18 @@ h2 {
     }
 
     .food-copy h2 {
-        max-width: 650px;
-
-        font-size: clamp(
-            3.6rem,
-            11vw,
-            5rem
-        );
-
-        line-height: 0.92;
+        font-size:
+            clamp(3.6rem, 11vw, 5rem);
     }
 
 
-    /* =========================
-       MENU
-    ========================= */
+    /* MENU */
 
     .menu-section {
         padding:
             80px
             6%
             85px;
-    }
-
-    .menu-heading h2 {
-        font-size: 4rem;
     }
 
     .menu-grid {
@@ -1877,9 +2083,7 @@ h2 {
     }
 
 
-    /* =========================
-       EXPERIENCE
-    ========================= */
+    /* EXPERIENCE */
 
     .experience-section {
         min-height: 420px;
@@ -1889,18 +2093,8 @@ h2 {
             7%;
     }
 
-    .experience-inner h2 {
-        font-size: clamp(
-            3.8rem,
-            11vw,
-            5.2rem
-        );
-    }
 
-
-    /* =========================
-       ABOUT
-    ========================= */
+    /* ABOUT */
 
     .about-section {
         min-height: auto;
@@ -1910,25 +2104,11 @@ h2 {
             7%;
     }
 
-    .about-inner h2 {
-        font-size: clamp(
-            3.8rem,
-            11vw,
-            5.2rem
-        );
-    }
 
-
-    /* =========================
-       CTA
-    ========================= */
+    /* CTA */
 
     .cta-section {
         min-height: 390px;
-    }
-
-    .cta-background {
-        background-position: center;
     }
 
     .cta-content {
@@ -1939,25 +2119,13 @@ h2 {
             7%;
     }
 
-    .cta-content h2 {
-        font-size: clamp(
-            3.8rem,
-            11vw,
-            5.2rem
-        );
-    }
 
-
-    /* =========================
-       FOOTER
-    ========================= */
+    /* FOOTER */
 
     .site-footer {
         padding:
             50px
             7%;
-
-        display: grid;
 
         grid-template-columns:
             1fr
@@ -1984,7 +2152,7 @@ h2 {
 
 /* =========================================================
    PHONE
-   ========================================================= */
+========================================================= */
 
 @media (max-width: 650px) {
 
@@ -1993,16 +2161,12 @@ h2 {
     }
 
 
-    /* =========================
-       HEADER
-    ========================= */
+    /* HEADER */
 
     .header-inner {
         height: var(--header-height);
 
-        padding:
-            0
-            26px;
+        padding: 0 24px;
     }
 
     .logo-main {
@@ -2018,11 +2182,15 @@ h2 {
     }
 
     .logo-sub {
-        font-size: 0.4rem;
+        font-size: 0.40rem;
     }
 
     .header-right {
         gap: 14px;
+    }
+
+    .language-switcher {
+        gap: 7px;
     }
 
     .lang-btn {
@@ -2035,9 +2203,7 @@ h2 {
     }
 
 
-    /* =========================
-       HERO
-    ========================= */
+    /* HERO */
 
     .hero-content {
         padding:
@@ -2046,32 +2212,19 @@ h2 {
             60px;
     }
 
-    .hero .eyebrow {
-        margin-bottom: 20px;
-    }
-
     .hero h1 {
         max-width: 100%;
 
-        font-size: clamp(
-            3.65rem,
-            15.5vw,
-            5rem
-        );
+        font-size:
+            clamp(3.65rem, 15.5vw, 5rem);
 
         line-height: 0.9;
-    }
-
-    .gold-line {
-        margin:
-            25px
-            0;
     }
 
     .hero-tags {
         font-size: 0.58rem;
 
-        letter-spacing: 0.2em;
+        letter-spacing: 0.20em;
 
         line-height: 1.9;
     }
@@ -2079,19 +2232,7 @@ h2 {
     .hero-photo {
         min-height: 430px;
 
-        /*
-           photo1 focal point
-        */
         background-position: 55% center;
-    }
-
-    .hero-message {
-        top: 8%;
-        right: 5%;
-
-        font-size: 0.58rem;
-
-        gap: 5px;
     }
 
     .hero-location {
@@ -2102,9 +2243,7 @@ h2 {
     }
 
 
-    /* =========================
-       GENERAL
-    ========================= */
+    /* GENERAL */
 
     .eyebrow {
         margin-bottom: 20px;
@@ -2120,10 +2259,12 @@ h2 {
         line-height: 1.7;
     }
 
+    .gold-line {
+        margin: 25px 0;
+    }
 
-    /* =========================
-       ROOMS
-    ========================= */
+
+    /* ROOMS INTRO */
 
     .rooms-copy {
         padding:
@@ -2133,24 +2274,18 @@ h2 {
     }
 
     .rooms-copy h2 {
-        font-size: clamp(
-            3.5rem,
-            14vw,
-            4.7rem
-        );
+        font-size:
+            clamp(3.5rem, 14vw, 4.7rem);
     }
 
     .rooms-photo {
         min-height: 420px;
 
-        background-position:
-            58% center;
+        background-position: 58% center;
     }
 
 
-    /* =========================
-       ROOM LIST
-    ========================= */
+    /* ROOM CARDS */
 
     .room-selection {
         padding:
@@ -2168,8 +2303,6 @@ h2 {
     }
 
     .room-grid {
-        display: grid;
-
         grid-template-columns: 1fr;
 
         gap: 18px;
@@ -2188,29 +2321,143 @@ h2 {
             28px;
     }
 
+    .room-info h3 {
+        font-size: 2.1rem;
+    }
 
-    /* =========================
-       FOOD
-    ========================= */
+    .room-meta {
+        gap: 10px;
+    }
+
+
+    /* =====================================================
+       MOBILE PRICING
+    ===================================================== */
+
+    .pricing-section {
+        padding:
+            70px
+            0
+            75px;
+    }
+
+    .pricing-heading {
+        width: auto;
+
+        margin:
+            0
+            7%
+            25px;
+    }
+
+    .pricing-heading h2 {
+        font-size: 3.55rem;
+    }
+
+    .pricing-scroll-hint {
+        margin:
+            0
+            7%
+            15px;
+
+        display: block;
+
+        color: var(--gold);
+
+        font-size: 0.60rem;
+        font-weight: 500;
+
+        letter-spacing: 0.13em;
+
+        text-transform: uppercase;
+    }
+
+    .pricing-table-scroll {
+        width: 100%;
+
+        margin: 0;
+
+        border-left: 0;
+        border-right: 0;
+
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        -webkit-overflow-scrolling: touch;
+
+        /*
+           Makes horizontal swipe feel
+           more intentional on mobile.
+        */
+        scroll-snap-type: x proximity;
+    }
+
+    .pricing-table {
+        width: 850px;
+        min-width: 850px;
+    }
+
+    .pricing-table th,
+    .pricing-table td {
+        padding:
+            19px
+            15px;
+    }
+
+    .pricing-table thead th {
+        font-size: 1.35rem;
+    }
+
+    .pricing-table thead th:first-child {
+        width: 150px;
+    }
+
+    .pricing-table tbody th {
+        width: 150px;
+
+        font-size: 0.66rem;
+    }
+
+    .pricing-table tbody td {
+        font-size: 1.35rem;
+    }
+
+    .pricing-table thead small {
+        font-size: 0.54rem;
+    }
+
+    .pricing-notes {
+        width: auto;
+
+        margin:
+            22px
+            7%
+            0;
+
+        flex-direction: column;
+
+        gap: 10px;
+    }
+
+    .pricing-notes p {
+        font-size: 0.68rem;
+    }
+
+
+    /* FOOD */
 
     .food-photo {
         min-height: 0;
 
-        /*
-           Keeps mobile image at a
-           controlled ratio instead of
-           becoming enormous.
-        */
         aspect-ratio: 1 / 1;
 
         background-size: cover;
 
         /*
-           Important for photo3:
-           crop toward food/drinks.
+           Crops away much of the
+           baked-in text on photo3.
         */
-        background-position:
-            72% center;
+        background-position: 72% center;
     }
 
     .food-copy {
@@ -2223,19 +2470,14 @@ h2 {
     .food-copy h2 {
         max-width: 100%;
 
-        font-size: clamp(
-            3.25rem,
-            13.5vw,
-            4.5rem
-        );
+        font-size:
+            clamp(3.25rem, 13.5vw, 4.5rem);
 
         line-height: 0.92;
     }
 
 
-    /* =========================
-       MENU
-    ========================= */
+    /* MENU */
 
     .menu-section {
         padding:
@@ -2259,9 +2501,7 @@ h2 {
     }
 
 
-    /* =========================
-       EXPERIENCE
-    ========================= */
+    /* EXPERIENCE */
 
     .experience-section {
         min-height: 380px;
@@ -2276,9 +2516,7 @@ h2 {
     }
 
 
-    /* =========================
-       ABOUT
-    ========================= */
+    /* ABOUT */
 
     .about-section {
         padding:
@@ -2291,17 +2529,14 @@ h2 {
     }
 
 
-    /* =========================
-       CTA
-    ========================= */
+    /* CTA */
 
     .cta-section {
         min-height: 340px;
     }
 
     .cta-background {
-        background-position:
-            68% center;
+        background-position: 68% center;
     }
 
     .cta-content {
@@ -2315,9 +2550,7 @@ h2 {
     }
 
 
-    /* =========================
-       FOOTER
-    ========================= */
+    /* FOOTER */
 
     .site-footer {
         padding:
@@ -2340,8 +2573,6 @@ h2 {
     }
 
     .footer-nav {
-        display: flex;
-
         justify-content: center;
 
         gap:
@@ -2373,14 +2604,12 @@ h2 {
 
 /* =========================================================
    VERY SMALL PHONES
-   ========================================================= */
+========================================================= */
 
 @media (max-width: 420px) {
 
     .header-inner {
-        padding:
-            0
-            18px;
+        padding: 0 18px;
     }
 
     .logo-main {
@@ -2423,12 +2652,26 @@ h2 {
     .cta-content h2 {
         font-size: 3.15rem;
     }
+
+    .pricing-heading h2 {
+        font-size: 3.15rem;
+    }
+
+    .room-meta {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .room-price strong {
+        font-size: 1.35rem;
+    }
 }
 
 
 /* =========================================================
    ACCESSIBILITY
-   ========================================================= */
+========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
 
@@ -2439,13 +2682,8 @@ h2 {
     *,
     *::before,
     *::after {
-        animation-duration:
-            0.01ms !important;
-
-        animation-iteration-count:
-            1 !important;
-
-        transition-duration:
-            0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }
