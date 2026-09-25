@@ -21,7 +21,6 @@ const translations = {
         "nav.home": "Home",
         "nav.rooms": "Rooms",
         "nav.food": "Food & Drinks",
-        "nav.experience": "Experience",
         "nav.about": "About Us",
         "nav.contact": "Contact",
 
@@ -254,17 +253,6 @@ const translations = {
 "menu.coffee":
     "Coffee",
 
-       
-        /* EXPERIENCE */
-
-        "experience.eyebrow":
-            "More than karaoke",
-
-        "experience.title":
-            "Your room.<br>Your night.",
-
-        "experience.text":
-            "Sing, eat, drink and spend the evening together in your own private karaoke room.",
 
 
         /* ABOUT US */
