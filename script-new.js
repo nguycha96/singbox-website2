@@ -291,7 +291,6 @@ const translations = {
         "nav.home": "Etusivu",
         "nav.rooms": "Huoneet",
         "nav.food": "Ruoka & juomat",
-        "nav.experience": "Elämys",
         "nav.about us": "Meistä",
         "nav.contact": "Yhteystiedot",
 
@@ -462,18 +461,7 @@ const translations = {
             "Nachot + salsa",
 
 
-        /* EXPERIENCE */
-
-        "experience.eyebrow":
-            "Enemmän kuin karaokea",
-
-        "experience.title":
-            "Teidän huone.<br>Teidän ilta.",
-
-        "experience.text":
-            "Laula, syö, juo ja vietä iltaa yhdessä omassa yksityisessä karaokehuoneessa.",
-
-
+ 
         /* ABOUT US */
 
         "about.eyebrow":
@@ -947,10 +935,6 @@ const navigationSections = [
     {
         id: "menu",
         nav: "#food"
-    },
-    {
-        id: "experience",
-        nav: "#experience"
     },
     {
         id: "about",
