@@ -132,7 +132,7 @@ const translations = {
             "Sun",
 
         "pricing.discount":
-            "Mon–Thu 18–23: Students, pensioners and unemployed customers receive 10% off with a valid card.",
+            "Mon–Thu 14–18: Students, pensioners and unemployed customers receive 10% off with a valid card.",
 
         "pricing.private":
             "Private events: ask us for availability and pricing.",
@@ -351,7 +351,7 @@ const translations = {
             "Su",
 
         "pricing.discount":
-            "Ma–To klo 18–23: opiskelija-, eläkeläis- ja työttömyyskortilla −10 %.",
+            "Ma–To klo 14–18: opiskelija-, eläkeläis- ja työttömyyskortilla −10 %.",
 
         "pricing.private":
             "Yksityistilaisuudet: kysy saatavuutta ja hintaa.",
