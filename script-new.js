@@ -1,7 +1,7 @@
 /* =========================================================
    SiNG BOX NORAEBANG
    script-new.js
-   ========================================================= */
+========================================================= */
 
 
 /* =========================================================
@@ -47,21 +47,6 @@ const translations = {
             "Scroll",
 
 
-        /* ROOMS INTRO */
-
-        "rooms.eyebrow":
-            "Private Karaoke Rooms",
-
-        "rooms.title":
-            "Find your<br>vibe.",
-
-        "rooms.text":
-            "Different rooms. Same great feeling.",
-
-        "rooms.cta":
-            "Explore rooms",
-
-
         /* ROOM LIST */
 
         "roomList.eyebrow":
@@ -84,18 +69,6 @@ const translations = {
 
         "room.from":
             "From",
-
-        "room.hongdae.text":
-            "An intimate room inspired by the energy of Hongdae.",
-
-        "room.itaewon.text":
-            "A stylish private room made for singing and spending time together.",
-
-        "room.gangnam.text":
-            "A spacious room with a polished atmosphere for bigger groups.",
-
-        "room.seoul.text":
-            "A spacious private room with modern Seoul energy.",
 
 
         /* PRICING */
@@ -152,107 +125,106 @@ const translations = {
             "View menu",
 
 
-       /* MENU */
+        /* MENU */
 
-"menu.eyebrow":
-    "Something for the table",
+        "menu.eyebrow":
+            "Something for the table",
 
-"menu.title":
-    "Menu",
+        "menu.title":
+            "Menu",
 
-"menu.text":
-    "Food, drinks and something sweet for your karaoke night.",
+        "menu.text":
+            "Food, drinks and something sweet for your karaoke night.",
 
-"menu.snacks":
-    "Snacks",
+        "menu.snacks":
+            "Snacks",
 
-"menu.sweets":
-    "Sweets",
+        "menu.sweets":
+            "Sweets",
 
-"menu.combos":
-    "Combos",
+        "menu.combos":
+            "Combos",
 
-"menu.soft":
-    "Non-alcoholic",
+        "menu.soft":
+            "Non-alcoholic",
 
-"menu.alcohol":
-    "Alcohol",
+        "menu.alcohol":
+            "Alcohol",
 
-"menu.hot":
-    "Hot drinks",
-
-
-/* FOOD ITEMS */
-
-"menu.yakitori":
-    "Yakitori – Japanese chicken skewers",
-
-"menu.karaage":
-    "Karaage – Japanese fried chicken",
-
-"menu.pizza":
-    "Pizza slice",
-
-"menu.kimbap":
-    "Kimbap – Korean seaweed rolls",
-
-"menu.springrolls":
-    "Vietnamese spring rolls",
-
-"menu.fries":
-    "French fries",
-
-"menu.vegetables":
-    "Vegetable sticks – carrot, cucumber & cauliflower",
-
-"menu.dips":
-    "Mayo dips, incl. gochujang",
-
-"menu.popcorn":
-    "Popcorn 0.5 l",
-
-"menu.nachos":
-    "Nachos + salsa",
+        "menu.hot":
+            "Hot drinks",
 
 
-/* SWEETS */
+        /* FOOD ITEMS */
 
-"menu.koreanIceCream":
-    "Korean marshmallow stick ice cream",
+        "menu.yakitori":
+            "Yakitori – Japanese chicken skewers",
 
-"menu.iceCream":
-    "Ice cream portions",
+        "menu.karaage":
+            "Karaage – Japanese fried chicken",
 
-"menu.blueberryPie":
-    "Blueberry pie + vanilla sauce",
+        "menu.pizza":
+            "Pizza slice",
 
-"menu.caramelCake":
-    "Caramel cake",
+        "menu.kimbap":
+            "Kimbap – Korean seaweed rolls",
 
-"menu.sacherCake":
-    "Sacher cake",
+        "menu.springrolls":
+            "Vietnamese spring rolls",
+
+        "menu.fries":
+            "French fries",
+
+        "menu.vegetables":
+            "Vegetable sticks – carrot, cucumber & cauliflower",
+
+        "menu.dips":
+            "Mayo dips, incl. gochujang",
+
+        "menu.popcorn":
+            "Popcorn 0.5 l",
+
+        "menu.nachos":
+            "Nachos + salsa",
 
 
-/* COMBOS */
+        /* SWEETS */
 
-"menu.sodaSnack":
-    "Soda drink + snack",
+        "menu.koreanIceCream":
+            "Korean marshmallow stick ice cream",
 
-"menu.shotTray":
-    "Shot tray (6 shots)",
+        "menu.iceCream":
+            "Ice cream portions",
+
+        "menu.blueberryPie":
+            "Blueberry pie + vanilla sauce",
+
+        "menu.caramelCake":
+            "Caramel cake",
+
+        "menu.sacherCake":
+            "Sacher cake",
 
 
-/* DRINKS */
+        /* COMBOS */
 
-"menu.jaffa":
-    "Jaffa Orange Sugar Free 0.5 l",
+        "menu.sodaSnack":
+            "Soda drink + snack",
 
-"menu.salmiakkiShot":
-    "Salmiakki shot 4 cl",
+        "menu.shotTray":
+            "Shot tray (6 shots)",
 
-"menu.coffee":
-    "Coffee",
 
+        /* DRINKS */
+
+        "menu.jaffa":
+            "Jaffa Orange Sugar Free 0.5 l",
+
+        "menu.salmiakkiShot":
+            "Salmiakki shot 4 cl",
+
+        "menu.coffee":
+            "Coffee",
 
 
         /* ABOUT US */
@@ -291,7 +263,7 @@ const translations = {
         "nav.home": "Etusivu",
         "nav.rooms": "Huoneet",
         "nav.food": "Ruoka & juomat",
-        "nav.about us": "Meistä",
+        "nav.about": "Meistä",
         "nav.contact": "Yhteystiedot",
 
 
@@ -317,21 +289,6 @@ const translations = {
             "Selaa",
 
 
-        /* ROOMS INTRO */
-
-        "rooms.eyebrow":
-            "Yksityiset karaokehuoneet",
-
-        "rooms.title":
-            "Löydä oma<br>tunnelmasi.",
-
-        "rooms.text":
-            "Erilaiset huoneet. Sama hyvä fiilis.",
-
-        "rooms.cta":
-            "Tutustu huoneisiin",
-
-
         /* ROOM LIST */
 
         "roomList.eyebrow":
@@ -354,18 +311,6 @@ const translations = {
 
         "room.from":
             "Alkaen",
-
-        "room.hongdae.text":
-            "Intiimi karaokehuone, jonka tunnelma on saanut inspiraationsa Hongdaesta.",
-
-        "room.itaewon.text":
-            "Tyylikäs yksityinen huone laulamiseen ja yhteiseen illanviettoon.",
-
-        "room.gangnam.text":
-            "Tilava ja viimeistelty karaokehuone suuremmalle seurueelle.",
-
-        "room.seoul.text":
-            "Tilava yksityinen karaokehuone modernilla Soul-tunnelmalla.",
 
 
         /* PRICING */
@@ -431,37 +376,99 @@ const translations = {
             "Menu",
 
         "menu.text":
-            "Juomia ja naposteltavaa karaokeiltaan.",
-
-        "menu.soft":
-            "Alkoholittomat",
-
-        "menu.hot":
-            "Kuumat juomat",
+            "Ruokaa, juomia ja jotain makeaa karaokeiltaan.",
 
         "menu.snacks":
             "Naposteltavat",
 
+        "menu.sweets":
+            "Makeat",
+
+        "menu.combos":
+            "Combot",
+
+        "menu.soft":
+            "Alkoholittomat",
+
         "menu.alcohol":
             "Alkoholijuomat",
 
-        "menu.coffee":
-            "Kahvi",
+        "menu.hot":
+            "Kuumat juomat",
 
-        "menu.tea":
-            "Tee",
 
-        "menu.popcorn":
-            "Popcorn 0,5 l",
+        /* FOOD ITEMS */
+
+        "menu.yakitori":
+            "Yakitori – japanilaiset kanavartaat",
+
+        "menu.karaage":
+            "Karaage – japanilainen friteerattu kana",
+
+        "menu.pizza":
+            "Pizzapala",
+
+        "menu.kimbap":
+            "Kimbap – korealaiset merilevärullat",
+
+        "menu.springrolls":
+            "Vietnamilaiset rullat",
 
         "menu.fries":
             "Ranskalaiset",
+
+        "menu.vegetables":
+            "Kasvistikkuja – porkkana, kurkku & kukkakaali",
+
+        "menu.dips":
+            "Majodippejä, mm. gochujang",
+
+        "menu.popcorn":
+            "Popcorn 0,5 l",
 
         "menu.nachos":
             "Nachot + salsa",
 
 
- 
+        /* SWEETS */
+
+        "menu.koreanIceCream":
+            "Korealainen vaahtokarkkitikkujäätelö",
+
+        "menu.iceCream":
+            "Jäätelöannoksia",
+
+        "menu.blueberryPie":
+            "Mustikkapiirakka + vaniljakastike",
+
+        "menu.caramelCake":
+            "Kinuskikakku",
+
+        "menu.sacherCake":
+            "Sacherkakku",
+
+
+        /* COMBOS */
+
+        "menu.sodaSnack":
+            "Virvoitusjuoma + snack",
+
+        "menu.shotTray":
+            "Shottilauta (6 shottia)",
+
+
+        /* DRINKS */
+
+        "menu.jaffa":
+            "Jaffa appelsiini sokeriton 0,5 l",
+
+        "menu.salmiakkiShot":
+            "Salmiakkishotti 4 cl",
+
+        "menu.coffee":
+            "Kahvi",
+
+
         /* ABOUT US */
 
         "about.eyebrow":
@@ -912,38 +919,42 @@ const navigationLinks =
 
 
 const navigationSections = [
+
     {
         id: "home",
         nav: "#home"
     },
+
     {
         id: "rooms",
         nav: "#rooms"
     },
-    {
-        id: "room-selection",
-        nav: "#rooms"
-    },
+
     {
         id: "pricing",
         nav: "#rooms"
     },
+
     {
         id: "food",
         nav: "#food"
     },
+
     {
         id: "menu",
         nav: "#food"
     },
+
     {
         id: "about",
         nav: "#about"
     },
+
     {
         id: "contact",
         nav: "#contact"
     }
+
 ];
 
 
@@ -988,11 +999,6 @@ function updateActiveNavigation() {
     });
 
 
-    /*
-        Remove BOTH active classes
-        from every navigation link first.
-    */
-
     navigationLinks.forEach((link) => {
 
         link.classList.remove(
@@ -1002,10 +1008,6 @@ function updateActiveNavigation() {
 
     });
 
-
-    /*
-        Activate only the correct link.
-    */
 
     navigationLinks.forEach((link) => {
 
@@ -1068,9 +1070,11 @@ const revealElements =
 
 revealElements.forEach(
     (element) => {
+
         element.classList.add(
             "reveal-item"
         );
+
     }
 );
 
@@ -1117,9 +1121,11 @@ if (
 
     revealElements.forEach(
         (element) => {
+
             revealObserver.observe(
                 element
             );
+
         }
     );
 
@@ -1131,9 +1137,11 @@ if (
 
     revealElements.forEach(
         (element) => {
+
             element.classList.add(
                 "revealed"
             );
+
         }
     );
 
