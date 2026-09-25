@@ -177,26 +177,36 @@ h2 {
 }
 
 .outline-button {
-    min-width: 195px;
-    min-height: 49px;
+    min-width: 220px;
+    height: 58px;
 
-    padding: 0 25px 0 29px;
+    padding: 0 30px;
 
-    border: 1px solid var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+
+    border: 1px solid var(--pink);
     border-radius: 999px;
 
     color: var(--cream);
+    background: transparent;
 
-    font-size: 0.70rem;
+    transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease;
 }
 
 .outline-button:hover {
-    transform: translateY(-3px);
+    background: var(--pink);
+    border-color: var(--pink);
+    color: #000;
 
-    background: var(--gold);
-    color: var(--green-black);
+    transform: translateY(-2px);
 }
-
 
 /* =========================================================
    HEADER
