@@ -1455,57 +1455,128 @@ h2 {
 
 
 /* =========================================================
-   TABLET / MOBILE NAV
-========================================================= */
+   TABLET + MOBILE
+   ========================================================= */
 
 @media (max-width: 950px) {
 
     :root {
-        --header-height: 76px;
+        --header-height: 92px;
+    }
+
+    html {
+        scroll-padding-top: var(--header-height);
     }
 
 
-    /* HEADER */
+    /* =========================
+       HEADER
+    ========================= */
+
+    .site-header {
+        height: var(--header-height);
+    }
 
     .header-inner {
-        width: 90%;
+        width: 100%;
+        height: var(--header-height);
 
-        height: 76px;
+        padding: 0 28px;
 
         display: flex;
 
+        align-items: center;
         justify-content: space-between;
 
         gap: 18px;
     }
 
     .logo {
-        margin-right: auto;
+        margin: 0 auto 0 0;
     }
 
     .logo-main {
-        font-size: 1.55rem;
+        font-size: 1.85rem;
+        line-height: 1;
+    }
+
+    .logo-bottom {
+        margin-top: 9px;
+        gap: 10px;
+    }
+
+    .logo-line {
+        width: 38px;
+    }
+
+    .logo-sub {
+        font-size: 0.45rem;
+        letter-spacing: 0.42em;
+    }
+
+
+    /* language */
+
+    .header-right {
+        margin-left: auto;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 18px;
+    }
+
+    .language-switcher {
+        display: flex;
+
+        gap: 9px;
+    }
+
+    .lang-btn {
+        font-size: 0.72rem;
     }
 
     .header-book {
         display: none;
     }
 
+
+    /* hamburger */
+
     .menu-toggle {
         display: block;
+
+        flex: 0 0 auto;
+
+        width: 52px;
+        height: 52px;
+
+        border: 1px solid var(--gold);
+        border-radius: 50%;
     }
+
+    .menu-toggle span {
+        width: 20px;
+
+        margin: 6px auto;
+    }
+
+
+    /* mobile navigation */
 
     .main-nav {
         position: fixed;
 
-        top: 76px;
+        top: var(--header-height);
         left: 0;
 
-        width: 100%;
+        z-index: 999;
 
+        width: 100%;
         max-height: 0;
 
-        padding: 0 6%;
+        padding: 0 30px;
 
         display: flex;
 
@@ -1521,21 +1592,21 @@ h2 {
 
         pointer-events: none;
 
-        background: rgba(0, 13, 10, 0.99);
+        background: rgba(0, 14, 10, 0.99);
 
         border-bottom: 1px solid var(--border);
 
         transition:
             max-height 0.35s ease,
-            padding 0.35s ease,
-            opacity 0.25s ease;
+            opacity 0.25s ease,
+            padding 0.35s ease;
     }
 
     .site-header.menu-open .main-nav {
-        max-height: 520px;
+        max-height: 600px;
 
-        padding-top: 16px;
-        padding-bottom: 22px;
+        padding-top: 18px;
+        padding-bottom: 24px;
 
         opacity: 1;
 
@@ -1545,11 +1616,12 @@ h2 {
     .main-nav a {
         width: 100%;
 
-        padding: 14px 0;
+        padding: 16px 0;
 
         font-size: 0.8rem;
 
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        border-bottom:
+            1px solid rgba(255,255,255,0.07);
     }
 
     .main-nav a::after {
@@ -1557,91 +1629,341 @@ h2 {
     }
 
 
-    /* HERO */
+    /* =========================
+       HERO
+    ========================= */
 
     .hero {
         min-height: auto;
 
-        grid-template-columns: 1fr;
-
         padding-top: var(--header-height);
+
+        display: flex;
+
+        flex-direction: column;
+
+        border-bottom: 1px solid var(--border);
     }
 
-    .hero-photo {
-        order: 1;
-
-        min-height: 58vh;
-
-        background-position: center;
-    }
+    /*
+       Text FIRST on mobile.
+       Image comes underneath.
+    */
 
     .hero-content {
-        order: 2;
+        order: 1;
 
         min-height: auto;
 
-        padding: 65px 7% 90px;
+        padding:
+            72px
+            7%
+            68px;
+
+        display: block;
+    }
+
+    .hero-photo {
+        order: 2;
+
+        width: 100%;
+        min-height: 520px;
+
+        background-size: cover;
+
+        background-position: center center;
     }
 
     .hero h1 {
-        font-size: clamp(4rem, 13vw, 6rem);
+        max-width: 600px;
+
+        font-size: clamp(
+            4rem,
+            13vw,
+            6.2rem
+        );
+
+        line-height: 0.9;
+    }
+
+    .hero-tags {
+        max-width: 500px;
+
+        font-size: 0.65rem;
+
+        line-height: 2;
+
+        letter-spacing: 0.25em;
+    }
+
+    .hero .pink-button {
+        margin-top: 28px;
     }
 
     .scroll-indicator {
         display: none;
     }
 
+    .hero-message {
+        top: 11%;
+        right: 6%;
 
-    /* ROOMS */
+        font-size: 0.68rem;
+    }
+
+    .hero-location {
+        right: 6%;
+        bottom: 6%;
+    }
+
+
+    /* =========================
+       ROOMS INTRO
+    ========================= */
 
     .rooms-section {
-        grid-template-columns: 1fr;
+        min-height: auto;
+
+        display: flex;
+
+        flex-direction: column;
     }
 
     .rooms-copy {
+        order: 1;
+
         min-height: auto;
 
-        padding: 70px 7%;
+        padding:
+            70px
+            7%
+            65px;
     }
 
     .rooms-copy h2 {
-        font-size: clamp(3.8rem, 12vw, 5.3rem);
+        font-size: clamp(
+            3.8rem,
+            12vw,
+            5.5rem
+        );
+
+        line-height: 0.91;
     }
 
     .rooms-photo {
+        order: 2;
+
+        width: 100%;
         min-height: 500px;
+
+        background-size: cover;
+        background-position: center;
     }
 
 
-    /* FOOD */
+    /* =========================
+       ROOM CARDS
+    ========================= */
+
+    .room-selection {
+        padding:
+            80px
+            6%
+            85px;
+    }
+
+    .room-selection-heading {
+        margin-bottom: 45px;
+    }
+
+    .room-selection-heading h2 {
+        font-size: clamp(
+            3.6rem,
+            11vw,
+            5rem
+        );
+    }
+
+    .room-grid {
+        max-width: 760px;
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 16px;
+    }
+
+    .room-image {
+        height: 360px;
+    }
+
+
+    /* =========================
+       FOOD
+    ========================= */
 
     .food-section {
-        grid-template-columns: 1fr;
+        min-height: auto;
+
+        display: flex;
+
+        flex-direction: column;
     }
 
+    /*
+       IMAGE FIRST, like reference.
+    */
+
     .food-photo {
-        min-height: 500px;
+        order: 1;
+
+        width: 100%;
+        min-height: 520px;
+
+        background-size: cover;
+
+        /*
+           This pushes the crop toward
+           the actual food/table instead
+           of the baked-in left text.
+        */
+        background-position: 68% center;
     }
 
     .food-copy {
+        order: 2;
+
         min-height: auto;
 
-        padding: 70px 7%;
+        padding:
+            70px
+            7%
+            75px;
     }
 
     .food-copy h2 {
-        font-size: clamp(3.4rem, 11vw, 5rem);
+        max-width: 650px;
+
+        font-size: clamp(
+            3.6rem,
+            11vw,
+            5rem
+        );
+
+        line-height: 0.92;
     }
 
 
-    /* FOOTER */
+    /* =========================
+       MENU
+    ========================= */
+
+    .menu-section {
+        padding:
+            80px
+            6%
+            85px;
+    }
+
+    .menu-heading h2 {
+        font-size: 4rem;
+    }
+
+    .menu-grid {
+        max-width: 800px;
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+
+    /* =========================
+       EXPERIENCE
+    ========================= */
+
+    .experience-section {
+        min-height: 420px;
+
+        padding:
+            75px
+            7%;
+    }
+
+    .experience-inner h2 {
+        font-size: clamp(
+            3.8rem,
+            11vw,
+            5.2rem
+        );
+    }
+
+
+    /* =========================
+       ABOUT
+    ========================= */
+
+    .about-section {
+        min-height: auto;
+
+        padding:
+            80px
+            7%;
+    }
+
+    .about-inner h2 {
+        font-size: clamp(
+            3.8rem,
+            11vw,
+            5.2rem
+        );
+    }
+
+
+    /* =========================
+       CTA
+    ========================= */
+
+    .cta-section {
+        min-height: 390px;
+    }
+
+    .cta-background {
+        background-position: center;
+    }
+
+    .cta-content {
+        width: 100%;
+
+        padding:
+            60px
+            7%;
+    }
+
+    .cta-content h2 {
+        font-size: clamp(
+            3.8rem,
+            11vw,
+            5.2rem
+        );
+    }
+
+
+    /* =========================
+       FOOTER
+    ========================= */
 
     .site-footer {
-        grid-template-columns: 1fr 1fr;
+        padding:
+            50px
+            7%;
+
+        display: grid;
+
+        grid-template-columns:
+            1fr
+            1fr;
 
         gap: 35px;
-
-        padding: 45px 7%;
     }
 
     .footer-nav {
@@ -1657,207 +1979,376 @@ h2 {
     .footer-location {
         justify-self: end;
     }
-
 }
 
 
 /* =========================================================
    PHONE
-========================================================= */
+   ========================================================= */
 
 @media (max-width: 650px) {
 
-    /* HEADER */
+    :root {
+        --header-height: 82px;
+    }
+
+
+    /* =========================
+       HEADER
+    ========================= */
 
     .header-inner {
-        width: 92%;
+        height: var(--header-height);
+
+        padding:
+            0
+            26px;
     }
 
     .logo-main {
-        font-size: 1.4rem;
+        font-size: 1.65rem;
+    }
+
+    .logo-bottom {
+        margin-top: 8px;
     }
 
     .logo-line {
-        width: 24px;
+        width: 31px;
     }
 
     .logo-sub {
-        font-size: 0.43rem;
+        font-size: 0.4rem;
     }
 
     .header-right {
-        gap: 10px;
+        gap: 14px;
     }
 
-    .language-switcher {
-        gap: 6px;
+    .lang-btn {
+        font-size: 0.68rem;
+    }
+
+    .menu-toggle {
+        width: 48px;
+        height: 48px;
     }
 
 
-    /* HERO */
-
-    .hero-photo {
-        min-height: 470px;
-
-        background-position: 58% center;
-    }
+    /* =========================
+       HERO
+    ========================= */
 
     .hero-content {
         padding:
-            55px
+            58px
             7%
-            70px;
+            60px;
+    }
+
+    .hero .eyebrow {
+        margin-bottom: 20px;
     }
 
     .hero h1 {
-        font-size: clamp(3.7rem, 16vw, 5rem);
+        max-width: 100%;
+
+        font-size: clamp(
+            3.65rem,
+            15.5vw,
+            5rem
+        );
+
+        line-height: 0.9;
+    }
+
+    .gold-line {
+        margin:
+            25px
+            0;
     }
 
     .hero-tags {
-        font-size: 0.61rem;
+        font-size: 0.58rem;
 
-        letter-spacing: 0.22em;
+        letter-spacing: 0.2em;
 
         line-height: 1.9;
     }
 
+    .hero-photo {
+        min-height: 430px;
+
+        /*
+           photo1 focal point
+        */
+        background-position: 55% center;
+    }
+
     .hero-message {
-        top: 11%;
+        top: 8%;
         right: 5%;
 
-        font-size: 0.68rem;
+        font-size: 0.58rem;
+
+        gap: 5px;
     }
 
     .hero-location {
-        right: 6%;
-        bottom: 6%;
+        right: 5%;
+        bottom: 5%;
+
+        font-size: 0.54rem;
     }
 
 
-    /* GENERAL */
+    /* =========================
+       GENERAL
+    ========================= */
 
     .eyebrow {
-        font-size: 0.65rem;
+        margin-bottom: 20px;
+
+        font-size: 0.63rem;
 
         letter-spacing: 0.23em;
     }
 
-    .pink-button,
-    .outline-button {
-        min-height: 50px;
+    .section-description {
+        font-size: 0.94rem;
+
+        line-height: 1.7;
     }
 
 
-    /* ROOMS */
+    /* =========================
+       ROOMS
+    ========================= */
+
+    .rooms-copy {
+        padding:
+            62px
+            7%
+            65px;
+    }
+
+    .rooms-copy h2 {
+        font-size: clamp(
+            3.5rem,
+            14vw,
+            4.7rem
+        );
+    }
 
     .rooms-photo {
-        min-height: 410px;
+        min-height: 420px;
 
-        background-position: center;
+        background-position:
+            58% center;
     }
 
+
+    /* =========================
+       ROOM LIST
+    ========================= */
+
     .room-selection {
-        padding: 75px 6%;
+        padding:
+            70px
+            7%
+            75px;
+    }
+
+    .room-selection-heading {
+        margin-bottom: 35px;
     }
 
     .room-selection-heading h2 {
-        font-size: 3.8rem;
+        font-size: 3.5rem;
     }
 
     .room-grid {
+        display: grid;
+
         grid-template-columns: 1fr;
 
         gap: 18px;
     }
 
     .room-image {
-        height: 390px;
+        height: auto;
+
+        aspect-ratio: 4 / 3;
+    }
+
+    .room-info {
+        padding:
+            24px
+            22px
+            28px;
     }
 
 
-    /* FOOD */
+    /* =========================
+       FOOD
+    ========================= */
 
     .food-photo {
-        min-height: 390px;
+        min-height: 0;
 
-        background-position: center;
+        /*
+           Keeps mobile image at a
+           controlled ratio instead of
+           becoming enormous.
+        */
+        aspect-ratio: 1 / 1;
+
+        background-size: cover;
+
+        /*
+           Important for photo3:
+           crop toward food/drinks.
+        */
+        background-position:
+            72% center;
+    }
+
+    .food-copy {
+        padding:
+            62px
+            7%
+            68px;
+    }
+
+    .food-copy h2 {
+        max-width: 100%;
+
+        font-size: clamp(
+            3.25rem,
+            13.5vw,
+            4.5rem
+        );
+
+        line-height: 0.92;
     }
 
 
-    /* MENU */
+    /* =========================
+       MENU
+    ========================= */
 
     .menu-section {
-        padding: 75px 6%;
+        padding:
+            70px
+            7%
+            75px;
+    }
+
+    .menu-heading {
+        margin-bottom: 40px;
     }
 
     .menu-heading h2 {
-        font-size: 3.8rem;
+        font-size: 3.5rem;
     }
 
     .menu-grid {
         grid-template-columns: 1fr;
+
+        gap: 15px;
     }
 
 
-    /* EXPERIENCE */
+    /* =========================
+       EXPERIENCE
+    ========================= */
 
     .experience-section {
-        min-height: 390px;
+        min-height: 380px;
 
-        padding: 65px 7%;
+        padding:
+            65px
+            7%;
     }
 
     .experience-inner h2 {
-        font-size: 3.8rem;
+        font-size: 3.5rem;
     }
 
 
-    /* ABOUT */
+    /* =========================
+       ABOUT
+    ========================= */
 
     .about-section {
-        min-height: 390px;
-
-        padding: 65px 7%;
+        padding:
+            65px
+            7%;
     }
 
     .about-inner h2 {
-        font-size: 3.8rem;
+        font-size: 3.5rem;
     }
 
 
-    /* CTA */
+    /* =========================
+       CTA
+    ========================= */
 
     .cta-section {
-        min-height: 330px;
+        min-height: 340px;
     }
 
     .cta-background {
-        background-position: 65% center;
+        background-position:
+            68% center;
+    }
+
+    .cta-content {
+        padding:
+            55px
+            7%;
     }
 
     .cta-content h2 {
-        font-size: 3.8rem;
+        font-size: 3.55rem;
     }
 
 
-    /* FOOTER */
+    /* =========================
+       FOOTER
+    ========================= */
 
     .site-footer {
-        grid-template-columns: 1fr;
+        padding:
+            45px
+            7%;
 
-        justify-items: center;
+        display: flex;
 
-        text-align: center;
+        flex-direction: column;
+
+        align-items: center;
 
         gap: 28px;
 
-        padding: 45px 7%;
+        text-align: center;
+    }
+
+    .footer-logo {
+        margin: 0;
     }
 
     .footer-nav {
+        display: flex;
+
         justify-content: center;
 
-        gap: 16px 25px;
+        gap:
+            15px
+            24px;
+
+        flex-wrap: wrap;
     }
 
     .footer-socials {
@@ -1865,7 +2356,7 @@ h2 {
     }
 
     .footer-location {
-        justify-self: center;
+        justify-self: auto;
 
         padding:
             18px
@@ -1874,32 +2365,55 @@ h2 {
 
         border-left: 0;
 
-        border-top: 1px solid var(--gold);
+        border-top:
+            1px solid var(--gold);
     }
-
 }
 
 
 /* =========================================================
-   SMALL PHONE
-========================================================= */
+   VERY SMALL PHONES
+   ========================================================= */
 
-@media (max-width: 400px) {
+@media (max-width: 420px) {
+
+    .header-inner {
+        padding:
+            0
+            18px;
+    }
 
     .logo-main {
-        font-size: 1.25rem;
+        font-size: 1.48rem;
+    }
+
+    .logo-line {
+        width: 26px;
+    }
+
+    .logo-sub {
+        font-size: 0.36rem;
     }
 
     .language-switcher {
-        display: none;
+        gap: 5px;
     }
 
-    .hero-photo {
-        min-height: 420px;
+    .lang-btn {
+        font-size: 0.62rem;
+    }
+
+    .menu-toggle {
+        width: 44px;
+        height: 44px;
     }
 
     .hero h1 {
-        font-size: 3.45rem;
+        font-size: 3.3rem;
+    }
+
+    .hero-photo {
+        min-height: 390px;
     }
 
     .rooms-copy h2,
@@ -1907,19 +2421,14 @@ h2 {
     .experience-inner h2,
     .about-inner h2,
     .cta-content h2 {
-        font-size: 3.35rem;
+        font-size: 3.15rem;
     }
-
-    .room-image {
-        height: 340px;
-    }
-
 }
 
 
 /* =========================================================
    ACCESSIBILITY
-========================================================= */
+   ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
 
@@ -1930,9 +2439,13 @@ h2 {
     *,
     *::before,
     *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
+        animation-duration:
+            0.01ms !important;
 
+        animation-iteration-count:
+            1 !important;
+
+        transition-duration:
+            0.01ms !important;
+    }
 }
