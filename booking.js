@@ -1307,11 +1307,6 @@ function drawRooms() {
                 : `Up to ${room.guests} guests`;
 
 
-        const priceText =
-            currentLanguage === "fi"
-                ? `Alkaen ${room.startingPrice} €/h`
-                : `From €${room.startingPrice} / hour`;
-
 
         card.innerHTML = `
 
@@ -1331,9 +1326,6 @@ function drawRooms() {
                     ${capacityText}
                 </div>
 
-                <div class="room-price">
-                    ${priceText}
-                </div>
 
             </div>
 
