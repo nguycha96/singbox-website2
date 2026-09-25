@@ -1257,47 +1257,66 @@ h2 {
 ========================================================= */
 
 .menu-section {
-    padding: 100px 5% 110px;
+    padding: 90px 5% 100px;
 
     background: #000e0a;
 
     border-bottom: 1px solid var(--border);
 }
 
+
 .menu-heading {
     max-width: 650px;
 
-    margin: 0 auto 55px;
+    margin: 0 auto 50px;
 
     text-align: center;
 }
 
-.menu-heading h2 {
-    margin-bottom: 18px;
 
-    font-size: clamp(3.5rem, 5vw, 5.2rem);
+.menu-heading h2 {
+    margin-bottom: 16px;
+
+    font-size: clamp(3.5rem, 5vw, 5rem);
 }
+
 
 .menu-heading > p:last-child {
     color: var(--muted);
 }
 
+
+/* =========================================================
+   MENU GRID
+========================================================= */
+
 .menu-grid {
-    width: min(1250px, 100%);
+    width: min(1320px, 100%);
 
     margin: 0 auto;
 
     display: grid;
 
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
 
     gap: 20px;
+
+    align-items: start;
 }
 
-.menu-category {
-    padding: 28px 25px;
 
-    border-top: 1px solid var(--gold);
+/* =========================================================
+   MENU CATEGORY
+========================================================= */
+
+.menu-category {
+    min-width: 0;
+
+    padding: 28px 26px 30px;
+
+    border-top:
+        1px solid var(--gold);
 
     border-bottom:
         1px solid rgba(255, 255, 255, 0.08);
@@ -1306,46 +1325,87 @@ h2 {
         rgba(255, 255, 255, 0.015);
 }
 
+
 .menu-category h3 {
-    margin-bottom: 22px;
+    margin:
+        0 0 22px;
 
-    color: var(--cream);
+    color:
+        var(--cream);
 
-    font-family: var(--serif);
+    font-family:
+        var(--serif);
 
-    font-size: 1.65rem;
-    font-weight: 500;
+    font-size:
+        1.7rem;
+
+    font-weight:
+        500;
+
+    line-height:
+        1.05;
 }
 
+
+/* =========================================================
+   MENU ITEM
+========================================================= */
+
 .menu-item {
-    padding: 11px 0;
+    min-height: 44px;
 
-    display: flex;
+    padding:
+        11px 0;
 
-    align-items: flex-start;
-    justify-content: space-between;
+    display:
+        flex;
 
-    gap: 20px;
+    align-items:
+        flex-start;
+
+    justify-content:
+        space-between;
+
+    gap:
+        20px;
 
     border-bottom:
         1px solid rgba(255, 255, 255, 0.06);
 
-    color: rgba(255, 255, 255, 0.70);
+    color:
+        rgba(255, 255, 255, 0.72);
 
-    font-size: 0.78rem;
+    font-size:
+        0.8rem;
+
+    line-height:
+        1.45;
 }
+
 
 .menu-item:last-child {
     border-bottom: 0;
 }
 
+
+.menu-item span {
+    min-width: 0;
+}
+
+
 .menu-item strong {
     flex-shrink: 0;
 
-    color: var(--gold);
+    color:
+        var(--gold);
 
-    font-weight: 400;
+    font-weight:
+        500;
+
+    white-space:
+        nowrap;
 }
+
 
 
 /* =========================================================
