@@ -153,45 +153,108 @@ const translations = {
             "View menu",
 
 
-        /* MENU */
+       /* MENU */
 
-        "menu.eyebrow":
-            "Something for the table",
+"menu.eyebrow":
+    "Something for the table",
 
-        "menu.title":
-            "Menu",
+"menu.title":
+    "Menu",
 
-        "menu.text":
-            "Drinks and snacks for your karaoke night.",
+"menu.text":
+    "Food, drinks and something sweet for your karaoke night.",
 
-        "menu.soft":
-            "Non-alcoholic",
+"menu.snacks":
+    "Snacks",
 
-        "menu.hot":
-            "Hot drinks",
+"menu.sweets":
+    "Sweets",
 
-        "menu.snacks":
-            "Snacks",
+"menu.combos":
+    "Combos",
 
-        "menu.alcohol":
-            "Alcohol",
+"menu.soft":
+    "Non-alcoholic",
 
-        "menu.coffee":
-            "Coffee",
+"menu.alcohol":
+    "Alcohol",
 
-        "menu.tea":
-            "Tea",
-
-        "menu.popcorn":
-            "Popcorn 0.5 l",
-
-        "menu.fries":
-            "French fries",
-
-        "menu.nachos":
-            "Nachos + salsa",
+"menu.hot":
+    "Hot drinks",
 
 
+/* FOOD ITEMS */
+
+"menu.yakitori":
+    "Yakitori – Japanese chicken skewers",
+
+"menu.karaage":
+    "Karaage – Japanese fried chicken",
+
+"menu.pizza":
+    "Pizza slice",
+
+"menu.kimbap":
+    "Kimbap – Korean seaweed rolls",
+
+"menu.springrolls":
+    "Vietnamese spring rolls",
+
+"menu.fries":
+    "French fries",
+
+"menu.vegetables":
+    "Vegetable sticks – carrot, cucumber & cauliflower",
+
+"menu.dips":
+    "Mayo dips, incl. gochujang",
+
+"menu.popcorn":
+    "Popcorn 0.5 l",
+
+"menu.nachos":
+    "Nachos + salsa",
+
+
+/* SWEETS */
+
+"menu.koreanIceCream":
+    "Korean marshmallow stick ice cream",
+
+"menu.iceCream":
+    "Ice cream portions",
+
+"menu.blueberryPie":
+    "Blueberry pie + vanilla sauce",
+
+"menu.caramelCake":
+    "Caramel cake",
+
+"menu.sacherCake":
+    "Sacher cake",
+
+
+/* COMBOS */
+
+"menu.sodaSnack":
+    "Soda drink + snack",
+
+"menu.shotTray":
+    "Shot tray (6 shots)",
+
+
+/* DRINKS */
+
+"menu.jaffa":
+    "Jaffa Orange Sugar Free 0.5 l",
+
+"menu.salmiakkiShot":
+    "Salmiakki shot 4 cl",
+
+"menu.coffee":
+    "Coffee",
+
+       
         /* EXPERIENCE */
 
         "experience.eyebrow":
