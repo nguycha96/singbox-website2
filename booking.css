@@ -2071,3 +2071,26 @@ a {
 .rooms-grid {
     background: rgba(216, 170, 43, 0.18);
 }
+
+
+/* =========================================================
+   CLEANING / CHANGEOVER TIME
+========================================================= */
+
+.time-slot.cleaning {
+    border-color: rgba(216, 170, 43, 0.10);
+
+    background: rgba(216, 170, 43, 0.025);
+
+    color: rgba(216, 170, 43, 0.34);
+
+    cursor: not-allowed;
+}
+
+.time-slot.cleaning:hover {
+    border-color: rgba(216, 170, 43, 0.10);
+
+    background: rgba(216, 170, 43, 0.025);
+
+    color: rgba(216, 170, 43, 0.34);
+}
