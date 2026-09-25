@@ -272,18 +272,18 @@ h2 {
 .logo-bottom {
     width: 100%;
 
-    margin-top: 11px;
+    margin-top: 9px;
 
     display: flex;
 
     align-items: center;
     justify-content: center;
 
-    gap: 12px;
+    gap: 10px;
 }
 
 .logo-line {
-    width: 43px;
+    width: 36px;
     height: 1px;
 
     background: var(--gold);
@@ -292,10 +292,11 @@ h2 {
 .logo-sub {
     color: var(--gold);
 
-    font-size: 0.58rem;
+    font-size: 0.72rem;
     font-weight: 500;
 
-    letter-spacing: 0.48em;
+    line-height: 1;
+    letter-spacing: 0.30em;
 }
 
 
@@ -1762,10 +1763,9 @@ h2 {
     }
 
     .logo-sub {
-        font-size: 0.45rem;
-
-        letter-spacing: 0.42em;
-    }
+    font-size: 0.62rem;
+    letter-spacing: 0.28em;
+   }
 
     .header-right {
         margin-left: auto;
