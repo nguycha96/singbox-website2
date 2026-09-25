@@ -2099,17 +2099,6 @@ h2 {
     }
 
 
-    /* EXPERIENCE */
-
-    .experience-section {
-        min-height: 420px;
-
-        padding:
-            75px
-            7%;
-    }
-
-
     /* ABOUT */
 
     .about-section {
@@ -2517,20 +2506,6 @@ h2 {
     }
 
 
-    /* EXPERIENCE */
-
-    .experience-section {
-        min-height: 380px;
-
-        padding:
-            65px
-            7%;
-    }
-
-    .experience-inner h2 {
-        font-size: 3.5rem;
-    }
-
 
     /* ABOUT */
 
@@ -2663,7 +2638,6 @@ h2 {
 
     .rooms-copy h2,
     .food-copy h2,
-    .experience-inner h2,
     .about-inner h2,
     .cta-content h2 {
         font-size: 3.15rem;
