@@ -1,0 +1,1862 @@
+/* =========================================================
+   SiNG BOX NORAEBANG
+   BOOKING PAGE
+========================================================= */
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+:root {
+
+    --green-black: #001c14;
+    --green-deep: #00251b;
+    --green-card: #08271d;
+    --green-card-alt: #0b2d22;
+
+    --cream: #f1ddb0;
+    --cream-soft: #dfc997;
+
+    --gold: #d8aa2b;
+    --gold-soft: rgba(216, 170, 43, 0.34);
+
+    --pink: #ff008c;
+    --pink-soft: rgba(255, 0, 140, 0.18);
+
+    --white: #f5f1e7;
+
+    --text:
+        rgba(245, 241, 231, 0.84);
+
+    --muted:
+        rgba(245, 241, 231, 0.52);
+
+    --border:
+        rgba(216, 170, 43, 0.24);
+
+    --border-light:
+        rgba(241, 221, 176, 0.13);
+
+    --serif:
+        "Cormorant Garamond",
+        Georgia,
+        serif;
+
+    --sans:
+        "Outfit",
+        Arial,
+        sans-serif;
+
+    --header-height: 108px;
+}
+
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+
+    background:
+        var(--green-black);
+
+    color:
+        var(--white);
+
+    font-family:
+        var(--sans);
+
+    -webkit-font-smoothing:
+        antialiased;
+}
+
+button,
+a {
+    font: inherit;
+}
+
+button {
+    appearance: none;
+}
+
+a {
+    color: inherit;
+}
+
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.site-header {
+    height:
+        var(--header-height);
+
+    border-bottom:
+        1px solid
+        var(--border);
+
+    background:
+        #00150f;
+
+    display: flex;
+    align-items: center;
+}
+
+.header-inner {
+    width:
+        min(1510px, 94%);
+
+    height: 100%;
+
+    margin:
+        0 auto;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.booking-logo {
+    width:
+        max-content;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    color:
+        var(--cream);
+
+    text-decoration:
+        none;
+}
+
+.logo-main {
+    font-family:
+        var(--sans);
+
+    font-size:
+        2.4rem;
+
+    font-weight:
+        500;
+
+    line-height:
+        0.95;
+
+    letter-spacing:
+        0.025em;
+}
+
+.logo-bottom {
+    width: 100%;
+
+    margin-top:
+        9px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap:
+        10px;
+}
+
+.logo-line {
+    width:
+        32px;
+
+    height:
+        1px;
+
+    background:
+        var(--gold);
+}
+
+.logo-sub {
+    color:
+        var(--gold);
+
+    font-size:
+        0.72rem;
+
+    font-weight:
+        600;
+
+    line-height:
+        1;
+
+    letter-spacing:
+        0.20em;
+
+    text-rendering:
+        geometricPrecision;
+}
+
+
+
+/* =========================================================
+   BACK LINK
+========================================================= */
+
+.back-link {
+    min-height:
+        48px;
+
+    padding:
+        0 22px;
+
+    border:
+        1px solid
+        var(--gold);
+
+    border-radius:
+        999px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    color:
+        var(--cream);
+
+    text-decoration:
+        none;
+
+    text-transform:
+        uppercase;
+
+    font-size:
+        0.75rem;
+
+    font-weight:
+        600;
+
+    letter-spacing:
+        0.08em;
+
+    transition:
+        background 180ms ease,
+        color 180ms ease,
+        transform 180ms ease;
+}
+
+.back-link:hover {
+    background:
+        var(--cream);
+
+    color:
+        var(--green-black);
+
+    transform:
+        translateY(-1px);
+}
+
+.back-arrow {
+    color:
+        var(--gold);
+
+    font-size:
+        1.1rem;
+}
+
+.back-link:hover
+.back-arrow {
+    color:
+        var(--green-black);
+}
+
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.booking-page {
+    min-height:
+        100vh;
+}
+
+
+
+/* =========================================================
+   INTRO
+========================================================= */
+
+.booking-intro {
+    border-bottom:
+        1px solid
+        var(--border);
+
+    background:
+        linear-gradient(
+            110deg,
+            #00291e 0%,
+            #001c14 58%,
+            #00150f 100%
+        );
+}
+
+.booking-intro-inner {
+    width:
+        min(1360px, 88%);
+
+    margin:
+        0 auto;
+
+    padding:
+        105px 0 82px;
+}
+
+.eyebrow {
+    margin:
+        0 0 24px;
+
+    color:
+        var(--gold);
+
+    font-size:
+        0.78rem;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.3;
+
+    letter-spacing:
+        0.27em;
+
+    text-transform:
+        uppercase;
+}
+
+.booking-intro h1 {
+    margin:
+        0;
+
+    color:
+        var(--cream);
+
+    font-family:
+        var(--serif);
+
+    font-size:
+        clamp(
+            4.4rem,
+            7.4vw,
+            7.4rem
+        );
+
+    font-weight:
+        400;
+
+    line-height:
+        0.82;
+
+    letter-spacing:
+        -0.025em;
+
+    text-transform:
+        uppercase;
+}
+
+.booking-lead {
+    max-width:
+        560px;
+
+    margin:
+        34px 0 0;
+
+    color:
+        var(--text);
+
+    font-size:
+        1.05rem;
+
+    line-height:
+        1.75;
+}
+
+
+
+/* =========================================================
+   CALENDAR SECTION
+========================================================= */
+
+.booking-calendar-section {
+    width:
+        min(1360px, 88%);
+
+    margin:
+        0 auto;
+
+    padding:
+        78px 0 88px;
+}
+
+
+
+/* =========================================================
+   MONTH HEADER
+========================================================= */
+
+.calendar-header {
+    margin-bottom:
+        42px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        36px;
+}
+
+.calendar-header h2 {
+    min-width:
+        310px;
+
+    margin:
+        0;
+
+    color:
+        var(--cream);
+
+    text-align:
+        center;
+
+    font-family:
+        var(--serif);
+
+    font-size:
+        2.45rem;
+
+    font-weight:
+        500;
+
+    line-height:
+        1;
+
+    text-transform:
+        uppercase;
+}
+
+.month-arrow {
+    width:
+        54px;
+
+    height:
+        54px;
+
+    padding:
+        0;
+
+    border:
+        1px solid
+        var(--gold);
+
+    border-radius:
+        50%;
+
+    background:
+        transparent;
+
+    color:
+        var(--cream);
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    font-size:
+        1.5rem;
+
+    cursor:
+        pointer;
+
+    transition:
+        background 180ms ease,
+        color 180ms ease,
+        transform 180ms ease;
+}
+
+.month-arrow:hover {
+    background:
+        var(--gold);
+
+    color:
+        var(--green-black);
+
+    transform:
+        scale(1.04);
+}
+
+
+
+/* =========================================================
+   CALENDAR LAYOUT
+========================================================= */
+
+.calendar-layout {
+    display:
+        grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        250px;
+
+    gap:
+        64px;
+
+    align-items:
+        stretch;
+}
+
+.calendar {
+    width:
+        100%;
+}
+
+
+
+/* =========================================================
+   WEEKDAYS
+========================================================= */
+
+.calendar-weekdays,
+.calendar-days {
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(7, 1fr);
+}
+
+.calendar-weekdays {
+    margin-bottom:
+        12px;
+
+    border-bottom:
+        1px solid
+        var(--border);
+}
+
+.calendar-weekdays span {
+    padding:
+        0 5px 16px;
+
+    color:
+        var(--gold);
+
+    text-align:
+        center;
+
+    font-size:
+        0.76rem;
+
+    font-weight:
+        600;
+
+    letter-spacing:
+        0.16em;
+
+    text-transform:
+        uppercase;
+}
+
+
+
+/* =========================================================
+   DAYS
+========================================================= */
+
+.calendar-days {
+    gap:
+        7px;
+}
+
+.calendar-day {
+    position:
+        relative;
+
+    min-height:
+        76px;
+
+    padding:
+        0;
+
+    border:
+        1px solid
+        var(--border-light);
+
+    border-radius:
+        0;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.018
+        );
+
+    color:
+        var(--cream);
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    font-family:
+        var(--serif);
+
+    font-size:
+        1.45rem;
+
+    font-weight:
+        500;
+
+    cursor:
+        pointer;
+
+    transition:
+        border-color 160ms ease,
+        background 160ms ease,
+        color 160ms ease,
+        transform 160ms ease;
+}
+
+.calendar-day:hover {
+    z-index:
+        1;
+
+    border-color:
+        var(--gold);
+
+    background:
+        rgba(
+            216,
+            170,
+            43,
+            0.08
+        );
+
+    transform:
+        translateY(-2px);
+}
+
+.calendar-day.empty {
+    visibility:
+        hidden;
+
+    pointer-events:
+        none;
+}
+
+.calendar-day.today {
+    border-color:
+        var(--gold);
+}
+
+.calendar-day.today::after {
+    content:
+        "";
+
+    position:
+        absolute;
+
+    bottom:
+        10px;
+
+    width:
+        4px;
+
+    height:
+        4px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--gold);
+}
+
+
+
+/* =========================================================
+   SELECTED DAY
+========================================================= */
+
+.calendar-day.selected {
+    border-color:
+        var(--pink);
+
+    background:
+        var(--pink);
+
+    color:
+        #ffffff;
+
+    box-shadow:
+        0 0 24px
+        rgba(
+            255,
+            0,
+            140,
+            0.18
+        );
+}
+
+.calendar-day.selected::after {
+    background:
+        #ffffff;
+}
+
+
+
+/* =========================================================
+   PAST DAY
+========================================================= */
+
+.calendar-day.past {
+    border-color:
+        rgba(
+            255,
+            255,
+            255,
+            0.035
+        );
+
+    background:
+        transparent;
+
+    color:
+        rgba(
+            245,
+            241,
+            231,
+            0.18
+        );
+
+    cursor:
+        not-allowed;
+}
+
+.calendar-day.past:hover {
+    border-color:
+        rgba(
+            255,
+            255,
+            255,
+            0.035
+        );
+
+    background:
+        transparent;
+
+    transform:
+        none;
+}
+
+
+
+/* =========================================================
+   LEGEND
+========================================================= */
+
+.calendar-legend {
+    padding:
+        6px 0 6px 38px;
+
+    border-left:
+        1px solid
+        var(--border);
+}
+
+.legend-title {
+    margin:
+        0 0 27px;
+
+    color:
+        var(--gold);
+
+    font-size:
+        0.75rem;
+
+    font-weight:
+        600;
+
+    letter-spacing:
+        0.22em;
+
+    text-transform:
+        uppercase;
+}
+
+.legend-list {
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        18px;
+}
+
+.legend-item {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        13px;
+
+    color:
+        var(--text);
+
+    font-size:
+        0.9rem;
+}
+
+.legend-box {
+    width:
+        24px;
+
+    height:
+        24px;
+
+    flex:
+        0 0 24px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+}
+
+.legend-box.available {
+    border:
+        1px solid
+        var(--cream-soft);
+
+    background:
+        transparent;
+}
+
+.legend-box.selected {
+    border:
+        1px solid
+        var(--pink);
+
+    background:
+        var(--pink);
+}
+
+.legend-box.booked {
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    color:
+        var(--muted);
+
+    font-size:
+        1.1rem;
+}
+
+.legend-help {
+    margin:
+        34px 0 0;
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.83rem;
+
+    line-height:
+        1.65;
+}
+
+
+
+/* =========================================================
+   ROOMS SECTION
+========================================================= */
+
+.rooms-section {
+    padding:
+        90px max(6vw, 30px)
+        110px;
+
+    border-top:
+        1px solid
+        var(--border);
+
+    background:
+        #00170f;
+}
+
+.rooms-heading {
+    width:
+        min(1360px, 100%);
+
+    margin:
+        0 auto 46px;
+}
+
+.rooms-heading h2 {
+    margin:
+        0;
+
+    color:
+        var(--cream);
+
+    font-family:
+        var(--serif);
+
+    font-size:
+        clamp(
+            3rem,
+            5vw,
+            5.2rem
+        );
+
+    font-weight:
+        400;
+
+    line-height:
+        0.95;
+}
+
+.rooms-description {
+    max-width:
+        580px;
+
+    margin:
+        22px 0 0;
+
+    color:
+        var(--text);
+
+    font-size:
+        0.98rem;
+
+    line-height:
+        1.7;
+}
+
+
+
+/* =========================================================
+   ROOM GRID
+========================================================= */
+
+.rooms-grid {
+    width:
+        min(1360px, 100%);
+
+    margin:
+        0 auto;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap:
+        1px;
+
+    background:
+        var(--border);
+}
+
+
+
+/* =========================================================
+   ROOM CARD
+========================================================= */
+
+.room-card {
+    min-width:
+        0;
+
+    overflow:
+        hidden;
+
+    border:
+        none;
+
+    border-radius:
+        0;
+
+    background:
+        var(--green-card);
+
+    box-shadow:
+        none;
+
+    transition:
+        background 180ms ease;
+}
+
+.room-card:hover {
+    background:
+        var(--green-card-alt);
+}
+
+.room-image {
+    width:
+        100%;
+
+    aspect-ratio:
+        4 / 3;
+
+    object-fit:
+        cover;
+
+    display:
+        block;
+
+    filter:
+        saturate(0.88)
+        brightness(0.88);
+
+    transition:
+        filter 220ms ease,
+        transform 350ms ease;
+}
+
+.room-card:hover
+.room-image {
+    filter:
+        saturate(1)
+        brightness(0.98);
+
+    transform:
+        scale(1.015);
+}
+
+
+
+/* =========================================================
+   ROOM INFO
+========================================================= */
+
+.room-info {
+    padding:
+        26px 25px 22px;
+}
+
+.room-info h3 {
+    margin:
+        0 0 10px;
+
+    color:
+        var(--cream);
+
+    font-family:
+        var(--serif);
+
+    font-size:
+        1.85rem;
+
+    font-weight:
+        500;
+
+    line-height:
+        1;
+}
+
+.room-info
+.room-meta {
+    color:
+        var(--muted);
+
+    font-size:
+        0.76rem;
+
+    font-weight:
+        500;
+
+    line-height:
+        1.5;
+
+    letter-spacing:
+        0.05em;
+
+    text-transform:
+        uppercase;
+}
+
+.room-price {
+    margin-top:
+        10px;
+
+    color:
+        var(--gold);
+
+    font-family:
+        var(--serif);
+
+    font-size:
+        1.22rem;
+
+    font-weight:
+        500;
+}
+
+
+
+/* =========================================================
+   TIME SLOTS
+========================================================= */
+
+.time-slots {
+    padding:
+        0 25px 28px;
+}
+
+.time-header {
+    min-height:
+        34px;
+
+    margin-bottom:
+        14px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        12px;
+}
+
+.time-slots h4 {
+    margin:
+        0;
+
+    color:
+        var(--cream);
+
+    font-size:
+        0.68rem;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.3;
+
+    letter-spacing:
+        0.13em;
+
+    text-transform:
+        uppercase;
+}
+
+.selected-total {
+    color:
+        var(--gold);
+
+    font-family:
+        var(--serif);
+
+    font-size:
+        1.08rem;
+
+    font-weight:
+        600;
+
+    white-space:
+        nowrap;
+}
+
+
+
+/* =========================================================
+   TIME GRID
+========================================================= */
+
+.time-grid {
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap:
+        6px;
+}
+
+.time-slot {
+    position:
+        relative;
+
+    min-height:
+        42px;
+
+    padding:
+        6px;
+
+    border:
+        1px solid
+        var(--border-light);
+
+    border-radius:
+        0;
+
+    background:
+        transparent;
+
+    color:
+        var(--text);
+
+    font-size:
+        0.77rem;
+
+    cursor:
+        pointer;
+
+    transition:
+        background 150ms ease,
+        border-color 150ms ease,
+        color 150ms ease;
+}
+
+.time-slot:hover {
+    border-color:
+        var(--gold);
+
+    background:
+        rgba(
+            216,
+            170,
+            43,
+            0.07
+        );
+
+    color:
+        var(--cream);
+}
+
+
+
+/* =========================================================
+   BOOKED TIME
+========================================================= */
+
+.time-slot.booked {
+    border-color:
+        rgba(
+            255,
+            255,
+            255,
+            0.035
+        );
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.012
+        );
+
+    color:
+        rgba(
+            245,
+            241,
+            231,
+            0.17
+        );
+
+    cursor:
+        not-allowed;
+}
+
+.time-slot.booked:hover {
+    border-color:
+        rgba(
+            255,
+            255,
+            255,
+            0.035
+        );
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.012
+        );
+
+    color:
+        rgba(
+            245,
+            241,
+            231,
+            0.17
+        );
+}
+
+
+
+/* =========================================================
+   SELECTED TIME
+========================================================= */
+
+.time-slot.selected {
+    border-color:
+        var(--pink);
+
+    background:
+        var(--pink);
+
+    color:
+        #ffffff;
+
+    box-shadow:
+        none;
+}
+
+.time-slot.selected:hover {
+    border-color:
+        var(--pink);
+
+    background:
+        var(--pink);
+
+    color:
+        #ffffff;
+}
+
+
+
+/* =========================================================
+   SELECTED PRICE
+========================================================= */
+
+.time-slot small,
+.time-slot
+.selected-price {
+    display:
+        block;
+
+    margin-top:
+        3px;
+
+    color:
+        #ffffff;
+
+    font-size:
+        0.65rem;
+
+    font-weight:
+        600;
+}
+
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.booking-footer {
+    border-top:
+        1px solid
+        var(--border);
+
+    background:
+        #00110c;
+}
+
+.footer-inner {
+    width:
+        min(1360px, 88%);
+
+    min-height:
+        190px;
+
+    margin:
+        0 auto;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        40px;
+}
+
+.footer-brand {
+    display:
+        flex;
+
+    flex-direction:
+        column;
+}
+
+.footer-logo {
+    color:
+        var(--cream);
+
+    font-size:
+        1.7rem;
+
+    font-weight:
+        500;
+
+    letter-spacing:
+        0.03em;
+}
+
+.footer-sub {
+    margin-top:
+        5px;
+
+    color:
+        var(--gold);
+
+    font-size:
+        0.57rem;
+
+    font-weight:
+        600;
+
+    letter-spacing:
+        0.24em;
+}
+
+.footer-inner p {
+    margin:
+        0;
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.78rem;
+}
+
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .calendar-layout {
+        grid-template-columns:
+            minmax(0, 1fr)
+            210px;
+
+        gap:
+            35px;
+    }
+
+    .rooms-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 760px) {
+
+    :root {
+        --header-height:
+            88px;
+    }
+
+
+    /* HEADER */
+
+    .header-inner {
+        width:
+            calc(100% - 30px);
+    }
+
+    .logo-main {
+        font-size:
+            1.65rem;
+    }
+
+    .logo-bottom {
+        margin-top:
+            6px;
+
+        gap:
+            6px;
+    }
+
+    .logo-line {
+        width:
+            20px;
+    }
+
+    .logo-sub {
+        font-size:
+            0.51rem;
+
+        letter-spacing:
+            0.17em;
+    }
+
+    .back-link {
+        min-height:
+            42px;
+
+        padding:
+            0 15px;
+
+        font-size:
+            0.62rem;
+    }
+
+
+    /* INTRO */
+
+    .booking-intro-inner {
+        width:
+            calc(100% - 34px);
+
+        padding:
+            70px 0 58px;
+    }
+
+    .eyebrow {
+        margin-bottom:
+            18px;
+
+        font-size:
+            0.66rem;
+    }
+
+    .booking-intro h1 {
+        font-size:
+            clamp(
+                3.6rem,
+                18vw,
+                5rem
+            );
+    }
+
+    .booking-lead {
+        margin-top:
+            25px;
+
+        font-size:
+            0.94rem;
+    }
+
+
+    /* CALENDAR */
+
+    .booking-calendar-section {
+        width:
+            calc(100% - 30px);
+
+        padding:
+            52px 0 62px;
+    }
+
+    .calendar-header {
+        gap:
+            12px;
+
+        margin-bottom:
+            30px;
+    }
+
+    .calendar-header h2 {
+        min-width:
+            0;
+
+        flex:
+            1;
+
+        font-size:
+            1.65rem;
+    }
+
+    .month-arrow {
+        width:
+            42px;
+
+        height:
+            42px;
+
+        flex:
+            0 0 42px;
+
+        font-size:
+            1.2rem;
+    }
+
+    .calendar-layout {
+        grid-template-columns:
+            1fr;
+
+        gap:
+            34px;
+    }
+
+    .calendar-weekdays span {
+        padding-bottom:
+            11px;
+
+        font-size:
+            0.59rem;
+
+        letter-spacing:
+            0.08em;
+    }
+
+    .calendar-days {
+        gap:
+            4px;
+    }
+
+    .calendar-day {
+        min-height:
+            48px;
+
+        font-size:
+            1rem;
+    }
+
+    .calendar-day.today::after {
+        bottom:
+            6px;
+    }
+
+
+    /* LEGEND */
+
+    .calendar-legend {
+        padding:
+            27px 0 0;
+
+        border-left:
+            none;
+
+        border-top:
+            1px solid
+            var(--border);
+    }
+
+    .legend-title {
+        margin-bottom:
+            18px;
+    }
+
+    .legend-list {
+        flex-direction:
+            row;
+
+        flex-wrap:
+            wrap;
+
+        gap:
+            14px 22px;
+    }
+
+    .legend-help {
+        margin-top:
+            23px;
+    }
+
+
+    /* ROOMS */
+
+    .rooms-section {
+        padding:
+            65px 15px 80px;
+    }
+
+    .rooms-heading {
+        margin-bottom:
+            32px;
+    }
+
+    .rooms-heading h2 {
+        font-size:
+            clamp(
+                2.7rem,
+                13vw,
+                4rem
+            );
+    }
+
+    .rooms-description {
+        font-size:
+            0.9rem;
+    }
+
+    .rooms-grid {
+        grid-template-columns:
+            1fr;
+
+        gap:
+            1px;
+    }
+
+    .room-image {
+        aspect-ratio:
+            16 / 10;
+    }
+
+    .room-info {
+        padding:
+            24px 20px 20px;
+    }
+
+    .time-slots {
+        padding:
+            0 20px 25px;
+    }
+
+    .time-grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+
+    /* FOOTER */
+
+    .footer-inner {
+        width:
+            calc(100% - 34px);
+
+        min-height:
+            170px;
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+        justify-content:
+            center;
+
+        gap:
+            24px;
+    }
+
+}
+
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .back-link {
+        padding:
+            0 11px;
+
+        font-size:
+            0.56rem;
+    }
+
+    .back-arrow {
+        display:
+            none;
+    }
+
+    .calendar-header h2 {
+        font-size:
+            1.42rem;
+    }
+
+    .calendar-day {
+        min-height:
+            43px;
+
+        font-size:
+            0.92rem;
+    }
+
+    .time-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
