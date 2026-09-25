@@ -1408,52 +1408,6 @@ h2 {
 
 
 
-/* =========================================================
-   EXPERIENCE
-========================================================= */
-
-.experience-section {
-    min-height: 440px;
-
-    padding: 80px 5%;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    background:
-        radial-gradient(
-            circle at 50% 50%,
-            rgba(8, 61, 44, 0.42),
-            transparent 55%
-        ),
-        #00140e;
-
-    border-bottom: 1px solid var(--border);
-}
-
-.experience-inner {
-    max-width: 760px;
-
-    text-align: center;
-}
-
-.experience-inner h2 {
-    font-size: clamp(3.7rem, 5vw, 5.4rem);
-}
-
-.experience-inner > p:last-child {
-    max-width: 570px;
-
-    margin: 0 auto;
-
-    color: rgba(255, 255, 255, 0.72);
-
-    font-size: 1rem;
-    line-height: 1.8;
-}
-
 
 /* =========================================================
    ABOUT
