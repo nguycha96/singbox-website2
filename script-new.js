@@ -22,7 +22,7 @@ const translations = {
         "nav.rooms": "Rooms",
         "nav.food": "Food & Drinks",
         "nav.experience": "Experience",
-        "nav.about": "About",
+        "nav.about": "About Us",
         "nav.contact": "Contact",
 
 
@@ -491,10 +491,10 @@ const translations = {
         "about.eyebrow":
             "Pala Soulia Helsingissä",
 
-        "about us.title":
+        "about.title":
             "Korealainen noraebang.<br>Teidän tavallanne.",
 
-        "about us.text":
+        "about.text":
             "SiNG BOX tuo korealaisen yksityishuonekaraoken Helsinkiin – musiikkia, ruokaa, juomia ja oma tila yhteiseen illanviettoon.",
 
 
