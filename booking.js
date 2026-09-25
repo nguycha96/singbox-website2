@@ -44,22 +44,6 @@ const roomPrices = {
 const rooms = [
 
     {
-        id: "gangnam",
-        title: "Gangnam",
-        guests: 6,
-        startingPrice: 55,
-        image: "images/gangnam.png"
-    },
-
-    {
-        id: "seoul",
-        title: "Seoul",
-        guests: 6,
-        startingPrice: 55,
-        image: "images/seoul.png"
-    },
-
-    {
         id: "hongdae",
         title: "Hongdae",
         guests: 4,
@@ -73,6 +57,22 @@ const rooms = [
         guests: 4,
         startingPrice: 45,
         image: "images/itaewon.png"
+    },
+
+    {
+        id: "gangnam",
+        title: "Gangnam",
+        guests: 6,
+        startingPrice: 55,
+        image: "images/gangnam.png"
+    },
+
+    {
+        id: "seoul",
+        title: "Seoul",
+        guests: 6,
+        startingPrice: 55,
+        image: "images/seoul.png"
     }
 
 ];
