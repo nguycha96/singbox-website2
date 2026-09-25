@@ -1,808 +1,1086 @@
 /* =========================================================
    SiNG BOX NORAEBANG
    script-new.js
+   ========================================================= */
+
+
+/* =========================================================
+   TRANSLATIONS
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
-
-    /* =====================================================
-       TRANSLATIONS
-    ===================================================== */
-
-    const translations = {
-
-        /* =========================
-           ENGLISH
-        ========================= */
-
-        en: {
-
-            /* Navigation */
-            "nav.home": "Home",
-            "nav.rooms": "Rooms",
-            "nav.food": "Food & Drinks",
-            "nav.experience": "Experience",
-            "nav.about": "About",
-            "nav.contact": "Contact",
-
-            /* Common */
-            "common.bookNow": "Book now",
-            "common.bookRoom": "Book a room",
-            "common.helsinki": "Helsinki",
-            "common.finland": "Finland",
-
-            /* Hero */
-            "hero.eyebrow": "Premium Korean Karaoke in Helsinki",
-            "hero.title": "A little Seoul<br>in your day.",
-            "hero.tags": "Karaoke · Food · Drinks · Friends",
-            "hero.scroll": "Scroll",
-
-            "hero.good": "Good",
-            "hero.people": "People",
-            "hero.songs": "Songs",
-
-            /* Rooms intro */
-            "rooms.eyebrow": "Private Karaoke Rooms",
-            "rooms.title": "Find your<br>vibe.",
-            "rooms.text": "Different rooms. Same great feeling.",
-            "rooms.cta": "Explore rooms",
-
-            "rooms.music": "Music",
-            "rooms.brings": "Brings",
-            "rooms.people": "People",
-            "rooms.together": "Together",
-
-            /* Room selection */
-            "roomList.eyebrow": "Choose your space",
-            "roomList.title": "Our rooms",
-            "roomList.text":
-                "Four private rooms. Four different atmospheres.",
-
-            /* Gangnam */
-            "room.gangnam.name": "Gangnam Lounge",
-            "room.gangnam.guests": "Up to 6 guests",
-            "room.gangnam.text":
-                "Warm gold tones and a polished lounge atmosphere.",
-
-            /* Seoul */
-            "room.seoul.name": "Seoul Lounge",
-            "room.seoul.guests": "Up to 6 guests",
-            "room.seoul.text":
-                "Bold pink details with modern Seoul energy.",
-
-            /* Hongdae */
-            "room.hongdae.name": "Hongdae Neon",
-            "room.hongdae.guests": "Up to 4 guests",
-            "room.hongdae.text":
-                "An intimate neon room inspired by Hongdae nightlife.",
-
-            /* Itaewon */
-            "room.itaewon.name": "Itaewon Gold",
-            "room.itaewon.guests": "Up to 4 guests",
-            "room.itaewon.text":
-                "A darker, luxurious room with golden details.",
-
-            /* Food */
-            "food.eyebrow": "Food & Drinks",
-            "food.title": "Good food.<br>Better company.",
-            "food.text":
-                "Korean flavours, creative drinks and the perfect karaoke vibe.",
-            "food.cta": "View menu",
-
-            /* Menu */
-            "menu.eyebrow": "Something for the table",
-            "menu.title": "Menu",
-            "menu.text":
-                "Drinks and snacks for your karaoke night.",
-
-            "menu.soft": "Non-alcoholic",
-            "menu.hot": "Hot drinks",
-            "menu.snacks": "Snacks",
-            "menu.alcohol": "Alcohol",
-
-            "menu.coffee": "Coffee",
-            "menu.tea": "Tea",
-            "menu.popcorn": "Popcorn 0.5 l",
-            "menu.fries": "French fries",
-            "menu.nachos": "Nachos + salsa",
-
-            /* Experience */
-            "experience.eyebrow": "More than karaoke",
-            "experience.title": "Your room.<br>Your night.",
-            "experience.text":
-                "Sing, eat, drink and spend the evening together in your own private karaoke room.",
-
-            /* About */
-            "about.eyebrow": "A little Seoul in Helsinki",
-            "about.title": "Korean noraebang.<br>Your way.",
-            "about.text":
-                "SiNG BOX brings Korean private-room karaoke culture to Helsinki with music, food, drinks and a space made for spending time together.",
-
-            /* CTA */
-            "cta.eyebrow": "It's more than karaoke",
-            "cta.title": "Ready to sing?",
-            "cta.button": "Book your room"
-        },
-
-
-        /* =========================
-           FINNISH
-        ========================= */
-
-        fi: {
-
-            /* Navigation */
-            "nav.home": "Etusivu",
-            "nav.rooms": "Huoneet",
-            "nav.food": "Ruoka & juomat",
-            "nav.experience": "Elämys",
-            "nav.about": "Meistä",
-            "nav.contact": "Yhteystiedot",
-
-            /* Common */
-            "common.bookNow": "Varaa nyt",
-            "common.bookRoom": "Varaa huone",
-            "common.helsinki": "Helsinki",
-            "common.finland": "Suomi",
-
-            /* Hero */
-            "hero.eyebrow": "Premium korealainen karaoke Helsingissä",
-            "hero.title": "Pala Soulia<br>päivääsi.",
-            "hero.tags": "Karaoke · Ruoka · Juomat · Ystävät",
-            "hero.scroll": "Vieritä",
-
-            "hero.good": "Hyvät",
-            "hero.people": "Tyypit",
-            "hero.songs": "Biisit",
-
-            /* Rooms intro */
-            "rooms.eyebrow": "Yksityiset karaokehuoneet",
-            "rooms.title": "Löydä oma<br>fiiliksesi.",
-            "rooms.text":
-                "Erilaiset huoneet. Sama upea tunnelma.",
-            "rooms.cta": "Tutustu huoneisiin",
-
-            "rooms.music": "Musiikki",
-            "rooms.brings": "Tuo",
-            "rooms.people": "Ihmiset",
-            "rooms.together": "Yhteen",
-
-            /* Room selection */
-            "roomList.eyebrow": "Valitse oma tilasi",
-            "roomList.title": "Huoneemme",
-            "roomList.text":
-                "Neljä yksityistä huonetta. Neljä erilaista tunnelmaa.",
-
-            /* Gangnam */
-            "room.gangnam.name": "Gangnam Lounge",
-            "room.gangnam.guests": "Enintään 6 henkilöä",
-            "room.gangnam.text":
-                "Lämpimät kultaiset sävyt ja viimeistelty lounge-tunnelma.",
-
-            /* Seoul */
-            "room.seoul.name": "Seoul Lounge",
-            "room.seoul.guests": "Enintään 6 henkilöä",
-            "room.seoul.text":
-                "Rohkeita pinkkejä yksityiskohtia ja modernia Soulin energiaa.",
-
-            /* Hongdae */
-            "room.hongdae.name": "Hongdae Neon",
-            "room.hongdae.guests": "Enintään 4 henkilöä",
-            "room.hongdae.text":
-                "Intiimi neonhuone Hongdaen yöelämän inspiroimana.",
-
-            /* Itaewon */
-            "room.itaewon.name": "Itaewon Gold",
-            "room.itaewon.guests": "Enintään 4 henkilöä",
-            "room.itaewon.text":
-                "Tumma ja ylellinen huone kultaisilla yksityiskohdilla.",
-
-            /* Food */
-            "food.eyebrow": "Ruoka & juomat",
-            "food.title":
-                "Hyvää ruokaa.<br>Parempaa seuraa.",
-            "food.text":
-                "Korealaisia makuja, raikkaita juomia ja täydellinen karaoketunnelma.",
-            "food.cta": "Katso menu",
-
-            /* Menu */
-            "menu.eyebrow": "Jotain pöytään",
-            "menu.title": "Menu",
-            "menu.text":
-                "Juomia ja naposteltavaa karaokeiltaasi varten.",
-
-            "menu.soft": "Alkoholittomat",
-            "menu.hot": "Kuumat juomat",
-            "menu.snacks": "Naposteltavat",
-            "menu.alcohol": "Alkoholijuomat",
-
-            "menu.coffee": "Kahvi",
-            "menu.tea": "Tee",
-            "menu.popcorn": "Popcorn 0,5 l",
-            "menu.fries": "Ranskalaiset",
-            "menu.nachos": "Nachot + salsa",
-
-            /* Experience */
-            "experience.eyebrow": "Enemmän kuin karaokea",
-            "experience.title": "Oma huone.<br>Oma ilta.",
-            "experience.text":
-                "Laula, syö, juo ja vietä iltaa yhdessä omassa yksityisessä karaokehuoneessasi.",
-
-            /* About */
-            "about.eyebrow": "Pala Soulia Helsingissä",
-            "about.title":
-                "Korealainen noraebang.<br>Sinun tavallasi.",
-            "about.text":
-                "SiNG BOX tuo korealaisen yksityishuonekaraoken kulttuurin Helsinkiin musiikin, ruoan, juomien ja yhdessäolon ympärille.",
-
-            /* CTA */
-            "cta.eyebrow": "Enemmän kuin karaokea",
-            "cta.title": "Valmiina laulamaan?",
-            "cta.button": "Varaa huoneesi"
-        }
-    };
-
-
-    /* =====================================================
-       LANGUAGE
-    ===================================================== */
-
-    const languageButtons =
-        document.querySelectorAll(".lang-btn");
-
-
-    function setLanguage(language) {
-
-        if (!translations[language]) {
-            language = "en";
-        }
-
-        const dictionary =
-            translations[language];
-
-
-        /* Translate all data-i18n elements */
-
-        document
-            .querySelectorAll("[data-i18n]")
-            .forEach(element => {
-
-                const key =
-                    element.dataset.i18n;
-
-                if (
-                    Object.prototype.hasOwnProperty.call(
-                        dictionary,
-                        key
-                    )
-                ) {
-                    /*
-                       innerHTML is used because some headings
-                       intentionally contain <br>.
-                    */
-
-                    element.innerHTML =
-                        dictionary[key];
-                }
-
-            });
-
-
-        /* HTML language */
-
-        document.documentElement.lang =
-            language;
-
-
-        /* Page title */
-
-        document.title =
-            language === "fi"
-                ? "SiNG BOX | Noraebang Helsinki"
-                : "SiNG BOX | Noraebang Helsinki";
-
-
-        /* Active FI / EN button */
-
-        languageButtons.forEach(button => {
-
-            const active =
-                button.dataset.lang === language;
-
-            button.classList.toggle(
-                "active",
-                active
-            );
-
-            button.setAttribute(
-                "aria-pressed",
-                active ? "true" : "false"
-            );
-
-        });
-
-
-        /* Remember language */
-
-        try {
-
-            localStorage.setItem(
-                "singbox-language",
-                language
-            );
-
-        } catch (error) {
-            /* Site still works without localStorage */
-        }
+const translations = {
+
+    /* =========================
+       ENGLISH
+    ========================= */
+
+    en: {
+
+        /* NAVIGATION */
+
+        "nav.home": "Home",
+        "nav.rooms": "Rooms",
+        "nav.food": "Food & Drinks",
+        "nav.experience": "Experience",
+        "nav.about": "About",
+        "nav.contact": "Contact",
+
+
+        /* COMMON */
+
+        "common.bookNow": "Book now",
+        "common.bookRoom": "Book a room",
+        "common.finland": "Finland",
+
+
+        /* HERO */
+
+        "hero.eyebrow":
+            "Premium Korean Karaoke in Helsinki",
+
+        "hero.title":
+            "A little Seoul<br>in your day.",
+
+        "hero.tags":
+            "Karaoke · Food · Drinks · Friends",
+
+        "hero.scroll":
+            "Scroll",
+
+
+        /* ROOMS INTRO */
+
+        "rooms.eyebrow":
+            "Private Karaoke Rooms",
+
+        "rooms.title":
+            "Find your<br>vibe.",
+
+        "rooms.text":
+            "Different rooms. Same great feeling.",
+
+        "rooms.cta":
+            "Explore rooms",
+
+
+        /* ROOM LIST */
+
+        "roomList.eyebrow":
+            "Choose your space",
+
+        "roomList.title":
+            "Our rooms",
+
+        "roomList.text":
+            "Four private rooms. Four different atmospheres.",
+
+
+        /* ROOM DETAILS */
+
+        "room.fourGuests":
+            "Up to 4 guests",
+
+        "room.sixGuests":
+            "Up to 6 guests",
+
+        "room.from":
+            "From",
+
+        "room.hongdae.text":
+            "An intimate room inspired by the energy of Hongdae.",
+
+        "room.itaewon.text":
+            "A stylish private room made for singing and spending time together.",
+
+        "room.gangnam.text":
+            "A spacious room with a polished atmosphere for bigger groups.",
+
+        "room.seoul.text":
+            "A spacious private room with modern Seoul energy.",
+
+
+        /* PRICING */
+
+        "pricing.eyebrow":
+            "Karaoke pricing",
+
+        "pricing.title":
+            "Choose your<br>time.",
+
+        "pricing.intro":
+            "Room prices are per hour.",
+
+        "pricing.scroll":
+            "← Swipe to see all rooms →",
+
+        "pricing.time":
+            "Time",
+
+        "pricing.fourPeople":
+            "Up to 4 guests",
+
+        "pricing.sixPeople":
+            "Up to 6 guests",
+
+        "pricing.monThu":
+            "Mon–Thu",
+
+        "pricing.friSat":
+            "Fri–Sat",
+
+        "pricing.sun":
+            "Sun",
+
+        "pricing.discount":
+            "Mon–Thu 18–23: Students, pensioners and unemployed customers receive 10% off with a valid card.",
+
+        "pricing.private":
+            "Private events: ask us for availability and pricing.",
+
+
+        /* FOOD */
+
+        "food.eyebrow":
+            "Food & Drinks",
+
+        "food.title":
+            "Good food.<br>Better company.",
+
+        "food.text":
+            "Korean flavours, creative drinks and the perfect karaoke vibe.",
+
+        "food.cta":
+            "View menu",
+
+
+        /* MENU */
+
+        "menu.eyebrow":
+            "Something for the table",
+
+        "menu.title":
+            "Menu",
+
+        "menu.text":
+            "Drinks and snacks for your karaoke night.",
+
+        "menu.soft":
+            "Non-alcoholic",
+
+        "menu.hot":
+            "Hot drinks",
+
+        "menu.snacks":
+            "Snacks",
+
+        "menu.alcohol":
+            "Alcohol",
+
+        "menu.coffee":
+            "Coffee",
+
+        "menu.tea":
+            "Tea",
+
+        "menu.popcorn":
+            "Popcorn 0.5 l",
+
+        "menu.fries":
+            "French fries",
+
+        "menu.nachos":
+            "Nachos + salsa",
+
+
+        /* EXPERIENCE */
+
+        "experience.eyebrow":
+            "More than karaoke",
+
+        "experience.title":
+            "Your room.<br>Your night.",
+
+        "experience.text":
+            "Sing, eat, drink and spend the evening together in your own private karaoke room.",
+
+
+        /* ABOUT */
+
+        "about.eyebrow":
+            "A little Seoul in Helsinki",
+
+        "about.title":
+            "Korean noraebang.<br>Your way.",
+
+        "about.text":
+            "SiNG BOX brings Korean private-room karaoke culture to Helsinki with music, food, drinks and a space made for spending time together.",
+
+
+        /* FINAL CTA */
+
+        "cta.eyebrow":
+            "It's more than karaoke",
+
+        "cta.title":
+            "Ready to sing?",
+
+        "cta.button":
+            "Book your room"
+    },
+
+
+    /* =========================
+       FINNISH
+    ========================= */
+
+    fi: {
+
+        /* NAVIGATION */
+
+        "nav.home": "Etusivu",
+        "nav.rooms": "Huoneet",
+        "nav.food": "Ruoka & juomat",
+        "nav.experience": "Elämys",
+        "nav.about": "Meistä",
+        "nav.contact": "Yhteystiedot",
+
+
+        /* COMMON */
+
+        "common.bookNow": "Varaa nyt",
+        "common.bookRoom": "Varaa huone",
+        "common.finland": "Suomi",
+
+
+        /* HERO */
+
+        "hero.eyebrow":
+            "Premium korealainen karaoke Helsingissä",
+
+        "hero.title":
+            "Pala Soulia<br>päivääsi.",
+
+        "hero.tags":
+            "Karaoke · Ruoka · Juomat · Ystävät",
+
+        "hero.scroll":
+            "Selaa",
+
+
+        /* ROOMS INTRO */
+
+        "rooms.eyebrow":
+            "Yksityiset karaokehuoneet",
+
+        "rooms.title":
+            "Löydä oma<br>tunnelmasi.",
+
+        "rooms.text":
+            "Erilaiset huoneet. Sama hyvä fiilis.",
+
+        "rooms.cta":
+            "Tutustu huoneisiin",
+
+
+        /* ROOM LIST */
+
+        "roomList.eyebrow":
+            "Valitse oma tilasi",
+
+        "roomList.title":
+            "Huoneemme",
+
+        "roomList.text":
+            "Neljä yksityistä huonetta. Neljä erilaista tunnelmaa.",
+
+
+        /* ROOM DETAILS */
+
+        "room.fourGuests":
+            "Enintään 4 henkilöä",
+
+        "room.sixGuests":
+            "Enintään 6 henkilöä",
+
+        "room.from":
+            "Alkaen",
+
+        "room.hongdae.text":
+            "Intiimi karaokehuone, jonka tunnelma on saanut inspiraationsa Hongdaesta.",
+
+        "room.itaewon.text":
+            "Tyylikäs yksityinen huone laulamiseen ja yhteiseen illanviettoon.",
+
+        "room.gangnam.text":
+            "Tilava ja viimeistelty karaokehuone suuremmalle seurueelle.",
+
+        "room.seoul.text":
+            "Tilava yksityinen karaokehuone modernilla Soul-tunnelmalla.",
+
+
+        /* PRICING */
+
+        "pricing.eyebrow":
+            "Karaokehuoneiden hinnasto",
+
+        "pricing.title":
+            "Valitse<br>aikasi.",
+
+        "pricing.intro":
+            "Hinnat ovat huonekohtaisia tuntihintoja.",
+
+        "pricing.scroll":
+            "← Pyyhkäise nähdäksesi kaikki huoneet →",
+
+        "pricing.time":
+            "Aika",
+
+        "pricing.fourPeople":
+            "Enintään 4 henkilöä",
+
+        "pricing.sixPeople":
+            "Enintään 6 henkilöä",
+
+        "pricing.monThu":
+            "Ma–To",
+
+        "pricing.friSat":
+            "Pe–La",
+
+        "pricing.sun":
+            "Su",
+
+        "pricing.discount":
+            "Ma–To klo 18–23: opiskelija-, eläkeläis- ja työttömyyskortilla −10 %.",
+
+        "pricing.private":
+            "Yksityistilaisuudet: kysy saatavuutta ja hintaa.",
+
+
+        /* FOOD */
+
+        "food.eyebrow":
+            "Ruoka & juomat",
+
+        "food.title":
+            "Hyvää ruokaa.<br>Parempaa seuraa.",
+
+        "food.text":
+            "Korealaisia makuja, juomia ja täydellinen karaoketunnelma.",
+
+        "food.cta":
+            "Katso menu",
+
+
+        /* MENU */
+
+        "menu.eyebrow":
+            "Jotain pöytään",
+
+        "menu.title":
+            "Menu",
+
+        "menu.text":
+            "Juomia ja naposteltavaa karaokeiltaan.",
+
+        "menu.soft":
+            "Alkoholittomat",
+
+        "menu.hot":
+            "Kuumat juomat",
+
+        "menu.snacks":
+            "Naposteltavat",
+
+        "menu.alcohol":
+            "Alkoholijuomat",
+
+        "menu.coffee":
+            "Kahvi",
+
+        "menu.tea":
+            "Tee",
+
+        "menu.popcorn":
+            "Popcorn 0,5 l",
+
+        "menu.fries":
+            "Ranskalaiset",
+
+        "menu.nachos":
+            "Nachot + salsa",
+
+
+        /* EXPERIENCE */
+
+        "experience.eyebrow":
+            "Enemmän kuin karaokea",
+
+        "experience.title":
+            "Teidän huone.<br>Teidän ilta.",
+
+        "experience.text":
+            "Laula, syö, juo ja vietä iltaa yhdessä omassa yksityisessä karaokehuoneessa.",
+
+
+        /* ABOUT */
+
+        "about.eyebrow":
+            "Pala Soulia Helsingissä",
+
+        "about.title":
+            "Korealainen noraebang.<br>Teidän tavallanne.",
+
+        "about.text":
+            "SiNG BOX tuo korealaisen yksityishuonekaraoken Helsinkiin – musiikkia, ruokaa, juomia ja oma tila yhteiseen illanviettoon.",
+
+
+        /* FINAL CTA */
+
+        "cta.eyebrow":
+            "Enemmän kuin karaokea",
+
+        "cta.title":
+            "Valmiina laulamaan?",
+
+        "cta.button":
+            "Varaa huone"
+    }
+};
+
+
+
+/* =========================================================
+   LANGUAGE SYSTEM
+========================================================= */
+
+const languageButtons =
+    document.querySelectorAll(".lang-btn");
+
+const translatableElements =
+    document.querySelectorAll("[data-i18n]");
+
+
+/*
+    Some translations contain <br>.
+    For that reason innerHTML is used here intentionally.
+*/
+
+function setLanguage(language) {
+
+    const selectedTranslations =
+        translations[language];
+
+    if (!selectedTranslations) {
+        return;
     }
 
 
-    /* Language buttons */
+    /* Translate every data-i18n element */
 
-    languageButtons.forEach(button => {
+    translatableElements.forEach((element) => {
 
-        button.addEventListener(
-            "click",
-            () => {
+        const key =
+            element.getAttribute("data-i18n");
 
-                setLanguage(
-                    button.dataset.lang
-                );
+        const translatedText =
+            selectedTranslations[key];
 
-            }
+        if (translatedText !== undefined) {
+            element.innerHTML = translatedText;
+        }
+
+    });
+
+
+    /* Update language buttons */
+
+    languageButtons.forEach((button) => {
+
+        const buttonLanguage =
+            button.getAttribute("data-lang");
+
+        const isActive =
+            buttonLanguage === language;
+
+        button.classList.toggle(
+            "active",
+            isActive
+        );
+
+        button.setAttribute(
+            "aria-pressed",
+            isActive ? "true" : "false"
         );
 
     });
 
 
-    /* =====================================================
-       INITIAL LANGUAGE
-    ===================================================== */
+    /* Update HTML language */
 
-    let savedLanguage = null;
+    document.documentElement.lang =
+        language;
+
+
+    /* Save selected language */
 
     try {
 
-        savedLanguage =
+        localStorage.setItem(
+            "singbox-language",
+            language
+        );
+
+    } catch (error) {
+
+        /*
+            Site still works if browser
+            blocks localStorage.
+        */
+
+    }
+
+}
+
+
+
+/* =========================================================
+   LANGUAGE BUTTON EVENTS
+========================================================= */
+
+languageButtons.forEach((button) => {
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            const language =
+                button.getAttribute("data-lang");
+
+            setLanguage(language);
+
+        }
+    );
+
+});
+
+
+
+/* =========================================================
+   INITIAL LANGUAGE
+========================================================= */
+
+function getInitialLanguage() {
+
+    /*
+        1. Previously selected language
+    */
+
+    try {
+
+        const savedLanguage =
             localStorage.getItem(
                 "singbox-language"
             );
 
+        if (
+            savedLanguage === "fi" ||
+            savedLanguage === "en"
+        ) {
+            return savedLanguage;
+        }
+
     } catch (error) {
-        savedLanguage = null;
+
+        /*
+            Continue to browser language.
+        */
+
     }
 
 
-    let initialLanguage = "en";
+    /*
+        2. Browser language
+    */
 
+    const browserLanguage =
+        (
+            navigator.language ||
+            navigator.userLanguage ||
+            ""
+        ).toLowerCase();
 
     if (
-        savedLanguage === "fi" ||
-        savedLanguage === "en"
+        browserLanguage.startsWith("fi")
     ) {
-
-        initialLanguage =
-            savedLanguage;
-
-    } else {
-
-        const browserLanguage =
-            (
-                navigator.language ||
-                "en"
-            ).toLowerCase();
-
-
-        if (
-            browserLanguage.startsWith("fi")
-        ) {
-            initialLanguage = "fi";
-        }
+        return "fi";
     }
 
 
-    setLanguage(initialLanguage);
+    /*
+        3. English fallback
+    */
+
+    return "en";
+}
 
 
-    /* =====================================================
-       MOBILE MENU
-    ===================================================== */
-
-    const header =
-        document.querySelector(".site-header");
-
-    const menuToggle =
-        document.querySelector(".menu-toggle");
-
-    const mainNav =
-        document.querySelector(".main-nav");
+setLanguage(
+    getInitialLanguage()
+);
 
 
-    function closeMenu() {
 
-        if (!header || !menuToggle) {
-            return;
-        }
+/* =========================================================
+   MOBILE MENU
+========================================================= */
 
-        header.classList.remove(
-            "menu-open"
-        );
+const header =
+    document.querySelector(".site-header");
 
-        menuToggle.setAttribute(
-            "aria-expanded",
-            "false"
-        );
+const menuToggle =
+    document.querySelector(".menu-toggle");
+
+const mainNav =
+    document.querySelector(".main-nav");
+
+
+function closeMenu() {
+
+    if (!header || !menuToggle) {
+        return;
     }
 
-
-    function openMenu() {
-
-        if (!header || !menuToggle) {
-            return;
-        }
-
-        header.classList.add(
-            "menu-open"
-        );
-
-        menuToggle.setAttribute(
-            "aria-expanded",
-            "true"
-        );
-    }
-
-
-    if (menuToggle) {
-
-        menuToggle.addEventListener(
-            "click",
-            event => {
-
-                event.stopPropagation();
-
-                const isOpen =
-                    header.classList.contains(
-                        "menu-open"
-                    );
-
-
-                if (isOpen) {
-                    closeMenu();
-                } else {
-                    openMenu();
-                }
-
-            }
-        );
-    }
-
-
-    /* Close after clicking nav link */
-
-    if (mainNav) {
-
-        mainNav
-            .querySelectorAll("a")
-            .forEach(link => {
-
-                link.addEventListener(
-                    "click",
-                    closeMenu
-                );
-
-            });
-    }
-
-
-    /* Close with ESC */
-
-    document.addEventListener(
-        "keydown",
-        event => {
-
-            if (event.key === "Escape") {
-                closeMenu();
-            }
-
-        }
+    header.classList.remove(
+        "menu-open"
     );
 
+    menuToggle.setAttribute(
+        "aria-expanded",
+        "false"
+    );
 
-    /* Close when clicking outside */
+}
 
-    document.addEventListener(
+
+function openMenu() {
+
+    if (!header || !menuToggle) {
+        return;
+    }
+
+    header.classList.add(
+        "menu-open"
+    );
+
+    menuToggle.setAttribute(
+        "aria-expanded",
+        "true"
+    );
+
+}
+
+
+if (menuToggle && header) {
+
+    menuToggle.addEventListener(
         "click",
-        event => {
-
-            if (
-                !header ||
-                !header.classList.contains(
-                    "menu-open"
-                )
-            ) {
-                return;
-            }
-
-
-            if (
-                !header.contains(
-                    event.target
-                )
-            ) {
-                closeMenu();
-            }
-
-        }
-    );
-
-
-    /* Close if switching back to desktop */
-
-    window.addEventListener(
-        "resize",
         () => {
 
-            if (window.innerWidth > 950) {
+            const menuIsOpen =
+                header.classList.contains(
+                    "menu-open"
+                );
+
+            if (menuIsOpen) {
                 closeMenu();
+            } else {
+                openMenu();
             }
 
         }
     );
 
+}
 
-    /* =====================================================
-       SMOOTH SCROLL
-    ===================================================== */
 
-    document
-        .querySelectorAll('a[href^="#"]')
-        .forEach(link => {
+
+/* =========================================================
+   CLOSE MOBILE MENU AFTER NAVIGATION
+========================================================= */
+
+if (mainNav) {
+
+    mainNav
+        .querySelectorAll("a")
+        .forEach((link) => {
 
             link.addEventListener(
                 "click",
-                event => {
-
-                    const href =
-                        link.getAttribute("href");
-
-
-                    if (
-                        !href ||
-                        href === "#"
-                    ) {
-                        return;
-                    }
-
-
-                    const target =
-                        document.querySelector(
-                            href
-                        );
-
-
-                    if (!target) {
-                        return;
-                    }
-
-
-                    event.preventDefault();
-
-
-                    target.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start"
-                    });
-
-                }
+                closeMenu
             );
 
         });
 
-
-    /* =====================================================
-       ACTIVE NAVIGATION
-    ===================================================== */
-
-    const navLinks =
-        document.querySelectorAll(
-            ".main-nav a"
-        );
-
-    const sections =
-        document.querySelectorAll(
-            "main section[id]"
-        );
+}
 
 
-    function setActiveNavigation(id) {
 
-        navLinks.forEach(link => {
+/* =========================================================
+   CLOSE MENU WITH ESCAPE
+========================================================= */
 
-            const linkTarget =
-                link.getAttribute("href");
+document.addEventListener(
+    "keydown",
+    (event) => {
 
+        if (event.key === "Escape") {
+            closeMenu();
+        }
 
-            link.classList.toggle(
-                "current",
-                linkTarget === "#" + id
-            );
-
-        });
     }
+);
 
 
-    if (
-        "IntersectionObserver" in window
-    ) {
 
-        const sectionObserver =
-            new IntersectionObserver(
-                entries => {
+/* =========================================================
+   CLOSE MENU WHEN CLICKING OUTSIDE
+========================================================= */
 
-                    entries.forEach(entry => {
+document.addEventListener(
+    "click",
+    (event) => {
 
-                        if (
-                            entry.isIntersecting
-                        ) {
-
-                            /*
-                               room-selection belongs
-                               to Rooms navigation.
-                            */
-
-                            let id =
-                                entry.target.id;
-
-
-                            if (
-                                id === "room-selection"
-                            ) {
-                                id = "rooms";
-                            }
-
-
-                            /*
-                               Menu belongs to
-                               Food & Drinks.
-                            */
-
-                            if (
-                                id === "menu"
-                            ) {
-                                id = "food";
-                            }
-
-
-                            setActiveNavigation(id);
-                        }
-
-                    });
-
-                },
-                {
-                    rootMargin:
-                        "-35% 0px -55% 0px",
-
-                    threshold: 0
-                }
-            );
-
-
-        sections.forEach(section => {
-
-            sectionObserver.observe(
-                section
-            );
-
-        });
-    }
-
-
-    /* =====================================================
-       HEADER SCROLL
-    ===================================================== */
-
-    function updateHeader() {
-
-        if (!header) {
+        if (
+            !header ||
+            !header.classList.contains(
+                "menu-open"
+            )
+        ) {
             return;
         }
 
+        if (
+            header.contains(
+                event.target
+            )
+        ) {
+            return;
+        }
 
-        header.classList.toggle(
-            "scrolled",
-            window.scrollY > 20
-        );
+        closeMenu();
+
     }
+);
 
 
-    window.addEventListener(
-        "scroll",
-        updateHeader,
-        { passive: true }
-    );
 
+/* =========================================================
+   SMOOTH INTERNAL LINKS
+========================================================= */
 
-    updateHeader();
+document
+    .querySelectorAll('a[href^="#"]')
+    .forEach((link) => {
 
+        link.addEventListener(
+            "click",
+            (event) => {
 
-    /* =====================================================
-       REVEAL ANIMATIONS
-    ===================================================== */
+                const targetId =
+                    link.getAttribute(
+                        "href"
+                    );
 
-    const revealElements =
-        document.querySelectorAll(
-            ".room-card, " +
-            ".menu-category, " +
-            ".room-selection-heading, " +
-            ".menu-heading, " +
-            ".experience-inner, " +
-            ".about-inner"
-        );
+                if (
+                    !targetId ||
+                    targetId === "#"
+                ) {
+                    return;
+                }
 
+                const target =
+                    document.querySelector(
+                        targetId
+                    );
 
-    revealElements.forEach(element => {
+                if (!target) {
+                    return;
+                }
 
-        element.classList.add(
-            "reveal-item"
+                event.preventDefault();
+
+                target.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+            }
         );
 
     });
 
 
-    if (
-        "IntersectionObserver" in window
-    ) {
 
-        const revealObserver =
-            new IntersectionObserver(
-                entries => {
+/* =========================================================
+   HEADER ON SCROLL
+========================================================= */
 
-                    entries.forEach(entry => {
+function updateHeaderOnScroll() {
 
-                        if (
-                            entry.isIntersecting
-                        ) {
+    if (!header) {
+        return;
+    }
 
-                            entry.target.classList.add(
-                                "revealed"
-                            );
+    if (window.scrollY > 20) {
 
-                            revealObserver.unobserve(
-                                entry.target
-                            );
-
-                        }
-
-                    });
-
-                },
-                {
-                    threshold: 0.1,
-
-                    rootMargin:
-                        "0px 0px -35px 0px"
-                }
-            );
-
-
-        revealElements.forEach(element => {
-
-            revealObserver.observe(
-                element
-            );
-
-        });
+        header.classList.add(
+            "scrolled"
+        );
 
     } else {
 
-        revealElements.forEach(element => {
+        header.classList.remove(
+            "scrolled"
+        );
 
+    }
+
+}
+
+
+window.addEventListener(
+    "scroll",
+    updateHeaderOnScroll,
+    {
+        passive: true
+    }
+);
+
+
+updateHeaderOnScroll();
+
+
+
+/* =========================================================
+   ACTIVE NAVIGATION
+========================================================= */
+
+const navigationLinks =
+    document.querySelectorAll(
+        '.main-nav a[href^="#"]'
+    );
+
+
+const sections =
+    Array.from(
+        navigationLinks
+    )
+        .map((link) => {
+
+            const href =
+                link.getAttribute("href");
+
+            if (
+                !href ||
+                href === "#"
+            ) {
+                return null;
+            }
+
+            return document.querySelector(
+                href
+            );
+
+        })
+        .filter(Boolean);
+
+
+
+function updateActiveNavigation() {
+
+    if (
+        sections.length === 0 ||
+        navigationLinks.length === 0
+    ) {
+        return;
+    }
+
+
+    const scrollPosition =
+        window.scrollY +
+        window.innerHeight * 0.32;
+
+
+    let currentSection =
+        sections[0];
+
+
+    sections.forEach((section) => {
+
+        if (
+            section.offsetTop <=
+            scrollPosition
+        ) {
+            currentSection = section;
+        }
+
+    });
+
+
+    navigationLinks.forEach((link) => {
+
+        const href =
+            link.getAttribute("href");
+
+        const isCurrent =
+            href ===
+            "#" + currentSection.id;
+
+        link.classList.toggle(
+            "active",
+            isCurrent
+        );
+
+        link.classList.toggle(
+            "current",
+            isCurrent
+        );
+
+    });
+
+}
+
+
+window.addEventListener(
+    "scroll",
+    updateActiveNavigation,
+    {
+        passive: true
+    }
+);
+
+
+window.addEventListener(
+    "resize",
+    updateActiveNavigation
+);
+
+
+updateActiveNavigation();
+
+
+
+/* =========================================================
+   REVEAL ANIMATIONS
+========================================================= */
+
+const revealElements =
+    document.querySelectorAll(
+        [
+            ".room-card",
+            ".menu-category",
+            ".pricing-heading",
+            ".pricing-table-scroll",
+            ".pricing-notes"
+        ].join(",")
+    );
+
+
+revealElements.forEach(
+    (element) => {
+        element.classList.add(
+            "reveal-item"
+        );
+    }
+);
+
+
+if (
+    "IntersectionObserver" in window
+) {
+
+    const revealObserver =
+        new IntersectionObserver(
+
+            (entries, observer) => {
+
+                entries.forEach(
+                    (entry) => {
+
+                        if (
+                            !entry.isIntersecting
+                        ) {
+                            return;
+                        }
+
+                        entry.target.classList.add(
+                            "revealed"
+                        );
+
+                        observer.unobserve(
+                            entry.target
+                        );
+
+                    }
+                );
+
+            },
+
+            {
+                threshold: 0.10,
+                rootMargin:
+                    "0px 0px -30px 0px"
+            }
+
+        );
+
+
+    revealElements.forEach(
+        (element) => {
+            revealObserver.observe(
+                element
+            );
+        }
+    );
+
+} else {
+
+    /*
+        Fallback for old browsers.
+    */
+
+    revealElements.forEach(
+        (element) => {
             element.classList.add(
                 "revealed"
             );
+        }
+    );
 
-        });
+}
+
+
+
+/* =========================================================
+   WINDOW RESIZE
+========================================================= */
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        /*
+            If user rotates phone or moves
+            from mobile to desktop, don't
+            leave mobile menu open.
+        */
+
+        if (
+            window.innerWidth > 950
+        ) {
+            closeMenu();
+        }
+
     }
-
-});
+);
