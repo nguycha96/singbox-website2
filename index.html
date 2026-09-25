@@ -30,11 +30,7 @@
         rel="stylesheet"
     >
 
-    <!-- CSS -->
-    <link
-        rel="stylesheet"
-        href="style-new.css"
-    >
+    <link rel="stylesheet" href="style-new.css">
 </head>
 
 
@@ -49,13 +45,12 @@
 
     <div class="header-inner">
 
-
         <!-- LOGO -->
 
         <a
             href="#home"
             class="logo"
-            aria-label="SiNG BOX"
+            aria-label="SiNG BOX Noraebang"
         >
 
             <span class="logo-main">
@@ -77,8 +72,7 @@
         </a>
 
 
-
-        <!-- DESKTOP NAVIGATION -->
+        <!-- NAVIGATION -->
 
         <nav
             class="main-nav"
@@ -131,8 +125,7 @@
         </nav>
 
 
-
-        <!-- RIGHT SIDE -->
+        <!-- HEADER RIGHT -->
 
         <div class="header-right">
 
@@ -182,8 +175,7 @@
         </div>
 
 
-
-        <!-- MOBILE MENU BUTTON -->
+        <!-- MOBILE MENU -->
 
         <button
             class="menu-toggle"
@@ -197,7 +189,6 @@
 
         </button>
 
-
     </div>
 
 </header>
@@ -209,7 +200,7 @@
 
 <!-- =====================================================
      HERO
-     IMAGE: images/photo1.png
+     photo1.png
 ===================================================== -->
 
 <section
@@ -217,11 +208,7 @@
     id="home"
 >
 
-
-    <!-- LEFT SIDE -->
-
     <div class="hero-content">
-
 
         <p
             class="eyebrow"
@@ -274,43 +261,22 @@
 
         </div>
 
-
     </div>
 
 
-
-    <!-- RIGHT SIDE / PHOTO 1 -->
+    <!--
+        No extra GOOD PEOPLE GOOD SONGS text here.
+        photo1.png is allowed to speak for itself.
+    -->
 
     <div
         class="hero-photo"
-        aria-label="SiNG BOX Noraebang"
+        aria-label="SiNG BOX Noraebang interior"
     >
-
-
-        <div class="hero-message">
-
-            <span data-i18n="hero.good">
-                Good
-            </span>
-
-            <span data-i18n="hero.people">
-                People
-            </span>
-
-            <span data-i18n="hero.good">
-                Good
-            </span>
-
-            <span data-i18n="hero.songs">
-                Songs
-            </span>
-
-        </div>
-
 
         <div class="hero-location">
 
-            <span data-i18n="common.helsinki">
+            <span>
                 Helsinki
             </span>
 
@@ -318,9 +284,7 @@
 
         </div>
 
-
     </div>
-
 
 </section>
 
@@ -328,7 +292,7 @@
 
 <!-- =====================================================
      ROOMS INTRO
-     IMAGE: images/photo2.png
+     photo2.png
 ===================================================== -->
 
 <section
@@ -336,11 +300,7 @@
     id="rooms"
 >
 
-
-    <!-- LEFT -->
-
     <div class="rooms-copy">
-
 
         <p
             class="eyebrow"
@@ -382,40 +342,17 @@
 
         </a>
 
-
     </div>
 
 
-
-    <!-- RIGHT / PHOTO 2 -->
+    <!--
+        No MUSIC BRINGS PEOPLE TOGETHER overlay.
+    -->
 
     <div
         class="rooms-photo"
-        aria-label="Private karaoke rooms"
-    >
-
-        <div class="rooms-photo-message">
-
-            <span data-i18n="rooms.music">
-                Music
-            </span>
-
-            <span data-i18n="rooms.brings">
-                Brings
-            </span>
-
-            <span data-i18n="rooms.people">
-                People
-            </span>
-
-            <span data-i18n="rooms.together">
-                Together
-            </span>
-
-        </div>
-
-    </div>
-
+        aria-label="Private karaoke room"
+    ></div>
 
 </section>
 
@@ -430,7 +367,6 @@
     id="room-selection"
 >
 
-
     <div class="room-selection-heading">
 
         <p
@@ -440,9 +376,11 @@
             Choose your space
         </p>
 
+
         <h2 data-i18n="roomList.title">
             Our rooms
         </h2>
+
 
         <p data-i18n="roomList.text">
             Four private rooms. Four different atmospheres.
@@ -455,15 +393,19 @@
     <div class="room-grid">
 
 
-        <!-- GANGNAM -->
+        <!-- =================================================
+             HONGDAE
+             4 PEOPLE
+             FROM 45 €/H
+        ================================================== -->
 
         <article class="room-card">
 
             <div class="room-image">
 
                 <img
-                    src="images/gangnam.png"
-                    alt="Gangnam Lounge"
+                    src="images/hongdae.png"
+                    alt="Hongdae karaoke room"
                     loading="lazy"
                 >
 
@@ -476,19 +418,38 @@
                     01
                 </span>
 
-                <h3 data-i18n="room.gangnam.name">
-                    Gangnam Lounge
+
+                <h3>
+                    Hongdae
                 </h3>
 
-                <p
-                    class="room-capacity"
-                    data-i18n="room.gangnam.guests"
-                >
-                    Up to 6 guests
-                </p>
 
-                <p data-i18n="room.gangnam.text">
-                    Warm gold tones and a polished lounge atmosphere.
+                <div class="room-meta">
+
+                    <span
+                        class="room-capacity"
+                        data-i18n="room.fourGuests"
+                    >
+                        Up to 4 guests
+                    </span>
+
+                    <span class="room-price">
+
+                        <span data-i18n="room.from">
+                            From
+                        </span>
+
+                        <strong>
+                            45 €/h
+                        </strong>
+
+                    </span>
+
+                </div>
+
+
+                <p data-i18n="room.hongdae.text">
+                    An intimate room inspired by the energy of Hongdae.
                 </p>
 
             </div>
@@ -497,15 +458,19 @@
 
 
 
-        <!-- SEOUL -->
+        <!-- =================================================
+             ITAEWON
+             4 PEOPLE
+             FROM 45 €/H
+        ================================================== -->
 
         <article class="room-card">
 
             <div class="room-image">
 
                 <img
-                    src="images/seoul.png"
-                    alt="Seoul Lounge"
+                    src="images/itaewon.png"
+                    alt="Itaewon karaoke room"
                     loading="lazy"
                 >
 
@@ -518,19 +483,38 @@
                     02
                 </span>
 
-                <h3 data-i18n="room.seoul.name">
-                    Seoul Lounge
+
+                <h3>
+                    Itaewon
                 </h3>
 
-                <p
-                    class="room-capacity"
-                    data-i18n="room.seoul.guests"
-                >
-                    Up to 6 guests
-                </p>
 
-                <p data-i18n="room.seoul.text">
-                    Bold pink details with modern Seoul energy.
+                <div class="room-meta">
+
+                    <span
+                        class="room-capacity"
+                        data-i18n="room.fourGuests"
+                    >
+                        Up to 4 guests
+                    </span>
+
+                    <span class="room-price">
+
+                        <span data-i18n="room.from">
+                            From
+                        </span>
+
+                        <strong>
+                            45 €/h
+                        </strong>
+
+                    </span>
+
+                </div>
+
+
+                <p data-i18n="room.itaewon.text">
+                    A stylish private room made for singing and spending time together.
                 </p>
 
             </div>
@@ -539,15 +523,19 @@
 
 
 
-        <!-- HONGDAE -->
+        <!-- =================================================
+             GANGNAM
+             6 PEOPLE
+             FROM 55 €/H
+        ================================================== -->
 
         <article class="room-card">
 
             <div class="room-image">
 
                 <img
-                    src="images/hongdae.png"
-                    alt="Hongdae Neon"
+                    src="images/gangnam.png"
+                    alt="Gangnam karaoke room"
                     loading="lazy"
                 >
 
@@ -560,19 +548,38 @@
                     03
                 </span>
 
-                <h3 data-i18n="room.hongdae.name">
-                    Hongdae Neon
+
+                <h3>
+                    Gangnam
                 </h3>
 
-                <p
-                    class="room-capacity"
-                    data-i18n="room.hongdae.guests"
-                >
-                    Up to 4 guests
-                </p>
 
-                <p data-i18n="room.hongdae.text">
-                    An intimate neon room inspired by Hongdae nightlife.
+                <div class="room-meta">
+
+                    <span
+                        class="room-capacity"
+                        data-i18n="room.sixGuests"
+                    >
+                        Up to 6 guests
+                    </span>
+
+                    <span class="room-price">
+
+                        <span data-i18n="room.from">
+                            From
+                        </span>
+
+                        <strong>
+                            55 €/h
+                        </strong>
+
+                    </span>
+
+                </div>
+
+
+                <p data-i18n="room.gangnam.text">
+                    A spacious room with a polished atmosphere for bigger groups.
                 </p>
 
             </div>
@@ -581,15 +588,19 @@
 
 
 
-        <!-- ITAEWON -->
+        <!-- =================================================
+             SEOUL
+             6 PEOPLE
+             FROM 55 €/H
+        ================================================== -->
 
         <article class="room-card">
 
             <div class="room-image">
 
                 <img
-                    src="images/itaewon.png"
-                    alt="Itaewon Gold"
+                    src="images/seoul.png"
+                    alt="Seoul karaoke room"
                     loading="lazy"
                 >
 
@@ -602,28 +613,319 @@
                     04
                 </span>
 
-                <h3 data-i18n="room.itaewon.name">
-                    Itaewon Gold
+
+                <h3>
+                    Seoul
                 </h3>
 
-                <p
-                    class="room-capacity"
-                    data-i18n="room.itaewon.guests"
-                >
-                    Up to 4 guests
-                </p>
 
-                <p data-i18n="room.itaewon.text">
-                    A darker, luxurious room with golden details.
+                <div class="room-meta">
+
+                    <span
+                        class="room-capacity"
+                        data-i18n="room.sixGuests"
+                    >
+                        Up to 6 guests
+                    </span>
+
+                    <span class="room-price">
+
+                        <span data-i18n="room.from">
+                            From
+                        </span>
+
+                        <strong>
+                            55 €/h
+                        </strong>
+
+                    </span>
+
+                </div>
+
+
+                <p data-i18n="room.seoul.text">
+                    A spacious private room with modern Seoul energy.
                 </p>
 
             </div>
 
         </article>
 
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     KARAOKE PRICING
+===================================================== -->
+
+<section
+    class="pricing-section"
+    id="pricing"
+>
+
+    <div class="pricing-heading">
+
+        <p
+            class="eyebrow"
+            data-i18n="pricing.eyebrow"
+        >
+            Karaoke pricing
+        </p>
+
+
+        <h2 data-i18n="pricing.title">
+            Choose your<br>
+            time.
+        </h2>
+
+
+        <p data-i18n="pricing.intro">
+            Room prices are per hour.
+        </p>
 
     </div>
 
+
+
+    <!-- MOBILE SCROLL HINT -->
+
+    <div
+        class="pricing-scroll-hint"
+        data-i18n="pricing.scroll"
+    >
+        ← Swipe to see all rooms →
+    </div>
+
+
+
+    <!--
+        On mobile this wrapper will scroll horizontally.
+        The table itself should NOT be squeezed to phone width.
+    -->
+
+    <div class="pricing-table-scroll">
+
+        <table class="pricing-table">
+
+
+            <thead>
+
+                <tr>
+
+                    <th data-i18n="pricing.time">
+                        Time
+                    </th>
+
+                    <th>
+                        Hongdae
+                        <small data-i18n="pricing.fourPeople">
+                            Up to 4 guests
+                        </small>
+                    </th>
+
+                    <th>
+                        Itaewon
+                        <small data-i18n="pricing.fourPeople">
+                            Up to 4 guests
+                        </small>
+                    </th>
+
+                    <th>
+                        Gangnam
+                        <small data-i18n="pricing.sixPeople">
+                            Up to 6 guests
+                        </small>
+                    </th>
+
+                    <th>
+                        Seoul
+                        <small data-i18n="pricing.sixPeople">
+                            Up to 6 guests
+                        </small>
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+
+            <tbody>
+
+
+                <!-- MON–THU 14–18 -->
+
+                <tr>
+
+                    <th>
+
+                        <span data-i18n="pricing.monThu">
+                            Mon–Thu
+                        </span>
+
+                        <small>
+                            14–18
+                        </small>
+
+                    </th>
+
+                    <td>45 €/h</td>
+                    <td>45 €/h</td>
+                    <td>55 €/h</td>
+                    <td>55 €/h</td>
+
+                </tr>
+
+
+
+                <!-- MON–THU 18–23 -->
+
+                <tr class="pricing-highlight">
+
+                    <th>
+
+                        <span data-i18n="pricing.monThu">
+                            Mon–Thu
+                        </span>
+
+                        <small>
+                            18–23
+                        </small>
+
+                    </th>
+
+                    <td>50 €/h</td>
+                    <td>50 €/h</td>
+                    <td>60 €/h</td>
+                    <td>60 €/h</td>
+
+                </tr>
+
+
+
+                <!-- FRI–SAT 14–18 -->
+
+                <tr>
+
+                    <th>
+
+                        <span data-i18n="pricing.friSat">
+                            Fri–Sat
+                        </span>
+
+                        <small>
+                            14–18
+                        </small>
+
+                    </th>
+
+                    <td>55 €/h</td>
+                    <td>55 €/h</td>
+                    <td>65 €/h</td>
+                    <td>65 €/h</td>
+
+                </tr>
+
+
+
+                <!-- FRI–SAT 18–02 -->
+
+                <tr class="pricing-highlight">
+
+                    <th>
+
+                        <span data-i18n="pricing.friSat">
+                            Fri–Sat
+                        </span>
+
+                        <small>
+                            18–02
+                        </small>
+
+                    </th>
+
+                    <td>60 €/h</td>
+                    <td>60 €/h</td>
+                    <td>70 €/h</td>
+                    <td>70 €/h</td>
+
+                </tr>
+
+
+
+                <!-- SUNDAY 14–18 -->
+
+                <tr>
+
+                    <th>
+
+                        <span data-i18n="pricing.sun">
+                            Sun
+                        </span>
+
+                        <small>
+                            14–18
+                        </small>
+
+                    </th>
+
+                    <td>55 €/h</td>
+                    <td>55 €/h</td>
+                    <td>65 €/h</td>
+                    <td>65 €/h</td>
+
+                </tr>
+
+
+
+                <!-- SUNDAY 18–23 -->
+
+                <tr class="pricing-highlight">
+
+                    <th>
+
+                        <span data-i18n="pricing.sun">
+                            Sun
+                        </span>
+
+                        <small>
+                            18–23
+                        </small>
+
+                    </th>
+
+                    <td>60 €/h</td>
+                    <td>60 €/h</td>
+                    <td>70 €/h</td>
+                    <td>70 €/h</td>
+
+                </tr>
+
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+
+    <!-- PRICING NOTES -->
+
+    <div class="pricing-notes">
+
+        <p data-i18n="pricing.discount">
+            Mon–Thu 18–23: Students, pensioners and unemployed customers receive 10% off with a valid card.
+        </p>
+
+        <p data-i18n="pricing.private">
+            Private events: ask us for availability and pricing.
+        </p>
+
+    </div>
 
 </section>
 
@@ -631,7 +933,7 @@
 
 <!-- =====================================================
      FOOD & DRINKS
-     IMAGE: images/photo3.png
+     photo3.png
 ===================================================== -->
 
 <section
@@ -639,20 +941,13 @@
     id="food"
 >
 
-
-    <!-- LEFT / PHOTO 3 -->
-
     <div
         class="food-photo"
         aria-label="Food and drinks"
     ></div>
 
 
-
-    <!-- RIGHT -->
-
     <div class="food-copy">
-
 
         <p
             class="eyebrow"
@@ -694,9 +989,7 @@
 
         </a>
 
-
     </div>
-
 
 </section>
 
@@ -711,7 +1004,6 @@
     id="menu"
 >
 
-
     <div class="menu-heading">
 
         <p
@@ -721,9 +1013,11 @@
             Something for the table
         </p>
 
+
         <h2 data-i18n="menu.title">
             Menu
         </h2>
+
 
         <p data-i18n="menu.text">
             Drinks and snacks for your karaoke night.
@@ -736,7 +1030,7 @@
     <div class="menu-grid">
 
 
-        <!-- NON ALCOHOLIC -->
+        <!-- NON-ALCOHOLIC -->
 
         <div class="menu-category">
 
@@ -744,26 +1038,50 @@
                 Non-alcoholic
             </h3>
 
-            <div class="menu-item">
-                <span>Pepsi Max 0.5 l</span>
-                <strong>€3.50</strong>
-            </div>
 
             <div class="menu-item">
-                <span>Jaffa</span>
-                <strong>€3.50</strong>
+
+                <span>
+                    Pepsi Max 0.5 l
+                </span>
+
+                <strong>
+                    €3.50
+                </strong>
+
             </div>
 
+
             <div class="menu-item">
-                <span>Novelle Plus Raspberry 0.33 l</span>
-                <strong>€3.00</strong>
+
+                <span>
+                    Jaffa
+                </span>
+
+                <strong>
+                    €3.50
+                </strong>
+
+            </div>
+
+
+            <div class="menu-item">
+
+                <span>
+                    Novelle Plus Raspberry 0.33 l
+                </span>
+
+                <strong>
+                    €3.00
+                </strong>
+
             </div>
 
         </div>
 
 
 
-        <!-- HOT -->
+        <!-- HOT DRINKS -->
 
         <div class="menu-category">
 
@@ -771,13 +1089,16 @@
                 Hot drinks
             </h3>
 
+
             <div class="menu-item">
 
                 <span data-i18n="menu.coffee">
                     Coffee
                 </span>
 
-                <strong>€2.50</strong>
+                <strong>
+                    €2.50
+                </strong>
 
             </div>
 
@@ -788,7 +1109,9 @@
                     Tea
                 </span>
 
-                <strong>€2.50</strong>
+                <strong>
+                    €2.50
+                </strong>
 
             </div>
 
@@ -811,7 +1134,9 @@
                     Popcorn 0.5 l
                 </span>
 
-                <strong>€3.50</strong>
+                <strong>
+                    €3.50
+                </strong>
 
             </div>
 
@@ -822,7 +1147,9 @@
                     French fries
                 </span>
 
-                <strong>€3.50</strong>
+                <strong>
+                    €3.50
+                </strong>
 
             </div>
 
@@ -833,7 +1160,9 @@
                     Nachos + salsa
                 </span>
 
-                <strong>€3.50</strong>
+                <strong>
+                    €3.50
+                </strong>
 
             </div>
 
@@ -856,7 +1185,9 @@
                     Heineken 5% 0.5 l
                 </span>
 
-                <strong>€8.50</strong>
+                <strong>
+                    €8.50
+                </strong>
 
             </div>
 
@@ -867,7 +1198,9 @@
                     Happy Joe Dry Apple 4.7% 0.5 l
                 </span>
 
-                <strong>€8.50</strong>
+                <strong>
+                    €8.50
+                </strong>
 
             </div>
 
@@ -878,22 +1211,22 @@
                     Long Drink Grapefruit 5.5% 0.5 l
                 </span>
 
-                <strong>€8.50</strong>
+                <strong>
+                    €8.50
+                </strong>
 
             </div>
 
         </div>
 
-
     </div>
-
 
 </section>
 
 
 
 <!-- =====================================================
-     EXPERIENCE / ABOUT
+     EXPERIENCE
 ===================================================== -->
 
 <section
@@ -901,9 +1234,7 @@
     id="experience"
 >
 
-
     <div class="experience-inner">
-
 
         <p
             class="eyebrow"
@@ -923,26 +1254,25 @@
 
 
         <p data-i18n="experience.text">
-            Sing, eat, drink and spend the evening together
-            in your own private karaoke room.
+            Sing, eat, drink and spend the evening together in your own private karaoke room.
         </p>
 
-
     </div>
-
 
 </section>
 
 
+
+<!-- =====================================================
+     ABOUT
+===================================================== -->
 
 <section
     class="about-section"
     id="about"
 >
 
-
     <div class="about-inner">
-
 
         <p
             class="eyebrow"
@@ -959,14 +1289,10 @@
 
 
         <p data-i18n="about.text">
-            SiNG BOX brings Korean private-room karaoke culture
-            to Helsinki with music, food, drinks and a space
-            made for spending time together.
+            SiNG BOX brings Korean private-room karaoke culture to Helsinki with music, food, drinks and a space made for spending time together.
         </p>
 
-
     </div>
-
 
 </section>
 
@@ -974,7 +1300,7 @@
 
 <!-- =====================================================
      FINAL CTA
-     IMAGE: images/photo4.png
+     photo4.png
 ===================================================== -->
 
 <section
@@ -982,12 +1308,10 @@
     id="contact"
 >
 
-
     <div class="cta-background"></div>
 
 
     <div class="cta-content">
-
 
         <p
             class="eyebrow pink"
@@ -1017,9 +1341,7 @@
 
         </a>
 
-
     </div>
-
 
 </section>
 
@@ -1034,13 +1356,10 @@
 
 <footer class="site-footer">
 
-
-    <!-- FOOTER LOGO -->
-
     <a
         href="#top"
         class="logo footer-logo"
-        aria-label="SiNG BOX"
+        aria-label="SiNG BOX Noraebang"
     >
 
         <span class="logo-main">
@@ -1063,52 +1382,32 @@
 
 
 
-    <!-- FOOTER NAV -->
-
     <nav
         class="footer-nav"
         aria-label="Footer navigation"
     >
 
-        <a
-            href="#home"
-            data-i18n="nav.home"
-        >
+        <a href="#home" data-i18n="nav.home">
             Home
         </a>
 
-        <a
-            href="#rooms"
-            data-i18n="nav.rooms"
-        >
+        <a href="#rooms" data-i18n="nav.rooms">
             Rooms
         </a>
 
-        <a
-            href="#food"
-            data-i18n="nav.food"
-        >
+        <a href="#food" data-i18n="nav.food">
             Food & Drinks
         </a>
 
-        <a
-            href="#experience"
-            data-i18n="nav.experience"
-        >
+        <a href="#experience" data-i18n="nav.experience">
             Experience
         </a>
 
-        <a
-            href="#about"
-            data-i18n="nav.about"
-        >
+        <a href="#about" data-i18n="nav.about">
             About
         </a>
 
-        <a
-            href="#contact"
-            data-i18n="nav.contact"
-        >
+        <a href="#contact" data-i18n="nav.contact">
             Contact
         </a>
 
@@ -1116,28 +1415,17 @@
 
 
 
-    <!-- SOCIALS -->
-
     <div class="footer-socials">
 
-        <a
-            href="#"
-            aria-label="Instagram"
-        >
+        <a href="#" aria-label="Instagram">
             IG
         </a>
 
-        <a
-            href="#"
-            aria-label="TikTok"
-        >
+        <a href="#" aria-label="TikTok">
             TT
         </a>
 
-        <a
-            href="#"
-            aria-label="Spotify"
-        >
+        <a href="#" aria-label="Spotify">
             SP
         </a>
 
@@ -1145,11 +1433,9 @@
 
 
 
-    <!-- LOCATION -->
-
     <div class="footer-location">
 
-        <span data-i18n="common.helsinki">
+        <span>
             Helsinki
         </span>
 
@@ -1159,18 +1445,11 @@
 
     </div>
 
-
 </footer>
 
 
 
-<!-- =====================================================
-     JAVASCRIPT
-===================================================== -->
-
 <script src="script-new.js"></script>
 
-
 </body>
-
 </html>
