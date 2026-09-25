@@ -267,7 +267,7 @@ const translations = {
             "Sing, eat, drink and spend the evening together in your own private karaoke room.",
 
 
-        /* ABOUT */
+        /* ABOUT US */
 
         "about.eyebrow":
             "A little Seoul in Helsinki",
@@ -304,7 +304,7 @@ const translations = {
         "nav.rooms": "Huoneet",
         "nav.food": "Ruoka & juomat",
         "nav.experience": "Elämys",
-        "nav.about": "Meistä",
+        "nav.about us": "Meistä",
         "nav.contact": "Yhteystiedot",
 
 
@@ -486,15 +486,15 @@ const translations = {
             "Laula, syö, juo ja vietä iltaa yhdessä omassa yksityisessä karaokehuoneessa.",
 
 
-        /* ABOUT */
+        /* ABOUT US */
 
         "about.eyebrow":
             "Pala Soulia Helsingissä",
 
-        "about.title":
+        "about us.title":
             "Korealainen noraebang.<br>Teidän tavallanne.",
 
-        "about.text":
+        "about us.text":
             "SiNG BOX tuo korealaisen yksityishuonekaraoken Helsinkiin – musiikkia, ruokaa, juomia ja oma tila yhteiseen illanviettoon.",
 
 
