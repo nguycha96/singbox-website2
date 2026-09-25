@@ -11,7 +11,6 @@
 
     <title>Varaa karaokehuone | SiNG BOX Noraebang</title>
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -59,13 +58,50 @@
             </a>
 
 
-            <a
-                href="index.html"
-                class="back-link"
-            >
-                <span class="back-arrow">←</span>
-                Takaisin etusivulle
-            </a>
+            <div class="booking-header-actions">
+
+                <div
+                    class="language-switcher"
+                    aria-label="Language"
+                >
+
+                    <button
+                        type="button"
+                        class="lang-btn active"
+                        data-lang="fi"
+                    >
+                        FI
+                    </button>
+
+                    <span class="lang-divider">
+                        |
+                    </span>
+
+                    <button
+                        type="button"
+                        class="lang-btn"
+                        data-lang="en"
+                    >
+                        EN
+                    </button>
+
+                </div>
+
+
+                <a
+                    href="index.html"
+                    class="back-link"
+                >
+                    <span class="back-arrow">
+                        ←
+                    </span>
+
+                    <span data-i18n="header.back">
+                        Takaisin etusivulle
+                    </span>
+                </a>
+
+            </div>
 
         </div>
 
@@ -88,16 +124,24 @@
 
             <div class="booking-intro-inner">
 
-                <p class="eyebrow">
+                <p
+                    class="eyebrow"
+                    data-i18n="intro.eyebrow"
+                >
                     VARAA KARAOKEHUONE
                 </p>
 
-                <h1>
+
+                <h1 data-i18n="intro.title">
                     Valitse<br>
                     päivä.
                 </h1>
 
-                <p class="booking-lead">
+
+                <p
+                    class="booking-lead"
+                    data-i18n="intro.text"
+                >
                     Valitse päivä nähdäksesi vapaat
                     karaokehuoneet ja ajat.
                 </p>
@@ -122,6 +166,7 @@
                     id="previousMonth"
                     class="month-arrow"
                     aria-label="Edellinen kuukausi"
+                    data-i18n-aria="calendar.previous"
                 >
                     ←
                 </button>
@@ -135,6 +180,7 @@
                     id="nextMonth"
                     class="month-arrow"
                     aria-label="Seuraava kuukausi"
+                    data-i18n-aria="calendar.next"
                 >
                     →
                 </button>
@@ -155,13 +201,13 @@
 
                     <div class="calendar-weekdays">
 
-                        <span>Ma</span>
-                        <span>Ti</span>
-                        <span>Ke</span>
-                        <span>To</span>
-                        <span>Pe</span>
-                        <span>La</span>
-                        <span>Su</span>
+                        <span data-weekday="mon">Ma</span>
+                        <span data-weekday="tue">Ti</span>
+                        <span data-weekday="wed">Ke</span>
+                        <span data-weekday="thu">To</span>
+                        <span data-weekday="fri">Pe</span>
+                        <span data-weekday="sat">La</span>
+                        <span data-weekday="sun">Su</span>
 
                     </div>
 
@@ -179,7 +225,10 @@
 
                 <aside class="calendar-legend">
 
-                    <p class="legend-title">
+                    <p
+                        class="legend-title"
+                        data-i18n="legend.title"
+                    >
                         SAATAVUUS
                     </p>
 
@@ -192,7 +241,7 @@
                                 class="legend-box available"
                             ></span>
 
-                            <span>
+                            <span data-i18n="legend.available">
                                 Vapaa
                             </span>
 
@@ -205,7 +254,7 @@
                                 class="legend-box selected"
                             ></span>
 
-                            <span>
+                            <span data-i18n="legend.selected">
                                 Valittu
                             </span>
 
@@ -220,7 +269,7 @@
                                 ×
                             </span>
 
-                            <span>
+                            <span data-i18n="legend.booked">
                                 Varattu
                             </span>
 
@@ -229,7 +278,10 @@
                     </div>
 
 
-                    <p class="legend-help">
+                    <p
+                        class="legend-help"
+                        data-i18n="legend.help"
+                    >
                         Valitse päivä nähdäksesi
                         vapaat huoneet ja ajat.
                     </p>
@@ -253,15 +305,23 @@
 
             <div class="rooms-heading">
 
-                <p class="eyebrow">
+                <p
+                    class="eyebrow"
+                    data-i18n="rooms.eyebrow"
+                >
                     VALITSE HUONE JA AIKA
                 </p>
+
 
                 <h2 id="selectedDateTitle">
                     Valitse päivä
                 </h2>
 
-                <p class="rooms-description">
+
+                <p
+                    class="rooms-description"
+                    data-i18n="rooms.description"
+                >
                     Valitse vähintään yhden tunnin varaus.
                     Varausten välissä on vähintään
                     15 minuutin siivousaika.
@@ -273,14 +333,7 @@
             <div
                 class="rooms-grid"
                 id="roomsGrid"
-            >
-
-                <!--
-                    booking.js generoi huoneet
-                    automaattisesti tähän.
-                -->
-
-            </div>
+            ></div>
 
         </section>
 
@@ -310,21 +363,14 @@
             </div>
 
 
-            <p>
-                Korean private-room karaoke
-                in Helsinki.
+            <p data-i18n="footer.text">
+                Korealainen yksityishuonekaraoke Helsingissä.
             </p>
 
         </div>
 
     </footer>
 
-
-
-    <!--
-        VARAUSLOGIIKKA:
-        tätä tiedostoa ei muuteta tässä vaiheessa.
-    -->
 
     <script src="booking.js"></script>
 
