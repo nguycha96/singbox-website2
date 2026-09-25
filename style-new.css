@@ -283,20 +283,22 @@ h2 {
 }
 
 .logo-line {
-    width: 36px;
+    width: 32px;
     height: 1px;
-
     background: var(--gold);
 }
 
 .logo-sub {
     color: var(--gold);
 
-    font-size: 0.72rem;
-    font-weight: 500;
+    font-size: 0.76rem;
+    font-weight: 600;
 
     line-height: 1;
-    letter-spacing: 0.30em;
+    letter-spacing: 0.20em;
+
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
 }
 
 
