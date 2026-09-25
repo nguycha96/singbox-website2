@@ -10,10 +10,10 @@
 
 :root {
 
-    --green-black: #001c14;
-    --green-deep: #00251b;
-    --green-card: #08271d;
-    --green-card-alt: #0b2d22;
+   --green-black: #00130e;
+   --green-deep: #001a13;
+   --green-card: #002219;
+   --green-card-alt: #00271d;
 
     --cream: #f1ddb0;
     --cream-soft: #dfc997;
@@ -109,7 +109,7 @@ a {
         var(--border);
 
     background:
-        #00150f;
+        #000f0b;
 
     display: flex;
     align-items: center;
@@ -948,7 +948,7 @@ a {
         var(--border);
 
     background:
-        #00170f;
+        #00130e;
 }
 
 .rooms-heading {
@@ -1429,7 +1429,7 @@ a {
         var(--border);
 
     background:
-        #00110c;
+        #000f0b;
 }
 
 .footer-inner {
