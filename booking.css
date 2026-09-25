@@ -2272,3 +2272,14 @@ a {
     }
 
 }
+
+
+/* Cleaning symbol in availability legend */
+
+.legend-box.cleaning {
+    border: 1px solid rgba(216, 170, 43, 0.12);
+    background: transparent;
+    color: rgba(216, 170, 43, 0.55);
+    font-family: var(--serif);
+    font-size: 1rem;
+}
