@@ -2034,3 +2034,40 @@ a {
         display: inline;
     }
 }
+
+
+/* =========================================================
+   DARKER BOOKING ROOM AREA
+========================================================= */
+
+/* Koko huoneosion pohja */
+.rooms-section {
+    background: #00130e;
+}
+
+/* Huonekorttien iso vihreä alue */
+.room-card {
+    background: #001811;
+}
+
+/* Älä tee kortista kirkkaan vihreää hoverissa */
+.room-card:hover {
+    background: #001b13;
+}
+
+/* Aikapainikkeet vielä hieman tummemmiksi */
+.time-slot {
+    background: #00150f;
+    border-color: rgba(216, 170, 43, 0.18);
+}
+
+/* Hoverissa vain pieni kultainen korostus */
+.time-slot:hover {
+    background: rgba(216, 170, 43, 0.06);
+    border-color: rgba(216, 170, 43, 0.55);
+}
+
+/* Korttien väliset jakoviivat */
+.rooms-grid {
+    background: rgba(216, 170, 43, 0.18);
+}
