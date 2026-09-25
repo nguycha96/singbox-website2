@@ -1030,19 +1030,226 @@ function getHourlyPrice(
    DEMO BOOKED TIMES
 ========================================================= */
 
+/* =========================================================
+   BOOKED TIMES + CLEANING BUFFER
+========================================================= */
+
+/*
+    Demo bookings.
+
+    start = booking start
+    end   = booking end
+
+    IMPORTANT:
+    The end time itself is NOT part of the customer's
+    booking, but 15 minutes after the booking is reserved
+    for cleaning.
+
+    We also block 15 minutes BEFORE an existing booking,
+    because a previous customer must finish early enough
+    to leave the required cleaning gap.
+*/
+
+function getDemoBookings(roomId) {
+
+    if (!selectedDate) {
+        return [];
+    }
+
+    const day =
+        selectedDate.getDate();
+
+
+    const bookings = [];
+
+
+    /*
+        Same demo conditions as before,
+        but bookings are now represented
+        as actual start/end times.
+    */
+
+    if (
+        roomId === "gangnam" &&
+        day % 3 === 0
+    ) {
+        bookings.push({
+            start: "18:00",
+            end: "19:00"
+        });
+    }
+
+
+    if (
+        roomId === "seoul" &&
+        day % 4 === 0
+    ) {
+        bookings.push({
+            start: "16:00",
+            end: "17:00"
+        });
+    }
+
+
+    if (
+        roomId === "hongdae" &&
+        day % 5 === 0
+    ) {
+        bookings.push({
+            start: "20:00",
+            end: "21:00"
+        });
+    }
+
+
+    if (
+        roomId === "itaewon" &&
+        day % 6 === 0
+    ) {
+        bookings.push({
+            start: "14:00",
+            end: "15:00"
+        });
+    }
+
+
+    return bookings;
+}
+
+
+
+/* =========================================================
+   TIME HELPERS
+========================================================= */
+
+function timeToMinutes(time) {
+
+    const [hours, minutes] =
+        time
+            .split(":")
+            .map(Number);
+
+    return hours * 60 + minutes;
+}
+
+
+function normalizeMinutes(minutes) {
+
+    /*
+        Times after midnight belong to the same
+        karaoke evening.
+
+        Example:
+        01:00 becomes 25:00 internally.
+    */
+
+    if (minutes < 14 * 60) {
+        return minutes + 24 * 60;
+    }
+
+    return minutes;
+}
+
+
+function bookingTimeToMinutes(time) {
+
+    return normalizeMinutes(
+        timeToMinutes(time)
+    );
+}
+
+
+
+/* =========================================================
+   SLOT STATUS
+========================================================= */
+
+function getSlotStatus(
+    roomId,
+    time
+) {
+
+    const slotMinutes =
+        bookingTimeToMinutes(time);
+
+
+    const bookings =
+        getDemoBookings(roomId);
+
+
+    for (const booking of bookings) {
+
+        const start =
+            bookingTimeToMinutes(
+                booking.start
+            );
+
+        let end =
+            bookingTimeToMinutes(
+                booking.end
+            );
+
+
+        if (end <= start) {
+            end += 24 * 60;
+        }
+
+
+        /*
+            Actual customer booking.
+        */
+
+        if (
+            slotMinutes >= start &&
+            slotMinutes < end
+        ) {
+            return "booked";
+        }
+
+
+        /*
+            15-minute cleaning / changeover
+            immediately BEFORE the booking.
+        */
+
+        if (
+            slotMinutes >= start - 15 &&
+            slotMinutes < start
+        ) {
+            return "cleaning";
+        }
+
+
+        /*
+            15-minute cleaning / changeover
+            immediately AFTER the booking.
+        */
+
+        if (
+            slotMinutes >= end &&
+            slotMinutes < end + 15
+        ) {
+            return "cleaning";
+        }
+
+    }
+
+
+    return "available";
+}
+
+
+
 function isBooked(
     roomId,
     time
 ) {
 
-    /*
-        Temporary demo data.
-        Booking database can replace this later.
-    */
-
-    if (!selectedDate) {
-        return false;
-    }
+    return getSlotStatus(
+        roomId,
+        time
+    ) !== "available";
+}
 
 
     const day =
