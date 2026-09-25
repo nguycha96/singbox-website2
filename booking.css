@@ -2094,3 +2094,19 @@ a {
 
     color: rgba(216, 170, 43, 0.34);
 }
+
+/* Cleaning / changeover */
+
+.time-slot.cleaning {
+    background: transparent;
+    border-color: rgba(216, 170, 43, 0.12);
+    color: rgba(216, 170, 43, 0.38);
+    font-size: 1rem;
+    cursor: not-allowed;
+}
+
+.time-slot.cleaning:hover {
+    background: transparent;
+    border-color: rgba(216, 170, 43, 0.12);
+    color: rgba(216, 170, 43, 0.38);
+}
