@@ -2110,3 +2110,165 @@ a {
     border-color: rgba(216, 170, 43, 0.12);
     color: rgba(216, 170, 43, 0.38);
 }
+
+
+/* =========================================================
+   COMPACT DESKTOP BOOKING LAYOUT
+   Keeps mobile styles unchanged
+========================================================= */
+
+@media (min-width: 761px) {
+
+    /* HEADER */
+
+    :root {
+        --header-height: 88px;
+    }
+
+    .logo-main {
+        font-size: 2rem;
+    }
+
+    .logo-sub {
+        font-size: 0.62rem;
+    }
+
+
+    /* INTRO */
+
+    .booking-intro-inner {
+        width: min(1360px, 88%);
+        padding: 58px 0 52px;
+    }
+
+    .eyebrow {
+        margin-bottom: 16px;
+        font-size: 0.7rem;
+    }
+
+    .booking-intro h1 {
+        font-size: clamp(3.7rem, 5.5vw, 5.5rem);
+        line-height: 0.84;
+    }
+
+    .booking-lead {
+        margin-top: 24px;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+
+    /* CALENDAR SECTION */
+
+    .booking-calendar-section {
+        padding: 45px 0 55px;
+    }
+
+
+    /* MONTH HEADER */
+
+    .calendar-header {
+        margin-bottom: 28px;
+        gap: 28px;
+    }
+
+    .calendar-header h2 {
+        min-width: 270px;
+        font-size: 2rem;
+    }
+
+    .month-arrow {
+        width: 46px;
+        height: 46px;
+        font-size: 1.25rem;
+    }
+
+
+    /* CALENDAR + LEGEND */
+
+    .calendar-layout {
+        grid-template-columns:
+            minmax(0, 1fr)
+            220px;
+
+        gap: 44px;
+    }
+
+    .calendar-weekdays {
+        margin-bottom: 8px;
+    }
+
+    .calendar-weekdays span {
+        padding: 0 5px 11px;
+        font-size: 0.68rem;
+    }
+
+    .calendar-days {
+        gap: 5px;
+    }
+
+    .calendar-day {
+        min-height: 58px;
+        font-size: 1.15rem;
+    }
+
+    .calendar-day.today::after {
+        bottom: 7px;
+    }
+
+
+    /* LEGEND */
+
+    .calendar-legend {
+        padding: 4px 0 4px 30px;
+    }
+
+    .legend-title {
+        margin-bottom: 20px;
+        font-size: 0.68rem;
+    }
+
+    .legend-list {
+        gap: 13px;
+    }
+
+    .legend-item {
+        gap: 10px;
+        font-size: 0.82rem;
+    }
+
+    .legend-box {
+        width: 20px;
+        height: 20px;
+        flex: 0 0 20px;
+    }
+
+    .legend-help {
+        margin-top: 24px;
+        font-size: 0.76rem;
+        line-height: 1.55;
+    }
+
+
+    /* ROOMS BELOW CALENDAR */
+
+    .rooms-section {
+        padding:
+            65px max(6vw, 30px)
+            80px;
+    }
+
+    .rooms-heading {
+        margin-bottom: 34px;
+    }
+
+    .rooms-heading h2 {
+        font-size: clamp(2.8rem, 4vw, 4.2rem);
+    }
+
+    .rooms-description {
+        margin-top: 16px;
+        font-size: 0.9rem;
+    }
+
+}
