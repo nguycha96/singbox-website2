@@ -1860,3 +1860,177 @@ a {
     }
 
 }
+
+
+/* =========================================================
+   HEADER BUTTON FIX
+========================================================= */
+
+/* Oikean reunan FI | EN + takaisin */
+.booking-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+
+/* FI | EN */
+
+.language-switcher {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.language-switcher .lang-btn {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    width: auto !important;
+    height: auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    border: 0 !important;
+    outline: 0;
+
+    border-radius: 0 !important;
+
+    background: transparent !important;
+    box-shadow: none !important;
+
+    color: rgba(241, 221, 176, 0.48);
+
+    font-family: var(--sans);
+    font-size: 0.76rem;
+    font-weight: 600;
+
+    line-height: 1;
+    letter-spacing: 0.08em;
+
+    cursor: pointer;
+}
+
+.language-switcher .lang-btn:hover {
+    color: var(--cream);
+}
+
+.language-switcher .lang-btn.active {
+    color: var(--gold);
+}
+
+.lang-divider {
+    color: rgba(241, 221, 176, 0.28);
+
+    font-size: 0.72rem;
+    line-height: 1;
+}
+
+
+/* TAKAISIN ETUSIVULLE */
+
+.back-link {
+    width: auto !important;
+
+    min-height: 42px;
+
+    padding: 0 18px;
+
+    border: 1px solid rgba(216, 170, 43, 0.72);
+    border-radius: 999px;
+
+    background: transparent;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    color: var(--cream);
+
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    font-weight: 600;
+
+    line-height: 1;
+    letter-spacing: 0.07em;
+
+    text-decoration: none;
+    text-transform: uppercase;
+
+    box-shadow: none;
+
+    transition:
+        border-color 180ms ease,
+        background 180ms ease;
+}
+
+.back-arrow {
+    color: var(--gold);
+
+    font-size: 0.95rem;
+    line-height: 1;
+}
+
+.back-link:hover {
+    border-color: var(--cream);
+
+    background: rgba(241, 221, 176, 0.06);
+
+    color: var(--cream);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 760px) {
+
+    .booking-header-actions {
+        gap: 14px;
+    }
+
+    .language-switcher {
+        gap: 6px;
+    }
+
+    .language-switcher .lang-btn {
+        font-size: 0.67rem;
+    }
+
+    .back-link {
+        min-height: 40px;
+
+        padding: 0 13px;
+
+        font-size: 0.59rem;
+    }
+}
+
+
+@media (max-width: 520px) {
+
+    .back-link {
+        width: 40px !important;
+        height: 40px;
+
+        min-height: 40px;
+
+        padding: 0;
+
+        border-radius: 50%;
+    }
+
+    .back-link span:not(.back-arrow) {
+        display: none;
+    }
+
+    .back-arrow {
+        display: inline;
+    }
+}
