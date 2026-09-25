@@ -479,7 +479,7 @@ h2 {
 ========================================================= */
 
 .hero {
-    min-height: 760px;
+    min-height: 100vh;
 
     padding-top: var(--header-height);
 
