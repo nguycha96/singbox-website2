@@ -872,80 +872,118 @@ const navigationLinks =
     );
 
 
-const sections =
-    Array.from(
-        navigationLinks
-    )
-        .map((link) => {
-
-            const href =
-                link.getAttribute("href");
-
-            if (
-                !href ||
-                href === "#"
-            ) {
-                return null;
-            }
-
-            return document.querySelector(
-                href
-            );
-
-        })
-        .filter(Boolean);
-
+const navigationSections = [
+    {
+        id: "home",
+        nav: "#home"
+    },
+    {
+        id: "rooms",
+        nav: "#rooms"
+    },
+    {
+        id: "room-selection",
+        nav: "#rooms"
+    },
+    {
+        id: "pricing",
+        nav: "#rooms"
+    },
+    {
+        id: "food",
+        nav: "#food"
+    },
+    {
+        id: "menu",
+        nav: "#food"
+    },
+    {
+        id: "experience",
+        nav: "#experience"
+    },
+    {
+        id: "about",
+        nav: "#about"
+    },
+    {
+        id: "contact",
+        nav: "#contact"
+    }
+];
 
 
 function updateActiveNavigation() {
 
-    if (
-        sections.length === 0 ||
-        navigationLinks.length === 0
-    ) {
-        return;
-    }
+    const headerHeight =
+        header
+            ? header.offsetHeight
+            : 0;
 
 
-    const scrollPosition =
+    const checkPoint =
         window.scrollY +
-        window.innerHeight * 0.32;
+        headerHeight +
+        120;
 
 
-    let currentSection =
-        sections[0];
+    let activeNav =
+        "#home";
 
 
-    sections.forEach((section) => {
+    navigationSections.forEach((item) => {
+
+        const section =
+            document.getElementById(
+                item.id
+            );
+
+
+        if (!section) {
+            return;
+        }
+
 
         if (
             section.offsetTop <=
-            scrollPosition
+            checkPoint
         ) {
-            currentSection = section;
+            activeNav = item.nav;
         }
 
     });
 
 
+    /*
+        Remove BOTH active classes
+        from every navigation link first.
+    */
+
     navigationLinks.forEach((link) => {
 
-        const href =
-            link.getAttribute("href");
-
-        const isCurrent =
-            href ===
-            "#" + currentSection.id;
-
-        link.classList.toggle(
+        link.classList.remove(
             "active",
-            isCurrent
+            "current"
         );
 
-        link.classList.toggle(
-            "current",
-            isCurrent
-        );
+    });
+
+
+    /*
+        Activate only the correct link.
+    */
+
+    navigationLinks.forEach((link) => {
+
+        if (
+            link.getAttribute("href") ===
+            activeNav
+        ) {
+
+            link.classList.add(
+                "active"
+            );
+
+        }
 
     });
 
@@ -963,6 +1001,12 @@ window.addEventListener(
 
 window.addEventListener(
     "resize",
+    updateActiveNavigation
+);
+
+
+window.addEventListener(
+    "load",
     updateActiveNavigation
 );
 
