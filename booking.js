@@ -1263,19 +1263,12 @@ function drawRooms() {
     if (!selectedDate) {
 
         selectedDateTitle.textContent =
-            getTranslation(
-                "selectDate"
-            );
+            getTranslation("selectDate");
 
-
-        roomsGrid.innerHTML =
-            "";
-
+        roomsGrid.innerHTML = "";
 
         return;
-
     }
-
 
 
     const dateText =
@@ -1295,26 +1288,17 @@ function drawRooms() {
         + dateText.slice(1);
 
 
-    roomsGrid.innerHTML =
-        "";
-
+    roomsGrid.innerHTML = "";
 
 
     rooms.forEach(room => {
 
         const card =
-            document.createElement(
-                "article"
-            );
+            document.createElement("article");
 
 
-        card.className =
-            "room-card";
-
-
-        card.dataset.roomId =
-            room.id;
-
+        card.className = "room-card";
+        card.dataset.roomId = room.id;
 
 
         const capacityText =
@@ -1327,7 +1311,6 @@ function drawRooms() {
             currentLanguage === "fi"
                 ? `Alkaen ${room.startingPrice} €/h`
                 : `From €${room.startingPrice} / hour`;
-
 
 
         card.innerHTML = `
@@ -1360,15 +1343,11 @@ function drawRooms() {
                 <div class="time-header">
 
                     <h4>
-                        ${getTranslation(
-                            "availableTimes"
-                        )}
+                        ${getTranslation("availableTimes")}
                     </h4>
 
                     <div class="selected-total">
-                        ${getTranslation(
-                            "total"
-                        )} €0
+                        ${getTranslation("total")} €0
                     </div>
 
                 </div>
@@ -1380,71 +1359,63 @@ function drawRooms() {
         `;
 
 
-
         const timeGrid =
-            card.querySelector(
-                ".time-grid"
-            );
+            card.querySelector(".time-grid");
 
 
         const slots =
             createTimeSlots();
 
 
-
         slots.forEach(time => {
 
             const button =
-                document.createElement(
-                    "button"
+                document.createElement("button");
+
+
+            button.type = "button";
+            button.className = "time-slot";
+            button.textContent = time;
+            button.dataset.time = time;
+
+
+            const slotStatus =
+                getSlotStatus(
+                    room.id,
+                    time
                 );
-
-
-            button.type =
-                "button";
-
-
-            button.className =
-                "time-slot";
-
-
-            button.textContent =
-                time;
-
-
-            button.dataset.time =
-                time;
-
 
 
             /*
-                Temporary booked state
+                ACTUAL EXISTING BOOKING
             */
 
-            if (
-                isBooked(
-                    room.id,
-                    time
-                )
-            ) {
+            if (slotStatus === "booked") {
 
-                button.classList.add(
-                    "booked"
-                );
+                button.classList.add("booked");
 
+                button.textContent = "×";
 
-                button.textContent =
-                    "×";
-
-
-                button.disabled =
-                    true;
-
+                button.disabled = true;
             }
 
 
             /*
-                Available time
+                CLEANING / CHANGEOVER TIME
+            */
+
+            else if (slotStatus === "cleaning") {
+
+                button.classList.add("cleaning");
+
+                button.textContent = "○";
+
+                button.disabled = true;
+            }
+
+
+            /*
+                AVAILABLE TIME
             */
 
             else {
@@ -1459,32 +1430,21 @@ function drawRooms() {
                             button
                         );
 
-
                         updateRoomSelection(
                             room.id
                         );
-
                     }
                 );
-
             }
 
 
-            timeGrid.appendChild(
-                button
-            );
-
+            timeGrid.appendChild(button);
         });
 
 
-        roomsGrid.appendChild(
-            card
-        );
-
+        roomsGrid.appendChild(card);
     });
-
 }
-
 
 
 /* =========================================================
@@ -1664,9 +1624,7 @@ function selectTime(
 ) {
 
     const roomCard =
-        button.closest(
-            ".room-card"
-        );
+        button.closest(".room-card");
 
 
     const timeButtons =
@@ -1678,20 +1636,31 @@ function selectTime(
 
 
     const clickedIndex =
-        timeButtons.indexOf(
-            button
-        );
-
+        timeButtons.indexOf(button);
 
 
     /*
-        CLICKED SLOT ALREADY SELECTED
+        Helper:
+        true = this slot cannot be part
+        of a customer booking.
+    */
+
+    function slotIsBlocked(slot) {
+
+        return (
+            slot.classList.contains("booked") ||
+            slot.classList.contains("cleaning")
+        );
+    }
+
+
+    /*
+        CLICKED SLOT IS ALREADY SELECTED
+        -> remove that one-hour block
     */
 
     if (
-        button.classList.contains(
-            "selected"
-        )
+        button.classList.contains("selected")
     ) {
 
         const selectedButtons =
@@ -1704,9 +1673,7 @@ function selectTime(
 
 
         const selectedIndex =
-            selectedButtons.indexOf(
-                button
-            );
+            selectedButtons.indexOf(button);
 
 
         const hourStartIndex =
@@ -1728,20 +1695,14 @@ function selectTime(
                 slot.classList.remove(
                     "selected"
                 );
-
             }
         );
 
 
-        updateRoomSelection(
-            room.id
-        );
-
+        updateRoomSelection(room.id);
 
         return;
-
     }
-
 
 
     /*
@@ -1757,15 +1718,12 @@ function selectTime(
         );
 
 
-
     /*
-        NOTHING SELECTED:
-        select four 15-minute slots.
+        NOTHING SELECTED YET
+        -> select one hour
     */
 
-    if (
-        selectedButtons.length === 0
-    ) {
+    if (selectedButtons.length === 0) {
 
         const newHour =
             timeButtons.slice(
@@ -1774,26 +1732,15 @@ function selectTime(
             );
 
 
-        if (
-            newHour.length !== 4
-        ) {
-
+        if (newHour.length !== 4) {
             return;
-
         }
 
 
         if (
-            newHour.some(
-                slot =>
-                    slot.classList.contains(
-                        "booked"
-                    )
-            )
+            newHour.some(slotIsBlocked)
         ) {
-
             return;
-
         }
 
 
@@ -1803,24 +1750,18 @@ function selectTime(
                 slot.classList.add(
                     "selected"
                 );
-
             }
         );
 
 
-        updateRoomSelection(
-            room.id
-        );
-
+        updateRoomSelection(room.id);
 
         return;
-
     }
 
 
-
     /*
-        ADD ONE HOUR TO END
+        ADD ONE HOUR TO THE END
     */
 
     const lastSelected =
@@ -1847,26 +1788,15 @@ function selectTime(
             );
 
 
-        if (
-            newHour.length !== 4
-        ) {
-
+        if (newHour.length !== 4) {
             return;
-
         }
 
 
         if (
-            newHour.some(
-                slot =>
-                    slot.classList.contains(
-                        "booked"
-                    )
-            )
+            newHour.some(slotIsBlocked)
         ) {
-
             return;
-
         }
 
 
@@ -1876,24 +1806,18 @@ function selectTime(
                 slot.classList.add(
                     "selected"
                 );
-
             }
         );
 
 
-        updateRoomSelection(
-            room.id
-        );
-
+        updateRoomSelection(room.id);
 
         return;
-
     }
 
 
-
     /*
-        ADD ONE HOUR TO BEGINNING
+        ADD ONE HOUR TO THE BEGINNING
     */
 
     const firstSelected =
@@ -1915,12 +1839,8 @@ function selectTime(
             firstIndex - 4;
 
 
-        if (
-            newStart < 0
-        ) {
-
+        if (newStart < 0) {
             return;
-
         }
 
 
@@ -1931,26 +1851,15 @@ function selectTime(
             );
 
 
-        if (
-            newHour.length !== 4
-        ) {
-
+        if (newHour.length !== 4) {
             return;
-
         }
 
 
         if (
-            newHour.some(
-                slot =>
-                    slot.classList.contains(
-                        "booked"
-                    )
-            )
+            newHour.some(slotIsBlocked)
         ) {
-
             return;
-
         }
 
 
@@ -1960,26 +1869,20 @@ function selectTime(
                 slot.classList.add(
                     "selected"
                 );
-
             }
         );
 
 
-        updateRoomSelection(
-            room.id
-        );
-
+        updateRoomSelection(room.id);
 
         return;
-
     }
 
 
-
     /*
-        CLICK ANOTHER TIME:
-        remove old selection and
-        begin a new one-hour selection.
+        CLICK ANOTHER AVAILABLE TIME
+        -> remove old selection and
+        start a new one-hour booking
     */
 
     selectedButtons.forEach(
@@ -1988,7 +1891,6 @@ function selectTime(
             slot.classList.remove(
                 "selected"
             );
-
         }
     );
 
@@ -2000,36 +1902,21 @@ function selectTime(
         );
 
 
-    if (
-        newHour.length !== 4
-    ) {
+    if (newHour.length !== 4) {
 
-        updateRoomSelection(
-            room.id
-        );
-
+        updateRoomSelection(room.id);
 
         return;
-
     }
 
 
     if (
-        newHour.some(
-            slot =>
-                slot.classList.contains(
-                    "booked"
-                )
-        )
+        newHour.some(slotIsBlocked)
     ) {
 
-        updateRoomSelection(
-            room.id
-        );
-
+        updateRoomSelection(room.id);
 
         return;
-
     }
 
 
@@ -2039,17 +1926,12 @@ function selectTime(
             slot.classList.add(
                 "selected"
             );
-
         }
     );
 
 
-    updateRoomSelection(
-        room.id
-    );
-
+    updateRoomSelection(room.id);
 }
-
 
 
 /* =========================================================
