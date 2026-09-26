@@ -111,6 +111,37 @@ async function loadRoomsFromSupabase() {
     );
 }
 
+let pricingRules = [];
+
+
+async function loadPricingRulesFromSupabase() {
+
+    const { data, error } = await supabaseClient
+        .from("pricing_rules")
+        .select("*")
+        .order("room_id", { ascending: true })
+        .order("start_time", { ascending: true });
+
+
+    if (error) {
+
+        console.error(
+            "Could not load pricing rules:",
+            error
+        );
+
+        return;
+    }
+
+
+    pricingRules = data;
+
+
+    console.log(
+        "Pricing rules loaded from Supabase:",
+        pricingRules
+    );
+}
 
 
 /* =========================================================
@@ -2071,6 +2102,8 @@ async function initializeBooking() {
         getInitialLanguage();
 
     await loadRoomsFromSupabase();
+
+   await loadPricingRulesFromSupabase();
 
     setLanguage(
         currentLanguage
