@@ -891,33 +891,33 @@ function createTimeSlots() {
 
 
 
-    /*
-        Monday–Thursday
-        14:00–23:00
-    */
+   /*
+    Monday–Thursday + Sunday
+    14:00–23:00
+*/
 
-    if (
-        day >= 1 &&
-        day <= 4
-    ) {
+if (
+    (day >= 1 && day <= 4) ||
+    day === 0
+) {
 
-        closingMinutes =
-            23 * 60;
+    closingMinutes =
+        23 * 60;
 
-    }
+}
 
 
-    /*
-        Friday–Sunday
-        14:00–02:00
-    */
+/*
+    Friday–Saturday
+    14:00–02:00
+*/
 
-    else {
+else {
 
-        closingMinutes =
-            26 * 60;
+    closingMinutes =
+        26 * 60;
 
-    }
+}
 
 
 
