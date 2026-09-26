@@ -1101,75 +1101,156 @@ updateActiveNavigation();
 const revealElements =
     document.querySelectorAll(
         [
+            ".room-selection-heading",
             ".room-card",
-            ".menu-category",
             ".pricing-heading",
             ".pricing-table-scroll",
-            ".pricing-notes"
+            ".pricing-notes",
+            ".info-heading",
+            ".info-card",
+            ".food-copy",
+            ".menu-heading",
+            ".menu-category",
+            ".about-inner",
+            ".cta-content"
         ].join(",")
     );
 
 
-revealElements.forEach(
-    (element) => {
+/*
+    Add the base reveal class.
+*/
 
-        element.classList.add(
-            "reveal-item"
+revealElements.forEach((element) => {
+
+    element.classList.add(
+        "reveal-item"
+    );
+
+});
+
+
+/*
+    Stagger room cards.
+*/
+
+document
+    .querySelectorAll(".room-card")
+    .forEach((card, index) => {
+
+        card.style.setProperty(
+            "--reveal-delay",
+            `${index * 110}ms`
         );
 
-    }
-);
+    });
 
 
-if (
-    "IntersectionObserver" in window
-) {
+/*
+    Stagger Good to know cards.
+*/
+
+document
+    .querySelectorAll(".info-card")
+    .forEach((card, index) => {
+
+        card.style.setProperty(
+            "--reveal-delay",
+            `${index * 100}ms`
+        );
+
+    });
+
+
+/*
+    Give menu categories a small stagger too.
+*/
+
+document
+    .querySelectorAll(".menu-category")
+    .forEach((category, index) => {
+
+        category.style.setProperty(
+            "--reveal-delay",
+            `${(index % 3) * 90}ms`
+        );
+
+    });
+
+
+/*
+    Gold decorative lines.
+*/
+
+const revealLines =
+    document.querySelectorAll(
+        ".gold-line"
+    );
+
+
+revealLines.forEach((line) => {
+
+    line.classList.add(
+        "reveal-line"
+    );
+
+});
+
+
+/*
+    Reveal observer.
+*/
+
+if ("IntersectionObserver" in window) {
 
     const revealObserver =
         new IntersectionObserver(
 
             (entries, observer) => {
 
-                entries.forEach(
-                    (entry) => {
+                entries.forEach((entry) => {
 
-                        if (
-                            !entry.isIntersecting
-                        ) {
-                            return;
-                        }
-
-                        entry.target.classList.add(
-                            "revealed"
-                        );
-
-                        observer.unobserve(
-                            entry.target
-                        );
-
+                    if (!entry.isIntersecting) {
+                        return;
                     }
-                );
+
+                    entry.target.classList.add(
+                        "revealed"
+                    );
+
+                    observer.unobserve(
+                        entry.target
+                    );
+
+                });
 
             },
 
             {
-                threshold: 0.10,
+                threshold: 0.12,
                 rootMargin:
-                    "0px 0px -30px 0px"
+                    "0px 0px -45px 0px"
             }
 
         );
 
 
-    revealElements.forEach(
-        (element) => {
+    revealElements.forEach((element) => {
 
-            revealObserver.observe(
-                element
-            );
+        revealObserver.observe(
+            element
+        );
 
-        }
-    );
+    });
+
+
+    revealLines.forEach((line) => {
+
+        revealObserver.observe(
+            line
+        );
+
+    });
 
 } else {
 
@@ -1177,18 +1258,24 @@ if (
         Fallback for old browsers.
     */
 
-    revealElements.forEach(
-        (element) => {
+    revealElements.forEach((element) => {
 
-            element.classList.add(
-                "revealed"
-            );
+        element.classList.add(
+            "revealed"
+        );
 
-        }
-    );
+    });
+
+
+    revealLines.forEach((line) => {
+
+        line.classList.add(
+            "revealed"
+        );
+
+    });
 
 }
-
 
 
 /* =========================================================
