@@ -47,7 +47,6 @@ const rooms = [
         id: "hongdae",
         title: "Hongdae",
         guests: 4,
-        startingPrice: 45,
         image: "images/hongdae.png"
     },
 
@@ -55,7 +54,6 @@ const rooms = [
         id: "itaewon",
         title: "Itaewon",
         guests: 4,
-        startingPrice: 45,
         image: "images/itaewon.png"
     },
 
@@ -63,7 +61,6 @@ const rooms = [
         id: "gangnam",
         title: "Gangnam",
         guests: 6,
-        startingPrice: 55,
         image: "images/gangnam.png"
     },
 
@@ -71,7 +68,6 @@ const rooms = [
         id: "seoul",
         title: "Seoul",
         guests: 6,
-        startingPrice: 55,
         image: "images/seoul.png"
     }
 
