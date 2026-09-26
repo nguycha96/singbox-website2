@@ -2022,10 +2022,10 @@ a.contact-row {
     display: grid;
 
     grid-template-columns:
-        245px
-        1fr
-        auto
-        120px;
+       220px
+       1fr
+       auto
+       105px;
 
     align-items: center;
 
@@ -2068,37 +2068,72 @@ a.contact-row {
     color: var(--gold);
 }
 
-.footer-socials {
-    display: flex;
+.footer-contact-links {
+    display: grid;
 
-    gap: 15px;
-}
+    grid-template-columns:
+        repeat(3, max-content);
 
-.footer-socials a {
-    width: 32px;
-    height: 32px;
-
-    display: flex;
+    gap:
+        9px
+        18px;
 
     align-items: center;
-    justify-content: center;
+}
 
-    border: 1px solid var(--pink);
-    border-radius: 50%;
+.footer-contact-link {
+    display: inline-flex;
 
-    color: var(--pink);
+    align-items: center;
+
+    gap: 7px;
+
+    color: rgba(255, 255, 255, 0.68);
 
     font-size: 0.58rem;
     font-weight: 500;
 
+    letter-spacing: 0.06em;
+
+    white-space: nowrap;
+
     transition:
-        background 0.2s ease,
-        color 0.2s ease;
+        color 0.25s ease;
 }
 
-.footer-socials a:hover {
-    background: var(--pink);
-    color: white;
+a.footer-contact-link:hover {
+    color: var(--pink);
+}
+
+.footer-contact-link svg {
+    width: 14px;
+    height: 14px;
+
+    flex: 0 0 14px;
+
+    fill: none;
+    stroke: var(--pink);
+
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    transition:
+        transform 0.25s ease,
+        stroke 0.25s ease;
+}
+
+a.footer-contact-link:hover svg {
+    transform: translateY(-1px);
+
+    stroke: #ff6eb1;
+}
+
+/* Facebook-icon uses a filled shape */
+
+.footer-contact-link[aria-label="Facebook"] svg {
+    fill: var(--pink);
+    stroke: none;
 }
 
 .footer-location {
@@ -2677,9 +2712,9 @@ a.contact-row {
         flex-wrap: wrap;
     }
 
-    .footer-socials {
-        justify-content: flex-start;
-    }
+   .footer-contact-links {
+       justify-content: start;
+   }
 
     .footer-location {
         justify-self: end;
@@ -3100,9 +3135,29 @@ a.contact-row {
         flex-wrap: wrap;
     }
 
-    .footer-socials {
-        justify-content: center;
-    }
+.footer-contact-links {
+    grid-template-columns:
+        repeat(2, max-content);
+
+    justify-content: center;
+
+    gap:
+        12px
+        22px;
+
+    text-align: left;
+}
+
+.footer-contact-link {
+    font-size: 0.62rem;
+}
+
+.footer-contact-link svg {
+    width: 15px;
+    height: 15px;
+
+    flex-basis: 15px;
+}
 
     .footer-location {
         justify-self: auto;
