@@ -1790,15 +1790,13 @@ h2 {
 
 .contact-section {
     position: relative;
-
-    padding: 110px 5% 120px;
-
+    padding: 72px 5% 78px;
     overflow: hidden;
 
     background:
         radial-gradient(
             circle at 10% 20%,
-            rgba(8, 64, 47, 0.34),
+            rgba(8, 64, 47, 0.22),
             transparent 38%
         ),
         #00140e;
@@ -1807,92 +1805,68 @@ h2 {
 }
 
 .contact-inner {
-    width: min(1400px, 100%);
-
+    width: min(1320px, 100%);
     margin: 0 auto;
 
     display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
 
-    grid-template-columns:
-        minmax(300px, 0.8fr)
-        minmax(520px, 1.2fr);
-
-    gap: clamp(70px, 9vw, 150px);
-
-    align-items: start;
+    gap: clamp(55px, 7vw, 105px);
+    align-items: center;
 }
 
 
-/* LEFT SIDE */
+/* LEFT */
 
 .contact-heading {
-    position: sticky;
-
-    top: calc(var(--header-height) + 55px);
+    position: relative;
 }
 
 .contact-heading h2 {
-    max-width: 520px;
-
+    max-width: 430px;
     margin: 0;
 
-    font-size:
-        clamp(4rem, 5.5vw, 6rem);
-
-    line-height: 0.90;
-
+    font-size: clamp(3.1rem, 4.2vw, 4.5rem);
+    line-height: 0.92;
     letter-spacing: -0.035em;
 }
 
 .contact-heading .gold-line {
-    margin:
-        32px
-        0;
+    width: 42px;
+    margin: 24px 0;
 }
 
 .contact-intro {
-    max-width: 430px;
-
+    max-width: 390px;
     margin: 0;
 
-    color:
-        rgba(255, 255, 255, 0.62);
+    color: rgba(255, 255, 255, 0.62);
 
-    font-size: 0.92rem;
-
-    line-height: 1.75;
+    font-size: 0.82rem;
+    line-height: 1.65;
 }
 
 
-/* RIGHT SIDE */
+/* RIGHT */
 
 .contact-links {
-    border-top:
-        1px solid rgba(215, 168, 70, 0.28);
+    border-top: 1px solid rgba(215, 168, 70, 0.25);
 }
 
 .contact-row {
     position: relative;
 
-    min-height: 102px;
-
-    padding:
-        24px
-        8px;
+    min-height: 72px;
+    padding: 17px 8px;
 
     display: grid;
-
-    grid-template-columns:
-        145px
-        1fr
-        42px;
-
+    grid-template-columns: 125px 1fr 32px;
     align-items: center;
 
-    gap: 20px;
+    gap: 16px;
 
     border-bottom:
-        1px solid rgba(215, 168, 70, 0.22);
+        1px solid rgba(215, 168, 70, 0.20);
 
     transition:
         background 0.3s ease,
@@ -1901,20 +1875,19 @@ h2 {
 }
 
 
-/* clickable rows */
+/* CLICKABLE ROWS */
 
 a.contact-row {
     cursor: pointer;
 }
 
 a.contact-row:hover {
-    padding-left: 18px;
+    padding-left: 14px;
 
-    background:
-        rgba(5, 39, 27, 0.55);
+    background: rgba(5, 39, 27, 0.5);
 
     border-color:
-        rgba(215, 168, 70, 0.48);
+        rgba(215, 168, 70, 0.42);
 }
 
 
@@ -1923,11 +1896,10 @@ a.contact-row:hover {
 .contact-label {
     color: var(--gold);
 
-    font-size: 0.65rem;
+    font-size: 0.58rem;
     font-weight: 600;
 
-    letter-spacing: 0.18em;
-
+    letter-spacing: 0.16em;
     text-transform: uppercase;
 }
 
@@ -1939,9 +1911,7 @@ a.contact-row:hover {
 
     font-family: var(--serif);
 
-    font-size:
-        clamp(1.45rem, 2vw, 2rem);
-
+    font-size: clamp(1.15rem, 1.5vw, 1.55rem);
     font-weight: 400;
 
     line-height: 1.1;
@@ -1955,8 +1925,7 @@ a.contact-row:hover {
 
 a.contact-row:hover .contact-value {
     color: #ffffff;
-
-    transform: translateX(4px);
+    transform: translateX(3px);
 }
 
 
@@ -1964,14 +1933,12 @@ a.contact-row:hover .contact-value {
 
 .contact-arrow {
     display: flex;
-
     align-items: center;
     justify-content: center;
 
     color: var(--pink);
 
-    font-size: 1.45rem;
-
+    font-size: 1.1rem;
     line-height: 1;
 
     transition:
@@ -1981,15 +1948,14 @@ a.contact-row:hover .contact-value {
 
 a.contact-row:hover .contact-arrow {
     color: #ff6eb1;
-
-    transform: translateX(7px);
+    transform: translateX(5px);
 }
 
 
-/* Placeholder phone row */
+/* PLACEHOLDER PHONE */
 
 div.contact-row .contact-arrow {
-    opacity: 0.35;
+    opacity: 0.3;
 }
 
 
@@ -2000,31 +1966,21 @@ div.contact-row .contact-arrow {
 @media (max-width: 950px) {
 
     .contact-section {
-        padding:
-            85px
-            7%
-            95px;
+        padding: 70px 7%;
     }
 
     .contact-inner {
         grid-template-columns: 1fr;
-
-        gap: 60px;
-    }
-
-    .contact-heading {
-        position: static;
+        gap: 45px;
     }
 
     .contact-heading h2 {
-        max-width: 650px;
-
-        font-size:
-            clamp(3.8rem, 11vw, 5.5rem);
+        max-width: 520px;
+        font-size: clamp(3rem, 9vw, 4.2rem);
     }
 
     .contact-intro {
-        max-width: 520px;
+        max-width: 480px;
     }
 
 }
@@ -2037,76 +1993,53 @@ div.contact-row .contact-arrow {
 @media (max-width: 650px) {
 
     .contact-section {
-        padding:
-            76px
-            20px
-            82px;
+        padding: 62px 20px 68px;
     }
 
     .contact-inner {
-        gap: 48px;
+        gap: 38px;
     }
 
     .contact-heading h2 {
-        font-size:
-            clamp(3.4rem, 15vw, 4.5rem);
-
+        font-size: clamp(2.9rem, 14vw, 3.8rem);
         line-height: 0.92;
     }
 
     .contact-heading .gold-line {
-        margin:
-            27px
-            0;
+        margin: 21px 0;
     }
 
     .contact-intro {
-        font-size: 0.86rem;
-
-        line-height: 1.7;
+        font-size: 0.8rem;
     }
 
     .contact-row {
-        min-height: 94px;
+        min-height: 78px;
+        padding: 15px 2px;
 
-        padding:
-            20px
-            2px;
-
-        grid-template-columns:
-            1fr
-            32px;
-
-        gap:
-            8px
-            15px;
+        grid-template-columns: 1fr 28px;
+        gap: 5px 12px;
     }
 
     .contact-label {
         grid-column: 1 / 2;
-
-        margin-bottom: 3px;
-
-        font-size: 0.61rem;
+        font-size: 0.56rem;
     }
 
     .contact-value {
         grid-column: 1 / 2;
-
-        font-size: 1.45rem;
+        font-size: 1.25rem;
     }
 
     .contact-arrow {
         grid-column: 2 / 3;
         grid-row: 1 / 3;
 
-        align-self: center;
-
-        font-size: 1.3rem;
+        font-size: 1rem;
     }
 
     a.contact-row:hover {
-        padding-left: 8px;
+        padding-left: 6px;
     }
 
 }
