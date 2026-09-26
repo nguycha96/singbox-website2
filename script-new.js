@@ -120,7 +120,7 @@ const translations = {
 
 "info.food.label": "Food & Drinks",
 "info.food.title": "Order during the night.",
-"info.food.text": "Enjoy food and drinks during your karaoke night without having to interrupt the fun.",
+"info.food.text": "Food and drinks are just a few taps away. Order from the tablet in your room, and we'll bring everything directly to you.",
 
 "info.room.label": "Private room",
 "info.room.title": "Your people. Your space.",
@@ -383,7 +383,7 @@ const translations = {
 
 "info.food.label": "Ruoka & juomat",
 "info.food.title": "Tilaa kesken illan.",
-"info.food.text": "Ruokaa ja juomia voi nauttia oman karaokeillan aikana ilman, että iltaa tarvitsee keskeyttää.",
+"info.food.text": "Ruoat ja juomat ovat vain muutaman painalluksen päässä. Tilaa huoneen tabletilta, niin me tuomme tilauksesi suoraan huoneeseen.",
 
 "info.room.label": "Oma huone",
 "info.room.title": "Teidän porukka. Teidän tila.",
