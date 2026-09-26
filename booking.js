@@ -53,37 +53,63 @@ const roomPrices = {
 };
 
 
-const rooms = [
+let rooms = [];
 
-    {
-        id: "hongdae",
-        title: "Hongdae",
-        guests: 4,
-        image: "images/hongdae.png"
-    },
 
-    {
-        id: "itaewon",
-        title: "Itaewon",
-        guests: 4,
-        image: "images/itaewon.png"
-    },
+async function loadRoomsFromSupabase() {
 
-    {
-        id: "gangnam",
-        title: "Gangnam",
-        guests: 6,
-        image: "images/gangnam.png"
-    },
+    const { data, error } = await supabaseClient
+        .from("rooms")
+        .select("id, name, capacity")
+        .order("id", { ascending: true });
 
-    {
-        id: "seoul",
-        title: "Seoul",
-        guests: 6,
-        image: "images/seoul.png"
+
+    if (error) {
+
+        console.error(
+            "Could not load rooms:",
+            error
+        );
+
+        return;
     }
 
-];
+
+    const imageMap = {
+        Hongdae: "images/hongdae.png",
+        Itaewon: "images/itaewon.png",
+        Gangnam: "images/gangnam.png",
+        Seoul: "images/seoul.png"
+    };
+
+
+    const roomOrder = {
+        Hongdae: 1,
+        Itaewon: 2,
+        Gangnam: 3,
+        Seoul: 4
+    };
+
+
+    rooms = data
+        .map(room => ({
+            id: room.id,
+            title: room.name,
+            guests: room.capacity,
+            image: imageMap[room.name] || ""
+        }))
+        .sort(
+            (a, b) =>
+                roomOrder[a.title] -
+                roomOrder[b.title]
+        );
+
+
+    console.log(
+        "Rooms loaded from Supabase:",
+        rooms
+    );
+}
 
 
 
