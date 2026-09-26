@@ -20,38 +20,6 @@ const supabaseClient = supabase.createClient(
    BOOKING DATA
 ========================================================= */
 
-const roomPrices = {
-
-    gangnam: {
-        weekdayBefore18: 55,
-        weekdayAfter18: 60,
-        weekendBefore18: 65,
-        weekendAfter18: 70
-    },
-
-    seoul: {
-        weekdayBefore18: 55,
-        weekdayAfter18: 60,
-        weekendBefore18: 65,
-        weekendAfter18: 70
-    },
-
-    hongdae: {
-        weekdayBefore18: 45,
-        weekdayAfter18: 50,
-        weekendBefore18: 55,
-        weekendAfter18: 60
-    },
-
-    itaewon: {
-        weekdayBefore18: 45,
-        weekdayAfter18: 50,
-        weekendBefore18: 55,
-        weekendAfter18: 60
-    }
-
-};
-
 
 let rooms = [];
 
@@ -1035,58 +1003,89 @@ function getHourlyPrice(
     startTime
 ) {
 
-    const prices =
-        roomPrices[roomId];
-
-
-    if (!prices) {
-        return 0;
-    }
-
-
-    const [hours] =
-        startTime
-            .split(":")
-            .map(Number);
-
-
     const day =
         date.getDay();
 
 
-    /*
-        Friday, Saturday and Sunday
-        use weekend pricing.
-    */
+    let dayGroup;
 
-    const isWeekend =
+    if (
+        day >= 1 &&
+        day <= 4
+    ) {
+
+        dayGroup = "mon_thu";
+
+    } else if (
         day === 5 ||
-        day === 6 ||
-        day === 0;
+        day === 6
+    ) {
 
+        dayGroup = "fri_sat";
 
-    /*
-        Starting time determines
-        the hourly price.
-    */
+    } else {
 
-    const isBefore18 =
-        hours < 18;
-
-
-    if (isWeekend) {
-
-        return isBefore18
-            ? prices.weekendBefore18
-            : prices.weekendAfter18;
-
+        dayGroup = "sun";
     }
 
 
-    return isBefore18
-        ? prices.weekdayBefore18
-        : prices.weekdayAfter18;
+    const startMinutes =
+        bookingTimeToMinutes(
+            startTime
+        );
 
+
+    const rule =
+        pricingRules.find(
+            pricingRule => {
+
+                if (
+                    Number(pricingRule.room_id) !==
+                    Number(roomId)
+                ) {
+                    return false;
+                }
+
+
+                if (
+                    pricingRule.day_group !==
+                    dayGroup
+                ) {
+                    return false;
+                }
+
+
+                const ruleStart =
+                    bookingTimeToMinutes(
+                        pricingRule.start_time
+                    );
+
+
+                let ruleEnd =
+                    bookingTimeToMinutes(
+                        pricingRule.end_time
+                    );
+
+
+                if (ruleEnd <= ruleStart) {
+                    ruleEnd += 24 * 60;
+                }
+
+
+                return (
+                    startMinutes >= ruleStart &&
+                    startMinutes < ruleEnd
+                );
+            }
+        );
+
+
+    if (!rule) {
+        return 0;
+    }
+
+
+    return Number(rule.price);
 }
 
 
