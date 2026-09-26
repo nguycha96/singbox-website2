@@ -2065,13 +2065,20 @@ document
    INITIAL DRAW
 ========================================================= */
 
-currentLanguage =
-    getInitialLanguage();
+async function initializeBooking() {
+
+    currentLanguage =
+        getInitialLanguage();
+
+    await loadRoomsFromSupabase();
+
+    setLanguage(
+        currentLanguage
+    );
+}
 
 
-setLanguage(
-    currentLanguage
-);
+initializeBooking();
 
 
 
