@@ -109,6 +109,27 @@ const translations = {
         "pricing.private":
             "Private events: ask us for availability and pricing.",
 
+       // GOOD TO KNOW
+"info.eyebrow": "Good to know",
+"info.title": "Your night.<br>Your way.",
+
+"info.songs.label": "Songs",
+"info.songs.title": "Songs for every mood.",
+"info.songs.text": "Our karaoke selection runs through Singa and offers songs across different genres, decades and languages.",
+"info.songs.link": "Browse Singa's song catalogue →",
+
+"info.food.label": "Food & Drinks",
+"info.food.title": "Order during the night.",
+"info.food.text": "Enjoy food and drinks during your karaoke night without having to interrupt the fun.",
+
+"info.room.label": "Private room",
+"info.room.title": "Your people. Your space.",
+"info.room.text": "Every karaoke room is private, so the space is exclusively yours for the duration of your booking.",
+
+"info.karaoke.label": "Karaoke",
+"info.karaoke.title": "An hour or the whole night.",
+"info.karaoke.text": "Book a room for the time that suits you and enjoy the night at your own pace.",
+       
 
         /* FOOD */
 
@@ -351,6 +372,27 @@ const translations = {
         "pricing.private":
             "Yksityistilaisuudet: kysy saatavuutta ja hintaa.",
 
+       // HYVÄ TIETÄÄ
+"info.eyebrow": "Hyvä tietää",
+"info.title": "Teidän ilta.<br>Teidän tavalla.",
+
+"info.songs.label": "Biisit",
+"info.songs.title": "Biisejä jokaiseen fiilikseen.",
+"info.songs.text": "Karaokevalikoimamme toimii Singan kautta ja tarjoaa kappaleita eri genreistä, vuosikymmeniltä ja kielillä.",
+"info.songs.link": "Selaa Singan kappalevalikoimaa →",
+
+"info.food.label": "Ruoka & juomat",
+"info.food.title": "Tilaa kesken illan.",
+"info.food.text": "Ruokaa ja juomia voi nauttia oman karaokeillan aikana ilman, että iltaa tarvitsee keskeyttää.",
+
+"info.room.label": "Oma huone",
+"info.room.title": "Teidän porukka. Teidän tila.",
+"info.room.text": "Jokainen karaokehuone on yksityinen, joten tila on varauksen ajan vain teidän seurueenne käytössä.",
+
+"info.karaoke.label": "Karaoke",
+"info.karaoke.title": "Tunti tai koko ilta.",
+"info.karaoke.text": "Varaa huone sopivaksi ajaksi ja jatka iltaa oman porukan tahdissa.",
+       
 
         /* FOOD */
 
