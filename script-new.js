@@ -259,7 +259,24 @@ const translations = {
         "about.text":
             "SiNG BOX brings Korean private-room karaoke culture to Helsinki with music, food, drinks and a space made for spending time together.",
 
+/* CONTACT */
 
+"contact.eyebrow":
+    "Contact",
+
+"contact.title":
+    "Get in<br>touch.",
+
+"contact.text":
+    "Questions about bookings, private events or something else? Get in touch.",
+
+"contact.email":
+    "Email",
+
+"contact.phone":
+    "Phone",
+       
+       
         /* FINAL CTA */
 
         "cta.eyebrow":
@@ -522,6 +539,23 @@ const translations = {
         "about.text":
             "SiNG BOX tuo korealaisen yksityishuonekaraoken Helsinkiin – musiikkia, ruokaa, juomia ja oma tila yhteiseen illanviettoon.",
 
+       /* CONTACT */
+
+"contact.eyebrow":
+    "Yhteystiedot",
+
+"contact.title":
+    "Ota<br>yhteyttä.",
+
+"contact.text":
+    "Kysyttävää varauksesta, yksityistilaisuudesta tai jostain muusta? Ota yhteyttä.",
+
+"contact.email":
+    "Sähköposti",
+
+"contact.phone":
+    "Puhelin",
+       
 
         /* FINAL CTA */
 
