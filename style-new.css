@@ -1881,7 +1881,7 @@ a.contact-row {
     cursor: pointer;
 }
 
-a.contact-row:hover {
+.contact-row:hover {
     padding-left: 14px;
 
     background: rgba(5, 39, 27, 0.5);
@@ -1923,7 +1923,7 @@ a.contact-row:hover {
         transform 0.3s ease;
 }
 
-a.contact-row:hover .contact-value {
+.contact-row:hover .contact-value {
     color: #ffffff;
     transform: translateX(3px);
 }
@@ -1946,17 +1946,11 @@ a.contact-row:hover .contact-value {
         color 0.3s ease;
 }
 
-a.contact-row:hover .contact-arrow {
+.contact-row:hover .contact-arrow {
     color: #ff6eb1;
     transform: translateX(5px);
 }
 
-
-/* PLACEHOLDER PHONE */
-
-div.contact-row .contact-arrow {
-    opacity: 0.3;
-}
 
 
 /* =========================================================
