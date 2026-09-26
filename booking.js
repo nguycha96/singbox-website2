@@ -2049,23 +2049,3 @@ setLanguage(
 
 
 
-/* =====================
-   SUPABASE CONNECTION TEST
-===================== */
-
-async function testSupabaseConnection(){
-
-    const { data, error } = await supabaseClient
-        .from("rooms")
-        .select("*");
-
-    if(error){
-        console.error("Supabase connection error:", error);
-        return;
-    }
-
-    console.log("Supabase connected!");
-    console.table(data);
-}
-
-testSupabaseConnection();
