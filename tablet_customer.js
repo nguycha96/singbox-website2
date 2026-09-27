@@ -597,6 +597,53 @@ if (cartClose) {
 }
 
 /* =========================================================
+   LANGUAGE SWITCHER
+========================================================= */
+
+const languageFi =
+    document.getElementById("languageFi");
+
+const languageEn =
+    document.getElementById("languageEn");
+
+
+function setLanguage(language) {
+
+    currentLanguage = language;
+
+    document.documentElement.lang =
+        currentLanguage;
+
+
+    languageFi.classList.toggle(
+        "active",
+        currentLanguage === "fi"
+    );
+
+    languageEn.classList.toggle(
+        "active",
+        currentLanguage === "en"
+    );
+
+
+    renderProducts();
+    renderCart();
+}
+
+
+languageFi.addEventListener(
+    "click",
+    () => setLanguage("fi")
+);
+
+
+languageEn.addEventListener(
+    "click",
+    () => setLanguage("en")
+);
+
+
+/* =========================================================
    START
 ========================================================= */
 
