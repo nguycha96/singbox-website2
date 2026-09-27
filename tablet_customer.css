@@ -567,3 +567,278 @@ button {
     text-align: center;
     white-space: nowrap;
 }
+
+/* =========================================================
+   CART POPUP
+========================================================= */
+
+.cart-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+
+    background:
+        rgba(0, 0, 0, 0.72);
+
+    backdrop-filter: blur(6px);
+}
+
+
+/* Important: hidden must really hide the popup */
+
+.cart-overlay[hidden] {
+    display: none;
+}
+
+
+/* =========================================================
+   CART PANEL
+========================================================= */
+
+.cart-panel {
+    display: flex;
+    flex-direction: column;
+
+    width: min(620px, 92vw);
+    max-height: 85vh;
+
+    padding: 30px;
+
+    overflow-y: auto;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 24px;
+
+    background:
+        var(--green-dark);
+
+    box-shadow:
+        0 30px 90px
+        rgba(0, 0, 0, 0.55);
+}
+
+
+/* =========================================================
+   CART HEADER
+========================================================= */
+
+.cart-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding-bottom: 22px;
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+
+.cart-eyebrow {
+    margin-bottom: 7px;
+
+    color: var(--gold);
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 0.22em;
+}
+
+
+.cart-header h2 {
+    margin: 0;
+
+    color: var(--cream);
+
+    font-size: 32px;
+    font-weight: 500;
+}
+
+
+.cart-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    width: 46px;
+    height: 46px;
+
+    padding: 0;
+
+    border:
+        1px solid var(--pink);
+
+    border-radius: 50%;
+
+    background: transparent;
+
+    color: var(--pink);
+
+    font-size: 28px;
+
+    cursor: pointer;
+}
+
+
+.cart-close:active {
+    background: var(--pink);
+    color: white;
+}
+
+
+/* =========================================================
+   CART ITEMS
+========================================================= */
+
+.cart-items {
+    padding:
+        10px
+        0;
+}
+
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 24px;
+
+    padding:
+        18px
+        0;
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+
+.cart-item-info {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+.cart-item-info strong {
+    color: var(--cream);
+
+    font-size: 17px;
+}
+
+
+.cart-item-info span {
+    color: var(--text-soft);
+
+    font-size: 14px;
+}
+
+
+.cart-item-price {
+    color: var(--gold);
+
+    font-size: 18px;
+
+    white-space: nowrap;
+}
+
+
+.cart-empty {
+    margin:
+        35px
+        0;
+
+    color: var(--text-soft);
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   CART TOTAL
+========================================================= */
+
+.cart-summary {
+    padding-top: 22px;
+}
+
+
+.cart-total-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 22px;
+
+    color: var(--cream);
+
+    font-size: 20px;
+}
+
+
+.cart-total-row strong {
+    color: var(--gold);
+
+    font-size: 26px;
+}
+
+
+/* =========================================================
+   SEND ORDER
+========================================================= */
+
+.send-order-button {
+    width: 100%;
+
+    padding:
+        17px
+        22px;
+
+    border: 0;
+    border-radius: 999px;
+
+    background: var(--pink);
+
+    color: white;
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+
+.send-order-button:disabled {
+    opacity: 0.35;
+
+    cursor: not-allowed;
+}
+
+
+.order-disabled-note {
+    margin:
+        12px
+        0
+        0;
+
+    color: var(--text-soft);
+
+    font-size: 12px;
+    line-height: 1.5;
+
+    text-align: center;
+}
