@@ -305,3 +305,57 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* =========================================================
+   STAFF BOOKINGS
+========================================================= */
+
+.staff-booking {
+    padding: 18px 20px;
+
+    border: 1px solid rgba(215, 168, 70, 0.22);
+    border-radius: 14px;
+
+    background: rgba(215, 168, 70, 0.05);
+}
+
+
+.staff-booking + .staff-booking {
+    margin-top: 12px;
+}
+
+
+.staff-booking-date {
+    margin-bottom: 7px;
+
+    color: var(--gold);
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 0.12em;
+
+    text-transform: uppercase;
+}
+
+
+.staff-booking-time {
+    margin-bottom: 8px;
+
+    color: var(--cream);
+
+    font-size: 24px;
+    font-weight: 700;
+}
+
+
+.staff-booking-customer {
+    color: var(--text-soft);
+
+    font-size: 15px;
+}
+
+
+.staff-booking-customer::first-letter {
+    text-transform: uppercase;
+}
