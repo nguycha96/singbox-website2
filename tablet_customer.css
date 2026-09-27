@@ -497,3 +497,73 @@ button {
         0 8px 24px
         rgba(255, 47, 146, 0.18);
 }
+
+/* =========================================================
+   QUANTITY CONTROLS
+========================================================= */
+
+.quantity-controls {
+    display: grid;
+
+    grid-template-columns:
+        52px
+        1fr
+        52px;
+
+    align-items: center;
+
+    width: 100%;
+    min-height: 52px;
+
+    border:
+        1px solid var(--pink);
+
+    border-radius: 999px;
+
+    overflow: hidden;
+}
+
+
+.quantity-button {
+    width: 52px;
+    height: 52px;
+
+    padding: 0;
+
+    border: 0;
+
+    background:
+        rgba(255, 47, 146, 0.10);
+
+    color: var(--pink);
+
+    font-size: 26px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.quantity-button:active {
+    background: var(--pink);
+    color: white;
+}
+
+
+.selected-quantity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 0;
+
+    padding: 0 18px;
+
+    color: var(--cream);
+
+    font-size: 16px;
+    font-weight: 700;
+
+    text-align: center;
+    white-space: nowrap;
+}
