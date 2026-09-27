@@ -353,6 +353,7 @@ function addToCart(product) {
 
     updateCartCount();
     renderProducts();
+    renderCart();
 }
 
 
@@ -386,6 +387,7 @@ function removeFromCart(product) {
 
     updateCartCount();
     renderProducts();
+    renderCart();
 }
 
 
