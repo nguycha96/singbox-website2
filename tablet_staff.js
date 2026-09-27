@@ -6,7 +6,7 @@ const SUPABASE_URL =
     "https://tikatiahzawstvrdqfix.supabase.co";
 
 const SUPABASE_KEY =
-    "LAITA_TÄHÄN_SAMA_PUBLISHABLE_KEY_KUIN_CUSTOMER_TABLETISSA";
+    "sb_publishable_ZfYe1fy7Dxu59HfTLSQ7Cw_EK0xGl34";
 
 const supabaseClient =
     supabase.createClient(
