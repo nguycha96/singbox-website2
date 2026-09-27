@@ -123,14 +123,23 @@ if (bookingsError) {
             room.name;
 
 
-        const status =
-            document.createElement("span");
+const roomBookings =
+    bookings.filter(
+        (booking) =>
+            booking.room_id === room.id
+    );
 
-        status.className =
-            "room-status";
 
-        status.textContent =
-            "Ei tapahtumia";
+const status =
+    document.createElement("span");
+
+status.className =
+    "room-status";
+
+status.textContent =
+    roomBookings.length > 0
+        ? `${roomBookings.length} varausta`
+        : "Ei varauksia";
 
 
         header.appendChild(name);
