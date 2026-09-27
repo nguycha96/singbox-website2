@@ -148,14 +148,75 @@ status.textContent =
         header.appendChild(status);
 
 
-        const content =
+const content =
+    document.createElement("div");
+
+content.className =
+    "room-card-content";
+
+
+if (roomBookings.length === 0) {
+
+    content.textContent =
+        "Ei varauksia.";
+
+} else {
+
+    roomBookings.forEach((booking) => {
+
+        const bookingBlock =
             document.createElement("div");
 
-        content.className =
-            "room-card-content";
+        bookingBlock.className =
+            "staff-booking";
 
-        content.textContent =
-            "Ei avoimia tilauksia tai kutsuja.";
+
+        const date =
+            document.createElement("div");
+
+        date.className =
+            "staff-booking-date";
+
+        date.textContent =
+            new Date(
+                `${booking.booking_date}T00:00:00`
+            ).toLocaleDateString(
+                "fi-FI",
+                {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "numeric"
+                }
+            );
+
+
+        const time =
+            document.createElement("div");
+
+        time.className =
+            "staff-booking-time";
+
+        time.textContent =
+            `${booking.start_time.slice(0, 5)}–${booking.end_time.slice(0, 5)}`;
+
+
+        const customer =
+            document.createElement("div");
+
+        customer.className =
+            "staff-booking-customer";
+
+        customer.textContent =
+            `Varaaja: ${booking.customer_name}`;
+
+
+        bookingBlock.appendChild(date);
+        bookingBlock.appendChild(time);
+        bookingBlock.appendChild(customer);
+
+        content.appendChild(bookingBlock);
+    });
+}
 
 
         card.appendChild(header);
