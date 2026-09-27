@@ -412,6 +412,176 @@ function updateCartCount() {
         totalQuantity;
 }
 
+/* =========================================================
+   CART PANEL
+========================================================= */
+
+function openCart() {
+
+    const overlay =
+        document.getElementById("cartOverlay");
+
+    if (!overlay) {
+        return;
+    }
+
+    renderCart();
+
+    overlay.hidden = false;
+}
+
+
+function closeCart() {
+
+    const overlay =
+        document.getElementById("cartOverlay");
+
+    if (!overlay) {
+        return;
+    }
+
+    overlay.hidden = true;
+}
+
+
+function renderCart() {
+
+    const cartItems =
+        document.getElementById("cartItems");
+
+    const cartTotal =
+        document.getElementById("cartTotal");
+
+
+    if (!cartItems || !cartTotal) {
+        return;
+    }
+
+
+    cartItems.replaceChildren();
+
+
+    if (cart.length === 0) {
+
+        const emptyMessage =
+            document.createElement("p");
+
+        emptyMessage.className =
+            "cart-empty";
+
+        emptyMessage.textContent =
+            "Ostoskori on tyhjä.";
+
+        cartItems.appendChild(
+            emptyMessage
+        );
+
+    } else {
+
+        cart.forEach((item) => {
+
+            const row =
+                document.createElement("div");
+
+            row.className =
+                "cart-item";
+
+
+            const info =
+                document.createElement("div");
+
+            info.className =
+                "cart-item-info";
+
+
+            const name =
+                document.createElement("strong");
+
+            name.textContent =
+                item.product.name_fi;
+
+
+            const details =
+                document.createElement("span");
+
+            const rowTotal =
+                Number(item.product.price) *
+                item.quantity;
+
+            details.textContent =
+                `${item.quantity} × ${Number(item.product.price).toFixed(2)} €`;
+
+
+            info.appendChild(name);
+            info.appendChild(details);
+
+
+            const price =
+                document.createElement("strong");
+
+            price.className =
+                "cart-item-price";
+
+            price.textContent =
+                `${rowTotal.toFixed(2)} €`;
+
+
+            row.appendChild(info);
+            row.appendChild(price);
+
+            cartItems.appendChild(row);
+
+        });
+
+    }
+
+
+    const total =
+        cart.reduce(
+            (sum, item) =>
+                sum +
+                (
+                    Number(item.product.price) *
+                    item.quantity
+                ),
+            0
+        );
+
+
+    cartTotal.textContent =
+        `${total.toFixed(2)} €`;
+}
+
+
+/* =========================================================
+   CART EVENTS
+========================================================= */
+
+const cartButton =
+    document.getElementById("cartButton");
+
+const cartClose =
+    document.getElementById("cartClose");
+
+
+if (cartButton) {
+
+    cartButton.addEventListener(
+        "click",
+        openCart
+    );
+
+}
+
+
+if (cartClose) {
+
+    cartClose.addEventListener(
+        "click",
+        closeCart
+    );
+
+}
 
 /* =========================================================
    START
