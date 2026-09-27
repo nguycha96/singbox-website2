@@ -597,6 +597,77 @@ if (cartClose) {
 }
 
 /* =========================================================
+   STAFF CALL
+========================================================= */
+
+const staffCallButton =
+    document.getElementById("staffCallButton");
+
+const staffCallOverlay =
+    document.getElementById("staffCallOverlay");
+
+const staffCallCancel =
+    document.getElementById("staffCallCancel");
+
+const staffCallConfirm =
+    document.getElementById("staffCallConfirm");
+
+
+function openStaffCall() {
+
+    if (!staffCallOverlay) {
+        return;
+    }
+
+    staffCallOverlay.hidden = false;
+}
+
+
+function closeStaffCall() {
+
+    if (!staffCallOverlay) {
+        return;
+    }
+
+    staffCallOverlay.hidden = true;
+}
+
+
+if (staffCallButton) {
+
+    staffCallButton.addEventListener(
+        "click",
+        openStaffCall
+    );
+}
+
+
+if (staffCallCancel) {
+
+    staffCallCancel.addEventListener(
+        "click",
+        closeStaffCall
+    );
+}
+
+
+/*
+   Oikea henkilökuntakutsu lisätään myöhemmin,
+   kun huonetabletin turvallinen tunnistautuminen on käytössä.
+*/
+
+if (staffCallConfirm) {
+
+    staffCallConfirm.addEventListener(
+        "click",
+        () => {
+            closeStaffCall();
+        }
+    );
+}
+
+
+/* =========================================================
    LANGUAGE SWITCHER
 ========================================================= */
 
