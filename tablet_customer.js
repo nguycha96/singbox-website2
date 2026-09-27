@@ -135,7 +135,7 @@ function renderProducts(
 
         button.type = "button";
         button.className = "category-button";
-        button.textContent = category.name;
+        button.textContent = category[currentLanguage];
 
 
         if (category.id === activeCategory) {
@@ -191,7 +191,7 @@ function renderProducts(
         document.createElement("h2");
 
     heading.textContent =
-        category.name;
+    category[currentLanguage];
 
     section.appendChild(heading);
 
@@ -216,7 +216,9 @@ function renderProducts(
             document.createElement("h3");
 
         name.textContent =
-            product.name_fi;
+    currentLanguage === "fi"
+        ? product.name_fi
+        : product.name_en;
 
 
         const price =
