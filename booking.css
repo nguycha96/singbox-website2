@@ -2297,7 +2297,7 @@ a {
 
 .booking-intro {
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .booking-intro-inner {
