@@ -137,9 +137,11 @@ status.className =
     "room-status";
 
 status.textContent =
-    roomBookings.length > 0
-        ? `${roomBookings.length} varausta`
-        : "Ei varauksia";
+    roomBookings.length === 1
+        ? "1 varaus"
+        : roomBookings.length > 1
+            ? `${roomBookings.length} varausta`
+            : "Ei varauksia";
 
 
         header.appendChild(name);
