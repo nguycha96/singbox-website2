@@ -2288,3 +2288,45 @@ a {
     line-height: 1;
     padding-top: 3px;
 }
+
+/* =========================================================
+   BOOKING INTRO — CHERRY BLOSSOM
+========================================================= */
+
+.booking-intro {
+    position: relative;
+    overflow: hidden;
+}
+
+.booking-intro-inner {
+    position: relative;
+    z-index: 2;
+}
+
+.booking-blossom {
+    position: absolute;
+
+    top: 0;
+    right: 0;
+
+    width: 68%;
+    height: 100%;
+
+    z-index: 1;
+
+    pointer-events: none;
+}
+
+.booking-blossom img {
+    position: absolute;
+
+    top: 50%;
+    right: -2%;
+
+    width: 100%;
+    height: auto;
+
+    transform: translateY(-50%);
+
+    object-fit: contain;
+}
