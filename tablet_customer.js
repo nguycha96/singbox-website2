@@ -697,6 +697,74 @@ function setLanguage(language) {
     );
 
 
+    /* STAFF CALL */
+
+    const staffCallText =
+        document.getElementById("staffCallText");
+
+    const staffCallTitle =
+        document.getElementById("staffCallTitle");
+
+    const staffCallDescription =
+        document.getElementById("staffCallDescription");
+
+
+    if (currentLanguage === "fi") {
+
+        if (staffCallText) {
+            staffCallText.textContent =
+                "Kutsu henkilökunta";
+        }
+
+        if (staffCallTitle) {
+            staffCallTitle.textContent =
+                "Kutsutaanko henkilökunta?";
+        }
+
+        if (staffCallDescription) {
+            staffCallDescription.textContent =
+                "Henkilökunta saa ilmoituksen ja tulee huoneeseesi.";
+        }
+
+        if (staffCallCancel) {
+            staffCallCancel.textContent =
+                "Peruuta";
+        }
+
+        if (staffCallConfirm) {
+            staffCallConfirm.textContent =
+                "Kutsu henkilökunta";
+        }
+
+    } else {
+
+        if (staffCallText) {
+            staffCallText.textContent =
+                "Call staff";
+        }
+
+        if (staffCallTitle) {
+            staffCallTitle.textContent =
+                "Call staff to your room?";
+        }
+
+        if (staffCallDescription) {
+            staffCallDescription.textContent =
+                "Our staff will be notified and come to your room.";
+        }
+
+        if (staffCallCancel) {
+            staffCallCancel.textContent =
+                "Cancel";
+        }
+
+        if (staffCallConfirm) {
+            staffCallConfirm.textContent =
+                "Call staff";
+        }
+    }
+
+
     renderProducts();
     renderCart();
 }
