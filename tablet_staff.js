@@ -80,7 +80,23 @@ async function loadRooms() {
         return;
     }
 
+const {
+    data: bookings,
+    error: bookingsError
+} = await supabaseClient
+    .rpc("get_staff_bookings");
 
+
+if (bookingsError) {
+
+    console.error(
+        "Could not load bookings:",
+        bookingsError
+    );
+
+    return;
+}
+   
     roomsContainer.replaceChildren();
 
 
