@@ -842,3 +842,63 @@ button {
 
     text-align: center;
 }
+
+/* =========================================================
+   HEADER ACTIONS + LANGUAGE SWITCHER
+========================================================= */
+
+.tablet-header-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 24px;
+}
+
+
+.language-switcher {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+}
+
+
+.language-button {
+    padding: 0;
+
+    border: 0;
+
+    background: transparent;
+
+    color: var(--text-soft);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    letter-spacing: 0.08em;
+
+    cursor: pointer;
+}
+
+
+.language-button.active {
+    color: var(--gold);
+}
+
+
+.language-divider {
+    color:
+        rgba(240, 220, 181, 0.35);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 12px;
+}
