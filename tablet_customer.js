@@ -26,29 +26,38 @@ let cart = [];
 const categories = [
     {
         id: "snacks",
-        name: "Naposteltavat"
+        fi: "Naposteltavat",
+        en: "Snacks"
     },
     {
         id: "sweets",
-        name: "Makeat"
+        fi: "Makeat",
+        en: "Sweets"
     },
     {
         id: "combos",
-        name: "Combot"
+        fi: "Combot",
+        en: "Combos"
     },
     {
         id: "non_alcoholic",
-        name: "Alkoholittomat"
+        fi: "Alkoholittomat",
+        en: "Non-alcoholic"
     },
     {
         id: "alcohol",
-        name: "Alkoholijuomat"
+        fi: "Alkoholijuomat",
+        en: "Alcohol"
     },
     {
         id: "hot_drinks",
-        name: "Kuumat juomat"
+        fi: "Kuumat juomat",
+        en: "Hot drinks"
     }
 ];
+
+
+let currentLanguage = "fi";
 
 
 let activeCategory = "snacks";
@@ -62,9 +71,9 @@ async function loadProducts() {
 
     const { data, error } = await supabaseClient
         .from("products")
-        .select(
-            "id, category, price, name_fi, available, sort_order"
-        )
+.select(
+    "id, category, price, name_fi, name_en, available, sort_order"
+)
         .eq("available", true)
         .order("sort_order", {
             ascending: true
