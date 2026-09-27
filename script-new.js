@@ -3,6 +3,52 @@
    script-new.js
 ========================================================= */
 
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+    "https://tikatiahzawstvrdqfix.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_ZfYe1fy7Dxu59HfTLSQ7Cw_EK0xGl34";
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================================================
+   PRODUCTS
+========================================================= */
+
+async function loadProductsFromSupabase() {
+
+    const { data, error } = await supabaseClient
+        .from("products")
+        .select(
+            "id, category, price, available, sort_order, name_fi, name_en"
+        )
+        .order("sort_order", { ascending: true });
+
+    if (error) {
+        console.error(
+            "Could not load products:",
+            error
+        );
+        return;
+    }
+
+    console.log(
+        "Products loaded from Supabase:",
+        data
+    );
+}
+
+loadProductsFromSupabase();
+
 
 /* =========================================================
    TRANSLATIONS
