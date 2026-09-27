@@ -286,12 +286,16 @@ body {
 
 
 .room-card-content {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 320px);
+
+    gap: 12px;
+
+    align-items: start;
+
     padding-top: 20px;
-
-    color: var(--text-soft);
-
-    font-size: 14px;
-    line-height: 1.6;
 }
 
 
@@ -311,7 +315,9 @@ body {
 ========================================================= */
 
 .staff-booking {
-    padding: 18px 20px;
+    width: 100%;
+
+    padding: 14px 16px;
 
     border: 1px solid rgba(215, 168, 70, 0.22);
     border-radius: 14px;
