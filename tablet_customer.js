@@ -51,6 +51,9 @@ const categories = [
 ];
 
 
+let activeCategory = "snacks";
+
+
 /* =========================================================
    LOAD PRODUCTS
 ========================================================= */
@@ -89,7 +92,12 @@ async function loadProducts() {
    RENDER PRODUCTS
 ========================================================= */
 
-function renderProducts(activeCategory = "snacks") {
+function renderProducts(
+    categoryId = activeCategory
+) {
+
+    activeCategory = categoryId;
+
 
     const menu =
         document.getElementById("tabletMenu");
@@ -102,9 +110,7 @@ function renderProducts(activeCategory = "snacks") {
     menu.replaceChildren();
 
 
-    /* =====================================================
-       CATEGORY NAVIGATION
-    ===================================================== */
+    /* CATEGORY NAVIGATION */
 
     const navigation =
         document.createElement("nav");
@@ -118,52 +124,33 @@ function renderProducts(activeCategory = "snacks") {
         const button =
             document.createElement("button");
 
-        button.type =
-            "button";
-
-        button.className =
-            "category-button";
-
-        button.textContent =
-            category.name;
+        button.type = "button";
+        button.className = "category-button";
+        button.textContent = category.name;
 
 
         if (category.id === activeCategory) {
-
-            button.classList.add(
-                "active"
-            );
-
+            button.classList.add("active");
         }
 
 
         button.addEventListener(
             "click",
             () => {
-
-                renderProducts(
-                    category.id
-                );
-
+                renderProducts(category.id);
             }
         );
 
 
-        navigation.appendChild(
-            button
-        );
+        navigation.appendChild(button);
 
     });
 
 
-    menu.appendChild(
-        navigation
-    );
+    menu.appendChild(navigation);
 
 
-    /* =====================================================
-       ACTIVE CATEGORY
-    ===================================================== */
+    /* ACTIVE CATEGORY */
 
     const category =
         categories.find(
@@ -197,15 +184,8 @@ function renderProducts(activeCategory = "snacks") {
     heading.textContent =
         category.name;
 
+    section.appendChild(heading);
 
-    section.appendChild(
-        heading
-    );
-
-
-    /* =====================================================
-       PRODUCT GRID
-    ===================================================== */
 
     const grid =
         document.createElement("div");
@@ -214,96 +194,135 @@ function renderProducts(activeCategory = "snacks") {
         "product-grid";
 
 
-    categoryProducts.forEach(
-        (product) => {
+    categoryProducts.forEach((product) => {
 
-            const card =
-                document.createElement(
-                    "article"
-                );
+        const card =
+            document.createElement("article");
 
-            card.className =
-                "product-card";
+        card.className =
+            "product-card";
 
 
-            /* PRODUCT NAME */
+        const name =
+            document.createElement("h3");
 
-            const name =
-                document.createElement(
-                    "h3"
-                );
-
-            name.textContent =
-                product.name_fi;
+        name.textContent =
+            product.name_fi;
 
 
-            /* PRICE */
+        const price =
+            document.createElement("div");
 
-            const price =
-                document.createElement(
-                    "div"
-                );
+        price.className =
+            "product-price";
 
-            price.className =
-                "product-price";
-
-            price.textContent =
-                `${Number(product.price).toFixed(2)} €`;
+        price.textContent =
+            `${Number(product.price).toFixed(2)} €`;
 
 
-            /* ADD BUTTON */
-
-            const button =
-                document.createElement(
-                    "button"
-                );
-
-            button.className =
-                "add-product";
-
-            button.type =
-                "button";
-
-            button.textContent =
-                "Lisää";
-           button.addEventListener(
-    "click",
-    () => {
-        addToCart(product);
-    }
-);
+        card.appendChild(name);
+        card.appendChild(price);
 
 
-            card.appendChild(
-                name
-            );
+        /* PRODUCT'S OWN CART CONTROL */
 
-            card.appendChild(
-                price
-            );
-
-            card.appendChild(
-                button
+        const cartItem =
+            cart.find(
+                (item) =>
+                    item.product.id === product.id
             );
 
 
-            grid.appendChild(
-                card
+        if (!cartItem) {
+
+            const addButton =
+                document.createElement("button");
+
+            addButton.type = "button";
+            addButton.className = "add-product";
+            addButton.textContent = "Lisää";
+
+
+            addButton.addEventListener(
+                "click",
+                () => {
+                    addToCart(product);
+                }
             );
+
+
+            card.appendChild(addButton);
+
+        } else {
+
+            const controls =
+                document.createElement("div");
+
+            controls.className =
+                "quantity-controls";
+
+
+            const minus =
+                document.createElement("button");
+
+            minus.type = "button";
+            minus.className = "quantity-button";
+            minus.textContent = "−";
+
+
+            const quantity =
+                document.createElement("span");
+
+            quantity.className =
+                "selected-quantity";
+
+            quantity.textContent =
+                `${cartItem.quantity} valittu`;
+
+
+            const plus =
+                document.createElement("button");
+
+            plus.type = "button";
+            plus.className = "quantity-button";
+            plus.textContent = "+";
+
+
+            minus.addEventListener(
+                "click",
+                () => {
+                    removeFromCart(product);
+                }
+            );
+
+
+            plus.addEventListener(
+                "click",
+                () => {
+                    addToCart(product);
+                }
+            );
+
+
+            controls.appendChild(minus);
+            controls.appendChild(quantity);
+            controls.appendChild(plus);
+
+            card.appendChild(controls);
 
         }
-    );
 
 
-    section.appendChild(
-        grid
-    );
+        grid.appendChild(card);
 
-    menu.appendChild(
-        section
-    );
+    });
+
+
+    section.appendChild(grid);
+    menu.appendChild(section);
 
 }
+
 
 /* =========================================================
    CART
@@ -333,6 +352,40 @@ function addToCart(product) {
 
 
     updateCartCount();
+    renderProducts();
+}
+
+
+function removeFromCart(product) {
+
+    const existingItem =
+        cart.find(
+            (item) =>
+                item.product.id === product.id
+        );
+
+
+    if (!existingItem) {
+        return;
+    }
+
+
+    existingItem.quantity -= 1;
+
+
+    if (existingItem.quantity <= 0) {
+
+        cart =
+            cart.filter(
+                (item) =>
+                    item.product.id !== product.id
+            );
+
+    }
+
+
+    updateCartCount();
+    renderProducts();
 }
 
 
