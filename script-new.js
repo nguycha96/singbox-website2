@@ -835,6 +835,12 @@ function setLanguage(language) {
 
     }
 
+       /* Update Supabase menu */
+
+    if (products.length > 0) {
+        renderMenu(language);
+    }
+
 }
 
 
