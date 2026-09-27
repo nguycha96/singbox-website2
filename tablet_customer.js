@@ -80,7 +80,7 @@ async function loadProducts() {
 }
 
 
-function renderProducts() {
+function renderProducts(activeCategory = "snacks") {
 
     const menu =
         document.getElementById("tabletMenu");
@@ -93,7 +93,146 @@ function renderProducts() {
     menu.replaceChildren();
 
 
+    /* CATEGORY NAVIGATION */
+
+    const navigation =
+        document.createElement("nav");
+
+    navigation.className =
+        "category-navigation";
+
+
     categories.forEach((category) => {
+
+        const button =
+            document.createElement("button");
+
+        button.type = "button";
+
+        button.className =
+            "category-button";
+
+        button.textContent =
+            category.name;
+
+
+        if (category.id === activeCategory) {
+            button.classList.add("active");
+        }
+
+
+        button.addEventListener(
+            "click",
+            () => {
+                renderProducts(category.id);
+            }
+        );
+
+
+        navigation.appendChild(button);
+
+    });
+
+
+    menu.appendChild(navigation);
+
+
+    /* ACTIVE CATEGORY */
+
+    const category =
+        categories.find(
+            (item) =>
+                item.id === activeCategory
+        );
+
+
+    if (!category) {
+        return;
+    }
+
+
+    const categoryProducts =
+        products.filter(
+            (product) =>
+                product.category === category.id
+        );
+
+
+    const section =
+        document.createElement("section");
+
+    section.className =
+        "product-category";
+
+
+    const heading =
+        document.createElement("h2");
+
+    heading.textContent =
+        category.name;
+
+    section.appendChild(heading);
+
+
+    const grid =
+        document.createElement("div");
+
+    grid.className =
+        "product-grid";
+
+
+    categoryProducts.forEach((product) => {
+
+        const card =
+            document.createElement("article");
+
+        card.className =
+            "product-card";
+
+
+        const name =
+            document.createElement("h3");
+
+        name.textContent =
+            product.name_fi;
+
+
+        const price =
+            document.createElement("div");
+
+        price.className =
+            "product-price";
+
+        price.textContent =
+            `${Number(product.price).toFixed(2)} €`;
+
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "add-product";
+
+        button.type =
+            "button";
+
+        button.textContent =
+            "Lisää";
+
+
+        card.appendChild(name);
+        card.appendChild(price);
+        card.appendChild(button);
+
+        grid.appendChild(card);
+
+    });
+
+
+    section.appendChild(grid);
+    menu.appendChild(section);
+
+}
 
         const categoryProducts =
             products.filter(
