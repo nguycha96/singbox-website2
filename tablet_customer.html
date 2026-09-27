@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>SiNG BOX | Room Service</title>
+
+    <link
+        rel="stylesheet"
+        href="tablet_customer.css"
+    >
+
+</head>
+
+
+<body>
+
+    <main id="customerApp">
+
+        <header class="tablet-header">
+
+            <div>
+                <div class="tablet-brand">
+                    SiNG BOX
+                </div>
+
+                <div class="tablet-subtitle">
+                    NORAEBANG
+                </div>
+            </div>
+
+            <div
+                class="room-name"
+                id="roomName"
+            >
+                Room
+            </div>
+
+        </header>
+
+
+        <section class="tablet-intro">
+
+            <h1>
+                Order to your room
+            </h1>
+
+            <p>
+                Choose your food and drinks.
+            </p>
+
+        </section>
+
+
+        <section
+            class="tablet-menu"
+            id="tabletMenu"
+        >
+            <!-- Products will be loaded from Supabase -->
+        </section>
+
+
+        <button
+            class="cart-button"
+            id="cartButton"
+            type="button"
+        >
+            Cart
+            <span id="cartCount">0</span>
+        </button>
+
+    </main>
+
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+    <script src="tablet_customer.js"></script>
+
+</body>
+
+</html>
