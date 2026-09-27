@@ -359,3 +359,31 @@ body {
 .staff-booking-customer::first-letter {
     text-transform: uppercase;
 }
+
+.room-card-header h2 {
+    position: relative;
+
+    padding-left: 18px;
+}
+
+
+.room-card-header h2::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 50%;
+
+    width: 4px;
+    height: 28px;
+
+    border-radius: 999px;
+
+    background: var(--pink);
+
+    box-shadow:
+        0 0 12px rgba(255, 47, 146, 0.55);
+
+    transform: translateY(-50%);
+}
