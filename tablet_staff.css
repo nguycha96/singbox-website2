@@ -1,0 +1,307 @@
+/* =========================================================
+   SING BOX — STAFF TABLET
+========================================================= */
+
+:root {
+    --green: #001b14;
+    --green-dark: #00130e;
+    --green-black: #000b08;
+
+    --cream: #f0dcb5;
+    --gold: #d7a846;
+    --pink: #ff2f92;
+
+    --text-soft: rgba(240, 220, 181, 0.62);
+    --border: rgba(240, 220, 181, 0.14);
+}
+
+
+* {
+    box-sizing: border-box;
+}
+
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--green) 0%,
+            var(--green-black) 100%
+        );
+
+    color: var(--cream);
+}
+
+
+body {
+    min-height: 100vh;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+}
+
+
+#staffApp {
+    min-height: 100vh;
+
+    padding:
+        28px
+        28px
+        60px;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.staff-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 30px;
+
+    padding-bottom: 24px;
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+
+.tablet-logo {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.tablet-brand {
+    color: var(--cream);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 34px;
+    font-weight: 700;
+
+    letter-spacing: 0.04em;
+}
+
+
+.tablet-subtitle {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 3px;
+
+    color: var(--gold);
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 0.24em;
+}
+
+
+.tablet-subtitle span {
+    display: block;
+
+    width: 26px;
+    height: 1px;
+
+    background: var(--gold);
+}
+
+
+.staff-header-info {
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+}
+
+
+.staff-label {
+    padding:
+        9px
+        15px;
+
+    border:
+        1px solid var(--gold);
+
+    border-radius: 999px;
+
+    color: var(--gold);
+
+    font-size: 12px;
+    font-weight: 700;
+
+    letter-spacing: 0.16em;
+}
+
+
+.staff-clock {
+    min-width: 72px;
+
+    color: var(--cream);
+
+    font-size: 22px;
+    font-weight: 700;
+
+    text-align: right;
+}
+
+
+/* =========================================================
+   INTRO
+========================================================= */
+
+.staff-intro {
+    padding:
+        42px
+        0
+        30px;
+}
+
+
+.staff-eyebrow {
+    margin-bottom: 8px;
+
+    color: var(--gold);
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 0.22em;
+}
+
+
+.staff-intro h1 {
+    margin:
+        0
+        0
+        8px;
+
+    color: var(--cream);
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 42px;
+    font-weight: 500;
+}
+
+
+.staff-intro p {
+    margin: 0;
+
+    color: var(--text-soft);
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   ROOM GRID
+========================================================= */
+
+.staff-rooms {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+}
+
+
+/*
+   Nämä tyylit otetaan käyttöön,
+   kun huoneet ladataan Supabasesta.
+*/
+
+.staff-room-card {
+    min-height: 230px;
+
+    padding: 24px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 20px;
+
+    background:
+        rgba(0, 19, 14, 0.78);
+}
+
+
+.room-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding-bottom: 18px;
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+
+.room-card-header h2 {
+    margin: 0;
+
+    color: var(--cream);
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 28px;
+    font-weight: 500;
+}
+
+
+.room-status {
+    color: var(--text-soft);
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+.room-card-content {
+    padding-top: 20px;
+
+    color: var(--text-soft);
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 800px) {
+
+    .staff-rooms {
+        grid-template-columns: 1fr;
+    }
+}
