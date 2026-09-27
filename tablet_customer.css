@@ -944,3 +944,120 @@ button {
     background: var(--gold);
     color: var(--green-black);
 }
+
+/* =========================================================
+   STAFF CALL CONFIRMATION
+========================================================= */
+
+.staff-call-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(6px);
+}
+
+.staff-call-overlay[hidden] {
+    display: none;
+}
+
+
+.staff-call-panel {
+    width: min(520px, 92vw);
+
+    padding: 34px;
+
+    border: 1px solid var(--border);
+    border-radius: 24px;
+
+    background: var(--green-dark);
+
+    box-shadow:
+        0 30px 90px rgba(0, 0, 0, 0.55);
+
+    text-align: center;
+}
+
+
+.staff-call-symbol {
+    margin-bottom: 18px;
+
+    font-size: 32px;
+}
+
+
+.staff-call-panel h2 {
+    margin: 0 0 12px;
+
+    color: var(--cream);
+
+    font-size: 28px;
+    font-weight: 500;
+}
+
+
+.staff-call-panel p {
+    margin: 0 auto 28px;
+
+    max-width: 390px;
+
+    color: var(--text-soft);
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+.staff-call-actions {
+    display: flex;
+
+    gap: 12px;
+}
+
+
+.staff-call-cancel,
+.staff-call-confirm {
+    flex: 1;
+
+    padding: 15px 18px;
+
+    border-radius: 999px;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.staff-call-cancel {
+    border: 1px solid var(--border);
+
+    background: transparent;
+    color: var(--cream);
+}
+
+
+.staff-call-confirm {
+    border: 1px solid var(--pink);
+
+    background: var(--pink);
+    color: white;
+}
+
+
+.staff-call-cancel:active {
+    border-color: var(--cream);
+}
+
+
+.staff-call-confirm:active {
+    transform: scale(0.98);
+}
