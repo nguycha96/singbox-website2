@@ -79,6 +79,83 @@
             <span id="cartCount">0</span>
         </button>
 
+        <!-- =====================================================
+     CART PANEL
+===================================================== -->
+
+<div
+    class="cart-overlay"
+    id="cartOverlay"
+    hidden
+>
+
+    <div class="cart-panel">
+
+        <div class="cart-header">
+
+            <div>
+                <div class="cart-eyebrow">
+                    YOUR ORDER
+                </div>
+
+                <h2>
+                    Ostoskori
+                </h2>
+            </div>
+
+            <button
+                class="cart-close"
+                id="cartClose"
+                type="button"
+                aria-label="Sulje ostoskori"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div
+            class="cart-items"
+            id="cartItems"
+        >
+        </div>
+
+
+        <div class="cart-summary">
+
+            <div class="cart-total-row">
+
+                <span>
+                    Yhteensä
+                </span>
+
+                <strong id="cartTotal">
+                    0.00 €
+                </strong>
+
+            </div>
+
+
+            <button
+                class="send-order-button"
+                type="button"
+                disabled
+            >
+                Lähetä tilaus
+            </button>
+
+            <p class="order-disabled-note">
+                Tilauksen lähetys otetaan käyttöön
+                laitteen tunnistautumisen jälkeen.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
     </main>
 
 
