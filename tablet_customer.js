@@ -50,6 +50,10 @@ const categories = [
 ];
 
 
+/* =========================================================
+   LOAD PRODUCTS
+========================================================= */
+
 async function loadProducts() {
 
     const { data, error } = await supabaseClient
@@ -80,6 +84,10 @@ async function loadProducts() {
 }
 
 
+/* =========================================================
+   RENDER PRODUCTS
+========================================================= */
+
 function renderProducts(activeCategory = "snacks") {
 
     const menu =
@@ -93,7 +101,9 @@ function renderProducts(activeCategory = "snacks") {
     menu.replaceChildren();
 
 
-    /* CATEGORY NAVIGATION */
+    /* =====================================================
+       CATEGORY NAVIGATION
+    ===================================================== */
 
     const navigation =
         document.createElement("nav");
@@ -107,7 +117,8 @@ function renderProducts(activeCategory = "snacks") {
         const button =
             document.createElement("button");
 
-        button.type = "button";
+        button.type =
+            "button";
 
         button.className =
             "category-button";
@@ -117,27 +128,41 @@ function renderProducts(activeCategory = "snacks") {
 
 
         if (category.id === activeCategory) {
-            button.classList.add("active");
+
+            button.classList.add(
+                "active"
+            );
+
         }
 
 
         button.addEventListener(
             "click",
             () => {
-                renderProducts(category.id);
+
+                renderProducts(
+                    category.id
+                );
+
             }
         );
 
 
-        navigation.appendChild(button);
+        navigation.appendChild(
+            button
+        );
 
     });
 
 
-    menu.appendChild(navigation);
+    menu.appendChild(
+        navigation
+    );
 
 
-    /* ACTIVE CATEGORY */
+    /* =====================================================
+       ACTIVE CATEGORY
+    ===================================================== */
 
     const category =
         categories.find(
@@ -171,8 +196,15 @@ function renderProducts(activeCategory = "snacks") {
     heading.textContent =
         category.name;
 
-    section.appendChild(heading);
 
+    section.appendChild(
+        heading
+    );
+
+
+    /* =====================================================
+       PRODUCT GRID
+    ===================================================== */
 
     const grid =
         document.createElement("div");
@@ -181,112 +213,35 @@ function renderProducts(activeCategory = "snacks") {
         "product-grid";
 
 
-    categoryProducts.forEach((product) => {
-
-        const card =
-            document.createElement("article");
-
-        card.className =
-            "product-card";
-
-
-        const name =
-            document.createElement("h3");
-
-        name.textContent =
-            product.name_fi;
-
-
-        const price =
-            document.createElement("div");
-
-        price.className =
-            "product-price";
-
-        price.textContent =
-            `${Number(product.price).toFixed(2)} €`;
-
-
-        const button =
-            document.createElement("button");
-
-        button.className =
-            "add-product";
-
-        button.type =
-            "button";
-
-        button.textContent =
-            "Lisää";
-
-
-        card.appendChild(name);
-        card.appendChild(price);
-        card.appendChild(button);
-
-        grid.appendChild(card);
-
-    });
-
-
-    section.appendChild(grid);
-    menu.appendChild(section);
-
-}
-
-        const categoryProducts =
-            products.filter(
-                (product) =>
-                    product.category === category.id
-            );
-
-
-        if (categoryProducts.length === 0) {
-            return;
-        }
-
-
-        const section =
-            document.createElement("section");
-
-        section.className =
-            "product-category";
-
-
-        const heading =
-            document.createElement("h2");
-
-        heading.textContent =
-            category.name;
-
-        section.appendChild(heading);
-
-
-        const grid =
-            document.createElement("div");
-
-        grid.className =
-            "product-grid";
-
-
-        categoryProducts.forEach((product) => {
+    categoryProducts.forEach(
+        (product) => {
 
             const card =
-                document.createElement("article");
+                document.createElement(
+                    "article"
+                );
 
             card.className =
                 "product-card";
 
 
+            /* PRODUCT NAME */
+
             const name =
-                document.createElement("h3");
+                document.createElement(
+                    "h3"
+                );
 
             name.textContent =
                 product.name_fi;
 
 
+            /* PRICE */
+
             const price =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
             price.className =
                 "product-price";
@@ -295,8 +250,12 @@ function renderProducts(activeCategory = "snacks") {
                 `${Number(product.price).toFixed(2)} €`;
 
 
+            /* ADD BUTTON */
+
             const button =
-                document.createElement("button");
+                document.createElement(
+                    "button"
+                );
 
             button.className =
                 "add-product";
@@ -308,21 +267,40 @@ function renderProducts(activeCategory = "snacks") {
                 "Lisää";
 
 
-            card.appendChild(name);
-            card.appendChild(price);
-            card.appendChild(button);
+            card.appendChild(
+                name
+            );
 
-            grid.appendChild(card);
+            card.appendChild(
+                price
+            );
 
-        });
+            card.appendChild(
+                button
+            );
 
 
-        section.appendChild(grid);
-        menu.appendChild(section);
+            grid.appendChild(
+                card
+            );
 
-    });
+        }
+    );
+
+
+    section.appendChild(
+        grid
+    );
+
+    menu.appendChild(
+        section
+    );
 
 }
 
+
+/* =========================================================
+   START
+========================================================= */
 
 loadProducts();
