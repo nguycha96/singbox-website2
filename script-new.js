@@ -24,6 +24,37 @@ const supabaseClient =
    PRODUCTS
 ========================================================= */
 
+let products = [];
+
+
+const menuCategories = [
+    {
+        id: "snacks",
+        translationKey: "menu.snacks"
+    },
+    {
+        id: "sweets",
+        translationKey: "menu.sweets"
+    },
+    {
+        id: "combos",
+        translationKey: "menu.combos"
+    },
+    {
+        id: "non_alcoholic",
+        translationKey: "menu.soft"
+    },
+    {
+        id: "alcohol",
+        translationKey: "menu.alcohol"
+    },
+    {
+        id: "hot_drinks",
+        translationKey: "menu.hot"
+    }
+];
+
+
 async function loadProductsFromSupabase() {
 
     const { data, error } = await supabaseClient
@@ -31,24 +62,120 @@ async function loadProductsFromSupabase() {
         .select(
             "id, category, price, available, sort_order, name_fi, name_en"
         )
-        .order("sort_order", { ascending: true });
+        .eq("available", true)
+        .order("sort_order", {
+            ascending: true
+        });
 
     if (error) {
+
         console.error(
             "Could not load products:",
             error
         );
+
         return;
     }
 
-    console.log(
-        "Products loaded from Supabase:",
-        data
+    products = data;
+
+    renderMenu(
+        getInitialLanguage()
     );
 }
 
-loadProductsFromSupabase();
 
+function renderMenu(language) {
+
+    const menuGrid =
+        document.getElementById("menuGrid");
+
+    if (!menuGrid) {
+        return;
+    }
+
+    menuGrid.innerHTML = "";
+
+
+    menuCategories.forEach((category) => {
+
+        const categoryProducts =
+            products.filter(
+                (product) =>
+                    product.category === category.id
+            );
+
+
+        if (categoryProducts.length === 0) {
+            return;
+        }
+
+
+        const categoryElement =
+            document.createElement("div");
+
+        categoryElement.className =
+            "menu-category";
+
+
+        const heading =
+            document.createElement("h3");
+
+        heading.textContent =
+            translations[language][
+                category.translationKey
+            ];
+
+        categoryElement.appendChild(
+            heading
+        );
+
+
+        categoryProducts.forEach((product) => {
+
+            const item =
+                document.createElement("div");
+
+            item.className =
+                "menu-item";
+
+
+            const name =
+                document.createElement("span");
+
+            name.textContent =
+                language === "fi"
+                    ? product.name_fi
+                    : product.name_en;
+
+
+            const price =
+                document.createElement("strong");
+
+            price.textContent =
+                `€${Number(product.price).toFixed(2)}`;
+
+
+            item.appendChild(name);
+            item.appendChild(price);
+
+            categoryElement.appendChild(
+                item
+            );
+
+        });
+
+
+        menuGrid.appendChild(
+            categoryElement
+        );
+
+    });
+
+}
+
+
+loadProductsFromSupabase();
 
 /* =========================================================
    TRANSLATIONS
