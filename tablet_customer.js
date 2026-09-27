@@ -20,6 +20,7 @@ const supabaseClient =
 ========================================================= */
 
 let products = [];
+let cart = [];
 
 
 const categories = [
@@ -265,6 +266,12 @@ function renderProducts(activeCategory = "snacks") {
 
             button.textContent =
                 "Lisää";
+           button.addEventListener(
+    "click",
+    () => {
+        addToCart(product);
+    }
+);
 
 
             card.appendChild(
@@ -296,6 +303,60 @@ function renderProducts(activeCategory = "snacks") {
         section
     );
 
+}
+
+/* =========================================================
+   CART
+========================================================= */
+
+function addToCart(product) {
+
+    const existingItem =
+        cart.find(
+            (item) =>
+                item.product.id === product.id
+        );
+
+
+    if (existingItem) {
+
+        existingItem.quantity += 1;
+
+    } else {
+
+        cart.push({
+            product: product,
+            quantity: 1
+        });
+
+    }
+
+
+    updateCartCount();
+}
+
+
+function updateCartCount() {
+
+    const cartCount =
+        document.getElementById("cartCount");
+
+
+    if (!cartCount) {
+        return;
+    }
+
+
+    const totalQuantity =
+        cart.reduce(
+            (total, item) =>
+                total + item.quantity,
+            0
+        );
+
+
+    cartCount.textContent =
+        totalQuantity;
 }
 
 
