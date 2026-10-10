@@ -178,6 +178,33 @@ function renderMenu(language) {
 loadProductsFromSupabase();
 
 /* =========================================================
+   SiNG BOX NORAEBANG
+   script-new.js
+========================================================= */
+
+
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+    "https://tikatiahzawstvrdqfix.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_ZfYe1fy7Dxu59HfTLSQ7Cw_EK0xGl34";
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================================================
+   TRANSLATIONS
+========================================================= */
+
+/* =========================================================
    TRANSLATIONS
 ========================================================= */
 
@@ -1513,3 +1540,273 @@ window.addEventListener(
 
     }
 );
+
+/* =========================================================
+   OPENING HOURS
+========================================================= */
+
+let openingHoursData = [];
+let openingExceptionData = null;
+
+
+function formatOpeningTime(value) {
+
+    if (!value) {
+        return "";
+    }
+
+    return value.slice(0, 5);
+}
+
+
+function getTodayDateString() {
+
+    const now = new Date();
+
+    const year =
+        now.getFullYear();
+
+    const month =
+        String(now.getMonth() + 1)
+            .padStart(2, "0");
+
+    const day =
+        String(now.getDate())
+            .padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+
+function renderOpeningHours() {
+
+    const container =
+        document.getElementById(
+            "openingHours"
+        );
+
+    if (!container) {
+        return;
+    }
+
+
+    container.replaceChildren();
+
+
+    const language =
+        document.documentElement.lang === "fi"
+            ? "fi"
+            : "en";
+
+
+    const dayNames =
+        language === "fi"
+            ? {
+                1: "Ma",
+                2: "Ti",
+                3: "Ke",
+                4: "To",
+                5: "Pe",
+                6: "La",
+                0: "Su"
+            }
+            : {
+                1: "Mon",
+                2: "Tue",
+                3: "Wed",
+                4: "Thu",
+                5: "Fri",
+                6: "Sat",
+                0: "Sun"
+            };
+
+
+    const orderedDays = [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        0
+    ];
+
+
+    orderedDays.forEach((weekday) => {
+
+        const item =
+            openingHoursData.find(
+                (row) =>
+                    row.weekday === weekday
+            );
+
+        if (!item) {
+            return;
+        }
+
+
+        const line =
+            document.createElement("div");
+
+        line.className =
+            "opening-hours-line";
+
+
+        const day =
+            document.createElement("span");
+
+        day.className =
+            "opening-hours-day";
+
+        day.textContent =
+            dayNames[weekday];
+
+
+        const time =
+            document.createElement("span");
+
+
+        if (item.closed) {
+
+            time.textContent =
+                language === "fi"
+                    ? "Suljettu"
+                    : "Closed";
+
+        } else {
+
+            time.textContent =
+                `${formatOpeningTime(item.opens_at)}–${formatOpeningTime(item.closes_at)}`;
+        }
+
+
+        line.appendChild(day);
+        line.appendChild(time);
+
+        container.appendChild(line);
+    });
+
+
+    /* TODAY'S EXCEPTION */
+
+    if (openingExceptionData) {
+
+        const notice =
+            document.createElement("div");
+
+        notice.className =
+            "opening-hours-exception";
+
+
+        const customMessage =
+            language === "fi"
+                ? openingExceptionData.message_fi
+                : openingExceptionData.message_en;
+
+
+        if (customMessage) {
+
+            notice.textContent =
+                customMessage;
+
+        } else if (
+            openingExceptionData.exception_type ===
+            "closed"
+        ) {
+
+            notice.textContent =
+                language === "fi"
+                    ? "Tänään suljettu"
+                    : "Closed today";
+
+        } else if (
+            openingExceptionData.exception_type ===
+            "private_event"
+        ) {
+
+            notice.textContent =
+                language === "fi"
+                    ? "Suljettu tänään yksityistilaisuuden vuoksi"
+                    : "Closed today for a private event";
+
+        } else if (
+            openingExceptionData.exception_type ===
+            "custom_hours"
+        ) {
+
+            const hours =
+                `${formatOpeningTime(openingExceptionData.opens_at)}–${formatOpeningTime(openingExceptionData.closes_at)}`;
+
+            notice.textContent =
+                language === "fi"
+                    ? `Tänään ${hours}`
+                    : `Today ${hours}`;
+        }
+
+
+        container.appendChild(notice);
+    }
+}
+
+
+async function loadOpeningHours() {
+
+    const {
+        data: hours,
+        error: hoursError
+    } = await supabaseClient
+        .from("opening_hours")
+        .select(
+            "weekday, opens_at, closes_at, closes_next_day, closed"
+        );
+
+
+    if (hoursError) {
+
+        console.error(
+            "Could not load opening hours:",
+            hoursError
+        );
+
+        return;
+    }
+
+
+    openingHoursData =
+        hours || [];
+
+
+    const {
+        data: exception,
+        error: exceptionError
+    } = await supabaseClient
+        .from("opening_exceptions")
+        .select(
+            "exception_type, opens_at, closes_at, closes_next_day, message_fi, message_en"
+        )
+        .eq(
+            "exception_date",
+            getTodayDateString()
+        )
+        .maybeSingle();
+
+
+    if (exceptionError) {
+
+        console.error(
+            "Could not load opening exception:",
+            exceptionError
+        );
+
+    }
+
+
+    openingExceptionData =
+        exception || null;
+
+
+    renderOpeningHours();
+}
+
+
+loadOpeningHours();
