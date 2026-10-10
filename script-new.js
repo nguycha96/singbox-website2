@@ -1858,3 +1858,25 @@ async function loadOpeningHours() {
 
 
 loadOpeningHours();
+
+/* =========================================================
+   UPDATE OPENING HOURS WHEN LANGUAGE CHANGES
+========================================================= */
+
+const openingHoursLanguageObserver =
+    new MutationObserver(() => {
+
+        if (openingHoursData.length > 0) {
+            renderOpeningHours();
+        }
+
+    });
+
+
+openingHoursLanguageObserver.observe(
+    document.documentElement,
+    {
+        attributes: true,
+        attributeFilter: ["lang"]
+    }
+);
