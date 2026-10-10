@@ -567,8 +567,8 @@ async function loadOpeningCalendarData() {
     } = await supabaseClient
         .from("opening_exceptions")
         .select(
-            "exception_date, exception_type, opens_at, closes_at, closes_next_day, blocks_booking, message_fi, message_en"
-        )
+    "exception_date, exception_type, opens_at, closes_at, closes_next_day, blocks_booking, blocked_from, blocked_until, message_fi, message_en"
+)
         .gte(
             "exception_date",
             new Date().toISOString().slice(0, 10)
@@ -1019,14 +1019,11 @@ function createTimeSlots() {
     /* Suljettu tai yksityistilaisuus */
 
     if (
-        exception &&
-        (
-            exception.exception_type === "closed" ||
-            exception.exception_type === "private_event"
-        )
-    ) {
-        return slots;
-    }
+    exception &&
+    exception.exception_type === "closed"
+) {
+    return slots;
+}
 
 
     let opensAt;
