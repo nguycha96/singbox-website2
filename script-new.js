@@ -1530,7 +1530,7 @@ window.addEventListener(
 ========================================================= */
 
 let openingHoursData = [];
-let openingExceptionData = null;
+let openingExceptionsData = [];
 
 
 function formatOpeningTime(value) {
@@ -1670,66 +1670,124 @@ function renderOpeningHours() {
         container.appendChild(line);
     });
 
+    /* =========================================================
+       UPCOMING OPENING EXCEPTIONS
+    ========================================================= */
 
-    /* TODAY'S EXCEPTION */
+    if (openingExceptionsData.length > 0) {
 
-    if (openingExceptionData) {
-
-        const notice =
+        const exceptions =
             document.createElement("div");
 
-        notice.className =
-            "opening-hours-exception";
+        exceptions.className =
+            "opening-hours-exceptions";
 
 
-        const customMessage =
+        const heading =
+            document.createElement("div");
+
+        heading.className =
+            "opening-hours-exceptions-title";
+
+        heading.textContent =
             language === "fi"
-                ? openingExceptionData.message_fi
-                : openingExceptionData.message_en;
+                ? "Poikkeusaukioloajat"
+                : "Special opening hours";
+
+        exceptions.appendChild(heading);
 
 
-        if (customMessage) {
+        openingExceptionsData.forEach(
+            (exception) => {
 
-            notice.textContent =
-                customMessage;
+                const row =
+                    document.createElement("div");
 
-        } else if (
-            openingExceptionData.exception_type ===
-            "closed"
-        ) {
-
-            notice.textContent =
-                language === "fi"
-                    ? "Tänään suljettu"
-                    : "Closed today";
-
-        } else if (
-            openingExceptionData.exception_type ===
-            "private_event"
-        ) {
-
-            notice.textContent =
-                language === "fi"
-                    ? "Suljettu tänään yksityistilaisuuden vuoksi"
-                    : "Closed today for a private event";
-
-        } else if (
-            openingExceptionData.exception_type ===
-            "custom_hours"
-        ) {
-
-            const hours =
-                `${formatOpeningTime(openingExceptionData.opens_at)}–${formatOpeningTime(openingExceptionData.closes_at)}`;
-
-            notice.textContent =
-                language === "fi"
-                    ? `Tänään ${hours}`
-                    : `Today ${hours}`;
-        }
+                row.className =
+                    "opening-hours-exception-row";
 
 
-        container.appendChild(notice);
+                const date =
+                    document.createElement("span");
+
+                date.className =
+                    "opening-hours-exception-date";
+
+
+                const dateObject =
+                    new Date(
+                        `${exception.exception_date}T12:00:00`
+                    );
+
+
+                date.textContent =
+                    new Intl.DateTimeFormat(
+                        language === "fi"
+                            ? "fi-FI"
+                            : "en-GB",
+                        {
+                            day: "numeric",
+                            month: "numeric"
+                        }
+                    ).format(dateObject);
+
+
+                const text =
+                    document.createElement("span");
+
+                text.className =
+                    "opening-hours-exception-text";
+
+
+                const customMessage =
+                    language === "fi"
+                        ? exception.message_fi
+                        : exception.message_en;
+
+
+                if (customMessage) {
+
+                    text.textContent =
+                        customMessage;
+
+                } else if (
+                    exception.exception_type === "closed"
+                ) {
+
+                    text.textContent =
+                        language === "fi"
+                            ? "Suljettu"
+                            : "Closed";
+
+                } else if (
+                    exception.exception_type === "private_event"
+                ) {
+
+                    text.textContent =
+                        language === "fi"
+                            ? "Suljettu yksityistilaisuuden vuoksi"
+                            : "Closed for a private event";
+
+                } else if (
+                    exception.exception_type === "custom_hours"
+                ) {
+
+                    text.textContent =
+                        `${formatOpeningTime(exception.opens_at)}–${formatOpeningTime(exception.closes_at)}`;
+                }
+
+
+                row.appendChild(date);
+                row.appendChild(text);
+
+                exceptions.appendChild(row);
+            }
+        );
+
+
+        container.appendChild(exceptions);
     }
+
 }
 
 
