@@ -2162,7 +2162,9 @@ async function initializeBooking() {
 
     await loadRoomsFromSupabase();
 
-   await loadPricingRulesFromSupabase();
+    await loadPricingRulesFromSupabase();
+
+    await loadOpeningCalendarData();
 
     setLanguage(
         currentLanguage
@@ -2171,6 +2173,3 @@ async function initializeBooking() {
 
 
 initializeBooking();
-
-
-
