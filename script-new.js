@@ -453,6 +453,9 @@ const translations = {
 
 "contact.phone":
     "Phone",
+
+"contact.hours":
+    "Opening hours",
        
        
         /* FINAL CTA */
@@ -733,6 +736,9 @@ const translations = {
 
 "contact.phone":
     "Puhelin",
+
+"contact.hours":
+    "Aukioloajat",
        
 
         /* FINAL CTA */
