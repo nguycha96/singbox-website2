@@ -3378,5 +3378,62 @@ a.footer-contact-link:hover svg {
     }
 }
 
+/* =========================================================
+   OPENING HOURS
+========================================================= */
 
+.opening-hours-row {
+    align-items: flex-start;
+}
+
+.opening-hours-content {
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+.opening-hours-line {
+    display: grid;
+
+    grid-template-columns:
+        58px
+        auto;
+
+    gap: 12px;
+
+    color: var(--cream);
+
+    line-height: 1.5;
+}
+
+.opening-hours-day {
+    color: var(--gold);
+
+    font-family: var(--sans);
+
+    font-size: 0.72rem;
+    font-weight: 600;
+
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.opening-hours-exception {
+    margin-top: 10px;
+
+    padding-left: 12px;
+
+    border-left:
+        2px solid var(--pink);
+
+    color: var(--pink);
+
+    font-family: var(--sans);
+
+    font-size: 0.75rem;
+    font-weight: 600;
+
+    line-height: 1.5;
+}
 
