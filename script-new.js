@@ -1818,19 +1818,25 @@ async function loadOpeningHours() {
         hours || [];
 
 
-    const {
-        data: exception,
-        error: exceptionError
-    } = await supabaseClient
-        .from("opening_exceptions")
-        .select(
-            "exception_type, opens_at, closes_at, closes_next_day, message_fi, message_en"
-        )
-        .eq(
-            "exception_date",
-            getTodayDateString()
-        )
-        .maybeSingle();
+   const {
+    data: exceptions,
+    error: exceptionError
+} = await supabaseClient
+    .from("opening_exceptions")
+    .select(
+        "exception_date, exception_type, opens_at, closes_at, closes_next_day, message_fi, message_en"
+    )
+    .gte(
+        "exception_date",
+        getTodayDateString()
+    )
+    .order(
+        "exception_date",
+        {
+            ascending: true
+        }
+    )
+    .limit(8);
 
 
     if (exceptionError) {
@@ -1843,8 +1849,8 @@ async function loadOpeningHours() {
     }
 
 
-    openingExceptionData =
-        exception || null;
+    openingExceptionsData =
+    exceptions || [];
 
 
     renderOpeningHours();
