@@ -3419,21 +3419,69 @@ a.footer-contact-link:hover svg {
     text-transform: uppercase;
 }
 
-.opening-hours-exception {
-    margin-top: 10px;
+/* =========================================================
+   SPECIAL OPENING HOURS
+========================================================= */
 
-    padding-left: 12px;
+.opening-hours-exceptions {
+    margin-top: 18px;
+    padding-top: 16px;
 
-    border-left:
-        2px solid var(--pink);
+    border-top:
+        1px solid rgba(215, 168, 70, 0.22);
+}
+
+
+.opening-hours-exceptions-title {
+    margin-bottom: 14px;
 
     color: var(--pink);
 
     font-family: var(--sans);
 
-    font-size: 0.75rem;
+    font-size: 0.68rem;
     font-weight: 600;
 
-    line-height: 1.5;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
 }
 
+
+.opening-hours-exception-row {
+    display: grid;
+
+    grid-template-columns:
+        72px
+        minmax(0, 1fr);
+
+    column-gap: 18px;
+
+    align-items: baseline;
+
+    margin-top: 8px;
+}
+
+
+.opening-hours-exception-date {
+    color: var(--gold);
+
+    font-family: var(--sans);
+
+    font-size: 0.72rem;
+    font-weight: 600;
+
+    letter-spacing: 0.04em;
+
+    white-space: nowrap;
+}
+
+
+.opening-hours-exception-text {
+    color: var(--cream);
+
+    font-family: var(--serif);
+
+    font-size: 1rem;
+
+    line-height: 1.4;
+}
