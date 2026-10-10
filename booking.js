@@ -1413,7 +1413,72 @@ function getSlotStatus(
     const slotMinutes =
         bookingTimeToMinutes(time);
 
+    /* =====================================================
+       PRIVATE EVENT
+       Blocks the whole venue only during the selected time.
+    ===================================================== */
 
+    if (selectedDate) {
+
+        const year =
+            selectedDate.getFullYear();
+
+        const month =
+            String(
+                selectedDate.getMonth() + 1
+            ).padStart(2, "0");
+
+        const day =
+            String(
+                selectedDate.getDate()
+            ).padStart(2, "0");
+
+
+        const dateKey =
+            `${year}-${month}-${day}`;
+
+
+        const privateEvent =
+            openingExceptionsData.find(
+                exception =>
+                    exception.exception_date === dateKey &&
+                    exception.exception_type === "private_event"
+            );
+
+
+        if (
+            privateEvent &&
+            privateEvent.blocked_from &&
+            privateEvent.blocked_until
+        ) {
+
+            const eventStart =
+                bookingTimeToMinutes(
+                    privateEvent.blocked_from
+                );
+
+
+            let eventEnd =
+                bookingTimeToMinutes(
+                    privateEvent.blocked_until
+                );
+
+
+            if (eventEnd <= eventStart) {
+                eventEnd += 24 * 60;
+            }
+
+
+            if (
+                slotMinutes >= eventStart &&
+                slotMinutes < eventEnd
+            ) {
+
+                return "booked";
+            }
+        }
+    }
+   
     const bookings =
         getDemoBookings(roomId);
 
