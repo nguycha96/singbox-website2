@@ -177,28 +177,6 @@ function renderMenu(language) {
 
 loadProductsFromSupabase();
 
-/* =========================================================
-   SiNG BOX NORAEBANG
-   script-new.js
-========================================================= */
-
-
-/* =========================================================
-   SUPABASE
-========================================================= */
-
-const SUPABASE_URL =
-    "https://tikatiahzawstvrdqfix.supabase.co";
-
-const SUPABASE_KEY =
-    "sb_publishable_ZfYe1fy7Dxu59HfTLSQ7Cw_EK0xGl34";
-
-const supabaseClient =
-    supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
-
 
 /* =========================================================
    TRANSLATIONS
