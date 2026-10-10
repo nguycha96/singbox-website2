@@ -980,63 +980,147 @@ function createTimeSlots() {
     }
 
 
-    const day =
-        selectedDate.getDay();
+    const year =
+        selectedDate.getFullYear();
+
+    const month =
+        String(
+            selectedDate.getMonth() + 1
+        ).padStart(2, "0");
+
+    const dayOfMonth =
+        String(
+            selectedDate.getDate()
+        ).padStart(2, "0");
+
+
+    const dateKey =
+        `${year}-${month}-${dayOfMonth}`;
+
+
+    const exception =
+        openingExceptionsData.find(
+            item =>
+                item.exception_date ===
+                dateKey
+        );
+
+
+    /* Päivä kokonaan estetty */
+
+    if (
+        exception &&
+        exception.blocks_booking === true
+    ) {
+        return slots;
+    }
+
+
+    /* Suljettu tai yksityistilaisuus */
+
+    if (
+        exception &&
+        (
+            exception.exception_type === "closed" ||
+            exception.exception_type === "private_event"
+        )
+    ) {
+        return slots;
+    }
+
+
+    let opensAt;
+    let closesAt;
+    let closesNextDay;
+
+
+    /* Poikkeavat aukioloajat */
+
+    if (
+        exception &&
+        exception.exception_type === "custom_hours"
+    ) {
+
+        opensAt =
+            exception.opens_at;
+
+        closesAt =
+            exception.closes_at;
+
+        closesNextDay =
+            exception.closes_next_day;
+
+    } else {
+
+        /* Normaalit aukioloajat Supabasesta */
+
+        const weekday =
+            selectedDate.getDay();
+
+
+        const normalHours =
+            openingHoursData.find(
+                item =>
+                    Number(item.weekday) ===
+                    weekday
+            );
+
+
+        if (
+            !normalHours ||
+            normalHours.closed === true
+        ) {
+            return slots;
+        }
+
+
+        opensAt =
+            normalHours.opens_at;
+
+        closesAt =
+            normalHours.closes_at;
+
+        closesNextDay =
+            normalHours.closes_next_day;
+    }
+
+
+    if (
+        !opensAt ||
+        !closesAt
+    ) {
+        return slots;
+    }
 
 
     const openingMinutes =
-        14 * 60;
+        timeToMinutes(
+            opensAt
+        );
 
 
-    let closingMinutes;
+    let closingMinutes =
+        timeToMinutes(
+            closesAt
+        );
 
 
+    if (
+        closesNextDay === true ||
+        closingMinutes <= openingMinutes
+    ) {
+        closingMinutes +=
+            24 * 60;
+    }
 
-   /*
-    Monday–Thursday + Sunday
-    14:00–23:00
-*/
-
-if (
-    (day >= 1 && day <= 4) ||
-    day === 0
-) {
-
-    closingMinutes =
-        23 * 60;
-
-}
-
-
-/*
-    Friday–Saturday
-    14:00–02:00
-*/
-
-else {
-
-    closingMinutes =
-        26 * 60;
-
-}
-
-
-
-    /*
-        Keep the original booking logic.
-    */
 
     const latestStart =
         closingMinutes - 15;
 
 
     for (
-        let minutes =
-            openingMinutes;
-
-        minutes <=
-            latestStart;
-
+        let minutes = openingMinutes;
+        minutes <= latestStart;
         minutes += 15
     ) {
 
@@ -1048,10 +1132,8 @@ else {
             displayMinutes >=
             24 * 60
         ) {
-
             displayMinutes -=
                 24 * 60;
-
         }
 
 
@@ -1084,14 +1166,11 @@ else {
         slots.push(
             `${hourText}:${minuteText}`
         );
-
     }
 
 
     return slots;
-
 }
-
 
 
 /* =========================================================
