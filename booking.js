@@ -527,7 +527,67 @@ let displayedDate =
 let selectedDate =
     null;
 
+/* =========================================================
+   OPENING HOURS DATA
+========================================================= */
 
+let openingHoursData = [];
+let openingExceptionsData = [];
+
+
+async function loadOpeningCalendarData() {
+
+    const {
+        data: hours,
+        error: hoursError
+    } = await supabaseClient
+        .from("opening_hours")
+        .select(
+            "weekday, opens_at, closes_at, closes_next_day, closed"
+        );
+
+
+    if (hoursError) {
+
+        console.error(
+            "Could not load opening hours:",
+            hoursError
+        );
+
+    } else {
+
+        openingHoursData =
+            hours || [];
+    }
+
+
+    const {
+        data: exceptions,
+        error: exceptionsError
+    } = await supabaseClient
+        .from("opening_exceptions")
+        .select(
+            "exception_date, exception_type, opens_at, closes_at, closes_next_day, blocks_booking, message_fi, message_en"
+        )
+        .gte(
+            "exception_date",
+            new Date().toISOString().slice(0, 10)
+        );
+
+
+    if (exceptionsError) {
+
+        console.error(
+            "Could not load opening exceptions:",
+            exceptionsError
+        );
+
+    } else {
+
+        openingExceptionsData =
+            exceptions || [];
+    }
+}
 
 /* =========================================================
    DATE FORMATTERS
