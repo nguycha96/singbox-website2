@@ -760,7 +760,47 @@ function drawCalendar() {
             0
         );
 
+        const dateKey =
+            `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
+
+        const openingException =
+            openingExceptionsData.find(
+                exception =>
+                    exception.exception_date ===
+                    dateKey
+            );
+
+
+        const bookingBlocked =
+            openingException &&
+            openingException.blocks_booking === true;
+
+
+        if (bookingBlocked) {
+
+            button.classList.add(
+                "closed-day"
+            );
+
+            button.disabled =
+                true;
+
+
+            const message =
+                currentLanguage === "fi"
+                    ? openingException.message_fi
+                    : openingException.message_en;
+
+
+            button.title =
+                message ||
+                (
+                    currentLanguage === "fi"
+                        ? "Ei varattavissa"
+                        : "Not available"
+                );
+        }
 
         /*
             Today
@@ -820,11 +860,12 @@ function drawCalendar() {
             Click
         */
 
-        if (
-            date >= today
-        ) {
+       if (
+    date >= today &&
+    !bookingBlocked
+) {
 
-            button.addEventListener(
+    button.addEventListener(
                 "click",
                 () => {
 
