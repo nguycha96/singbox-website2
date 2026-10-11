@@ -61,36 +61,86 @@
         </header>
 
 
-        <!-- TITLE -->
+<!-- TITLE -->
 
-        <section class="staff-intro">
+<section class="staff-intro">
 
-            <div class="staff-eyebrow">
-                ROOM SERVICE
-            </div>
+    <div class="staff-eyebrow">
+        ROOM SERVICE
+    </div>
 
-            <h1>
-                Huoneet
-            </h1>
+    <h1 id="staffViewTitle">
+        Huoneet
+    </h1>
 
-            <p>
-                Varaukset, tilaukset ja henkilökuntakutsut
-            </p>
+    <p id="staffViewDescription">
+        Varaukset, tilaukset ja henkilökuntakutsut
+    </p>
 
-        </section>
+</section>
 
 
-        <!-- ROOMS -->
+<!-- VIEW SWITCH -->
 
-        <section
-            class="staff-rooms"
-            id="staffRooms"
-        >
+<nav
+    class="staff-view-switch"
+    aria-label="Staff view"
+>
+    <button
+        type="button"
+        class="staff-view-button active"
+        data-view="rooms"
+    >
+        Huoneet
+    </button>
 
-            <!-- Huoneet ja niiden tiedot
-                 ladataan myöhemmin Supabasesta -->
+    <button
+        type="button"
+        class="staff-view-button"
+        data-view="common"
+    >
+        Yhteistila
+    </button>
+</nav>
 
-        </section>
+
+<!-- ROOMS VIEW -->
+
+<section
+    class="staff-view active"
+    id="roomsView"
+>
+    <div
+        class="staff-rooms"
+        id="staffRooms"
+    ></div>
+</section>
+
+
+<!-- COMMON AREA VIEW -->
+
+<section
+    class="staff-view"
+    id="commonView"
+    hidden
+>
+    <div class="common-area-empty">
+
+        <span class="common-area-label">
+            YHTEISTILA
+        </span>
+
+        <h2>
+            Ei avoimia tilauksia
+        </h2>
+
+        <p>
+            Yhteistilan pöytätilaukset ja henkilökuntakutsut
+            näkyvät täällä.
+        </p>
+
+    </div>
+</section>
 
     </main>
 
