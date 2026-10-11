@@ -46,6 +46,94 @@ setInterval(
     30000
 );
 
+/* =========================================================
+   VIEW SWITCH
+========================================================= */
+
+const staffViewButtons =
+    document.querySelectorAll(
+        ".staff-view-button"
+    );
+
+
+const roomsView =
+    document.getElementById(
+        "roomsView"
+    );
+
+
+const commonView =
+    document.getElementById(
+        "commonView"
+    );
+
+
+const staffViewTitle =
+    document.getElementById(
+        "staffViewTitle"
+    );
+
+
+const staffViewDescription =
+    document.getElementById(
+        "staffViewDescription"
+    );
+
+
+staffViewButtons.forEach((button) => {
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            const view =
+                button.dataset.view;
+
+
+            staffViewButtons.forEach(
+                (item) => {
+
+                    item.classList.toggle(
+                        "active",
+                        item === button
+                    );
+
+                }
+            );
+
+
+            const showRooms =
+                view === "rooms";
+
+
+            roomsView.hidden =
+                !showRooms;
+
+            commonView.hidden =
+                showRooms;
+
+
+            if (showRooms) {
+
+                staffViewTitle.textContent =
+                    "Huoneet";
+
+                staffViewDescription.textContent =
+                    "Varaukset, tilaukset ja henkilökuntakutsut";
+
+            } else {
+
+                staffViewTitle.textContent =
+                    "Yhteistila";
+
+                staffViewDescription.textContent =
+                    "Pöytätilaukset ja henkilökuntakutsut";
+            }
+
+        }
+    );
+
+});
 
 /* =========================================================
    LOAD ROOMS
