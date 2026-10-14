@@ -2985,13 +2985,23 @@ a.footer-contact-link:hover svg {
             75px;
     }
 
-    .room-selection-heading {
-        margin-bottom: 35px;
-    }
+.room-selection-heading {
+    width: 100%;
+    margin: 0 auto 35px;
 
-    .room-selection-heading h2 {
-        font-size: 3.5rem;
-    }
+    text-align: center;
+}
+
+.room-selection-heading h2 {
+    width: 100%;
+
+    font-size:
+        clamp(2.9rem, 13vw, 3.5rem);
+
+    line-height: 0.95;
+
+    text-align: center;
+}
 
     .room-grid {
         grid-template-columns: 1fr;
