@@ -2871,9 +2871,10 @@ a.footer-contact-link:hover svg {
         width: 31px;
     }
 
-    .logo-sub {
-        font-size: 0.40rem;
-    }
+.logo-sub {
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+}
 
     .header-right {
         gap: 14px;
