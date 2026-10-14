@@ -3312,9 +3312,10 @@ a.footer-contact-link:hover svg {
         width: 26px;
     }
 
-    .logo-sub {
-        font-size: 0.36rem;
-    }
+.logo-sub {
+    font-size: 0.68rem;
+    letter-spacing: 0.20em;
+}
 
     .language-switcher {
         gap: 5px;
