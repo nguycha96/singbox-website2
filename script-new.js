@@ -177,6 +177,196 @@ function renderMenu(language) {
 
 loadProductsFromSupabase();
 
+/* =========================================================
+   OFFERS
+========================================================= */
+
+let offers = [];
+
+
+async function loadOffersFromSupabase() {
+
+    const offersArea =
+        document.getElementById("offersArea");
+
+
+    if (!offersArea) {
+        return;
+    }
+
+
+    const { data, error } =
+        await supabaseClient
+            .from("offers")
+            .select(
+                "id, title_fi, title_en, description_fi, description_en, price, starts_at, ends_at, active, sort_order"
+            )
+            .eq("active", true)
+            .order("sort_order", {
+                ascending: true
+            });
+
+
+    if (error) {
+
+        console.error(
+            "Could not load offers:",
+            error
+        );
+
+        offersArea.hidden = true;
+
+        return;
+    }
+
+
+    offers =
+        data || [];
+
+
+    renderOffers(
+        getInitialLanguage()
+    );
+}
+
+
+function formatOfferTime(time) {
+
+    if (!time) {
+        return "";
+    }
+
+    return time.slice(0, 5);
+}
+
+
+function renderOffers(language) {
+
+    const offersArea =
+        document.getElementById("offersArea");
+
+
+    if (!offersArea) {
+        return;
+    }
+
+
+    offersArea.replaceChildren();
+
+
+    if (offers.length === 0) {
+
+        offersArea.hidden = true;
+
+        return;
+    }
+
+
+    offers.forEach((offer) => {
+
+        const card =
+            document.createElement("article");
+
+        card.className =
+            "offer-card";
+
+
+        const kicker =
+            document.createElement("div");
+
+        kicker.className =
+            "offer-kicker";
+
+        kicker.textContent =
+            language === "fi"
+                ? "Tarjous"
+                : "Offer";
+
+
+        const title =
+            document.createElement("h3");
+
+        title.className =
+            "offer-title";
+
+        title.textContent =
+            language === "fi"
+                ? offer.title_fi
+                : offer.title_en;
+
+
+        const description =
+            document.createElement("p");
+
+        description.className =
+            "offer-description";
+
+        description.textContent =
+            language === "fi"
+                ? offer.description_fi || ""
+                : offer.description_en || "";
+
+
+        const meta =
+            document.createElement("div");
+
+        meta.className =
+            "offer-meta";
+
+
+        const time =
+            document.createElement("span");
+
+        time.className =
+            "offer-time";
+
+
+        if (
+            offer.starts_at &&
+            offer.ends_at
+        ) {
+
+            time.textContent =
+                `${formatOfferTime(offer.starts_at)}–${formatOfferTime(offer.ends_at)}`;
+        }
+
+
+        const price =
+            document.createElement("strong");
+
+        price.className =
+            "offer-price";
+
+
+        if (
+            offer.price !== null &&
+            offer.price !== undefined
+        ) {
+
+            price.textContent =
+                `${Number(offer.price).toFixed(2)} €`;
+        }
+
+
+        meta.appendChild(time);
+        meta.appendChild(price);
+
+        card.appendChild(kicker);
+        card.appendChild(title);
+        card.appendChild(description);
+        card.appendChild(meta);
+
+        offersArea.appendChild(card);
+
+    });
+
+
+    offersArea.hidden = false;
+}
+
+
+loadOffersFromSupabase();
+
 
 /* =========================================================
    TRANSLATIONS
@@ -870,6 +1060,7 @@ languageButtons.forEach((button) => {
                 button.getAttribute("data-lang");
 
             setLanguage(language);
+                       renderOffers(language);
 
         }
     );
