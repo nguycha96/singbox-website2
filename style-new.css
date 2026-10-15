@@ -1573,79 +1573,111 @@ h2 {
         1px solid rgba(255, 255, 255, 0.08);
 
     background:
-        rgba(255, 255, 255, 0.015);
-}
-
-
-.offer-kicker {
-    margin-bottom: 12px;
-
-    color: var(--pink);
-
-    font-size: 0.62rem;
-    font-weight: 600;
-
-    letter-spacing: 0.18em;
-
-    text-transform: uppercase;
+        rgba(255, 255, 255, 0.025);
 }
 
 
 .offer-title {
-    margin-bottom: 12px;
+    margin:
+        0
+        0
+        14px;
 
-    color: var(--cream);
+    color:
+        var(--cream);
 
-    font-family: var(--serif);
+    font-family:
+        var(--serif);
 
-    font-size: 1.8rem;
-    font-weight: 500;
+    font-size:
+        1.7rem;
 
-    line-height: 1.05;
+    font-weight:
+        500;
+
+    line-height:
+        1.1;
 }
 
 
 .offer-description {
-    margin-bottom: 20px;
+    margin:
+        0
+        0
+        20px;
+
+    color:
+        rgba(255, 255, 255, 0.62);
+
+    font-size:
+        0.75rem;
+
+    line-height:
+        1.55;
+}
+
+
+.offer-items {
+    border-top:
+        1px solid rgba(255, 255, 255, 0.08);
+}
+
+
+.offer-item {
+    min-height:
+        44px;
+
+    padding:
+        11px
+        0;
+
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    justify-content:
+        space-between;
+
+    gap:
+        20px;
+
+    border-bottom:
+        1px solid rgba(255, 255, 255, 0.06);
 
     color:
         rgba(255, 255, 255, 0.72);
 
-    font-size: 0.8rem;
+    font-size:
+        0.8rem;
 
-    line-height: 1.55;
+    line-height:
+        1.45;
 }
 
 
-.offer-meta {
-    display: flex;
-
-    align-items: baseline;
-    justify-content: space-between;
-
-    gap: 20px;
-
-    padding-top: 16px;
-
-    border-top:
-        1px solid rgba(255, 255, 255, 0.07);
+.offer-item:last-child {
+    border-bottom: 0;
 }
 
 
-.offer-time {
-    color: var(--gold);
-
-    font-size: 0.72rem;
-    font-weight: 500;
+.offer-item span {
+    min-width: 0;
 }
 
 
-.offer-price {
-    color: var(--cream);
+.offer-item strong {
+    flex-shrink: 0;
 
-    font-family: var(--serif);
+    color:
+        var(--gold);
 
-    font-size: 1.45rem;
+    font-weight:
+        500;
+
+    white-space:
+        nowrap;
 }
 
 /* =========================================================
