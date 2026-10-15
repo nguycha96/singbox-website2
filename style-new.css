@@ -1538,6 +1538,115 @@ h2 {
     color: var(--muted);
 }
 
+/* =========================================================
+   OFFERS
+========================================================= */
+
+.offers-area {
+    width: min(1320px, 100%);
+
+    margin:
+        28px
+        auto
+        0;
+}
+
+
+.offers-area[hidden] {
+    display: none;
+}
+
+
+.offer-card {
+    width:
+        calc((100% - 40px) / 3);
+
+    padding:
+        28px
+        26px
+        30px;
+
+    border-top:
+        1px solid var(--pink);
+
+    border-bottom:
+        1px solid rgba(255, 255, 255, 0.08);
+
+    background:
+        rgba(255, 255, 255, 0.015);
+}
+
+
+.offer-kicker {
+    margin-bottom: 12px;
+
+    color: var(--pink);
+
+    font-size: 0.62rem;
+    font-weight: 600;
+
+    letter-spacing: 0.18em;
+
+    text-transform: uppercase;
+}
+
+
+.offer-title {
+    margin-bottom: 12px;
+
+    color: var(--cream);
+
+    font-family: var(--serif);
+
+    font-size: 1.8rem;
+    font-weight: 500;
+
+    line-height: 1.05;
+}
+
+
+.offer-description {
+    margin-bottom: 20px;
+
+    color:
+        rgba(255, 255, 255, 0.72);
+
+    font-size: 0.8rem;
+
+    line-height: 1.55;
+}
+
+
+.offer-meta {
+    display: flex;
+
+    align-items: baseline;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding-top: 16px;
+
+    border-top:
+        1px solid rgba(255, 255, 255, 0.07);
+}
+
+
+.offer-time {
+    color: var(--gold);
+
+    font-size: 0.72rem;
+    font-weight: 500;
+}
+
+
+.offer-price {
+    color: var(--cream);
+
+    font-family: var(--serif);
+
+    font-size: 1.45rem;
+}
 
 /* =========================================================
    MENU GRID
@@ -2783,7 +2892,15 @@ a.footer-contact-link:hover svg {
             repeat(2, 1fr);
     }
 
+.offers-area {
+    max-width: 800px;
+}
 
+.offer-card {
+    width:
+        calc((100% - 20px) / 2);
+}
+   
     /* ABOUT */
 
     .about-section {
@@ -3196,7 +3313,9 @@ a.footer-contact-link:hover svg {
         gap: 15px;
     }
 
-
+.offer-card {
+    width: 100%;
+}
 
     /* ABOUT */
 
