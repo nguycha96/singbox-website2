@@ -182,12 +182,19 @@ loadProductsFromSupabase();
 ========================================================= */
 
 let offers = [];
+let offerItems = [];
 
+
+/* =========================================================
+   LOAD OFFERS
+========================================================= */
 
 async function loadOffersFromSupabase() {
 
     const offersArea =
-        document.getElementById("offersArea");
+        document.getElementById(
+            "offersArea"
+        );
 
 
     if (!offersArea) {
@@ -195,23 +202,32 @@ async function loadOffersFromSupabase() {
     }
 
 
-    const { data, error } =
-        await supabaseClient
-            .from("offers")
-            .select(
-                "id, title_fi, title_en, description_fi, description_en, price, starts_at, ends_at, active, sort_order"
-            )
-            .eq("active", true)
-            .order("sort_order", {
+    /*
+        Load active offer groups.
+    */
+
+    const {
+        data: offersData,
+        error: offersError
+    } = await supabaseClient
+        .from("offers")
+        .select(
+            "id, title_fi, title_en, description_fi, description_en, starts_at, ends_at, active, sort_order"
+        )
+        .eq("active", true)
+        .order(
+            "sort_order",
+            {
                 ascending: true
-            });
+            }
+        );
 
 
-    if (error) {
+    if (offersError) {
 
         console.error(
             "Could not load offers:",
-            error
+            offersError
         );
 
         offersArea.hidden = true;
@@ -221,7 +237,77 @@ async function loadOffersFromSupabase() {
 
 
     offers =
-        data || [];
+        offersData || [];
+
+
+    /*
+        No active offers.
+    */
+
+    if (offers.length === 0) {
+
+        offerItems = [];
+
+        offersArea.hidden = true;
+
+        return;
+    }
+
+
+    /*
+        Get IDs of active offers.
+    */
+
+    const offerIds =
+        offers.map(
+            offer => offer.id
+        );
+
+
+    /*
+        Load items belonging to
+        those offers.
+    */
+
+    const {
+        data: itemsData,
+        error: itemsError
+    } = await supabaseClient
+        .from("offer_items")
+        .select(
+            "id, offer_id, name_fi, name_en, price, active, sort_order"
+        )
+        .in(
+            "offer_id",
+            offerIds
+        )
+        .eq(
+            "active",
+            true
+        )
+        .order(
+            "sort_order",
+            {
+                ascending: true
+            }
+        );
+
+
+    if (itemsError) {
+
+        console.error(
+            "Could not load offer items:",
+            itemsError
+        );
+
+        offersArea.hidden = true;
+
+        return;
+    }
+
+
+    offerItems =
+        itemsData || [];
 
 
     renderOffers(
@@ -230,20 +316,61 @@ async function loadOffersFromSupabase() {
 }
 
 
+/* =========================================================
+   OFFER HELPERS
+========================================================= */
+
 function formatOfferTime(time) {
 
     if (!time) {
         return "";
     }
 
-    return time.slice(0, 5);
+
+    return time.slice(
+        0,
+        5
+    );
 }
 
+
+function formatOfferPrice(
+    price,
+    language
+) {
+
+    if (
+        price === null ||
+        price === undefined
+    ) {
+        return "";
+    }
+
+
+    return new Intl.NumberFormat(
+        language === "fi"
+            ? "fi-FI"
+            : "en-GB",
+        {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }
+    ).format(
+        Number(price)
+    ) + " €";
+}
+
+
+/* =========================================================
+   RENDER OFFERS
+========================================================= */
 
 function renderOffers(language) {
 
     const offersArea =
-        document.getElementById("offersArea");
+        document.getElementById(
+            "offersArea"
+        );
 
 
     if (!offersArea) {
@@ -264,109 +391,196 @@ function renderOffers(language) {
 
     offers.forEach((offer) => {
 
+        const items =
+            offerItems.filter(
+                item =>
+                    item.offer_id ===
+                    offer.id
+            );
+
+
+        /*
+            Don't show an empty offer.
+        */
+
+        if (items.length === 0) {
+            return;
+        }
+
+
         const card =
-            document.createElement("article");
+            document.createElement(
+                "article"
+            );
 
         card.className =
             "offer-card";
 
 
-        const kicker =
-            document.createElement("div");
-
-        kicker.className =
-            "offer-kicker";
-
-        kicker.textContent =
-            language === "fi"
-                ? "Tarjous"
-                : "Offer";
-
+        /*
+            TITLE + TIME
+        */
 
         const title =
-            document.createElement("h3");
+            document.createElement(
+                "h3"
+            );
 
         title.className =
             "offer-title";
 
-        title.textContent =
+
+        const offerTitle =
             language === "fi"
                 ? offer.title_fi
                 : offer.title_en;
 
 
-        const description =
-            document.createElement("p");
+        const startTime =
+            formatOfferTime(
+                offer.starts_at
+            );
 
-        description.className =
-            "offer-description";
-
-        description.textContent =
-            language === "fi"
-                ? offer.description_fi || ""
-                : offer.description_en || "";
-
-
-        const meta =
-            document.createElement("div");
-
-        meta.className =
-            "offer-meta";
-
-
-        const time =
-            document.createElement("span");
-
-        time.className =
-            "offer-time";
+        const endTime =
+            formatOfferTime(
+                offer.ends_at
+            );
 
 
         if (
-            offer.starts_at &&
-            offer.ends_at
+            startTime &&
+            endTime
         ) {
 
-            time.textContent =
-                `${formatOfferTime(offer.starts_at)}–${formatOfferTime(offer.ends_at)}`;
+            title.textContent =
+                `${offerTitle} · ${startTime}–${endTime}`;
+
+        } else {
+
+            title.textContent =
+                offerTitle;
         }
 
 
-        const price =
-            document.createElement("strong");
-
-        price.className =
-            "offer-price";
+        card.appendChild(
+            title
+        );
 
 
-        if (
-            offer.price !== null &&
-            offer.price !== undefined
-        ) {
+        /*
+            OPTIONAL DESCRIPTION
+        */
+
+        const descriptionText =
+            language === "fi"
+                ? offer.description_fi
+                : offer.description_en;
+
+
+        if (descriptionText) {
+
+            const description =
+                document.createElement(
+                    "p"
+                );
+
+            description.className =
+                "offer-description";
+
+            description.textContent =
+                descriptionText;
+
+            card.appendChild(
+                description
+            );
+        }
+
+
+        /*
+            OFFER ITEMS
+        */
+
+        const itemsContainer =
+            document.createElement(
+                "div"
+            );
+
+        itemsContainer.className =
+            "offer-items";
+
+
+        items.forEach((item) => {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+            row.className =
+                "offer-item";
+
+
+            const name =
+                document.createElement(
+                    "span"
+                );
+
+            name.textContent =
+                language === "fi"
+                    ? item.name_fi
+                    : item.name_en;
+
+
+            const price =
+                document.createElement(
+                    "strong"
+                );
 
             price.textContent =
-                `${Number(offer.price).toFixed(2)} €`;
-        }
+                formatOfferPrice(
+                    item.price,
+                    language
+                );
 
 
-        meta.appendChild(time);
-        meta.appendChild(price);
+            row.appendChild(
+                name
+            );
 
-        card.appendChild(kicker);
-        card.appendChild(title);
-        card.appendChild(description);
-        card.appendChild(meta);
+            row.appendChild(
+                price
+            );
 
-        offersArea.appendChild(card);
+
+            itemsContainer.appendChild(
+                row
+            );
+        });
+
+
+        card.appendChild(
+            itemsContainer
+        );
+
+
+        offersArea.appendChild(
+            card
+        );
 
     });
 
 
-    offersArea.hidden = false;
+    /*
+        Only show the area if at least
+        one actual offer card exists.
+    */
+
+    offersArea.hidden =
+        offersArea.children.length === 0;
 }
 
 
 loadOffersFromSupabase();
-
 
 /* =========================================================
    TRANSLATIONS
