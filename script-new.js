@@ -617,7 +617,7 @@ const translations = {
         /* HERO */
 
         "hero.eyebrow":
-            "Premium Korean Karaoke in Helsinki",
+            "Premium Korean Karaoke in Finland",
 
         "hero.title":
             "A little Seoul<br>in your day.",
@@ -833,13 +833,13 @@ const translations = {
         /* ABOUT US */
 
         "about.eyebrow":
-            "A little Seoul in Helsinki",
+            "A little Seoul in Finland",
 
         "about.title":
             "Korean noraebang.<br>Your way.",
 
         "about.text":
-            "SiNG BOX brings Korean private-room karaoke culture to Helsinki with music, food, drinks and a space made for spending time together.",
+            "SiNG BOX brings Korean private-room karaoke culture to Finland with music, food, drinks and a space made for spending time together.",
 
 /* CONTACT */
 
@@ -900,7 +900,7 @@ const translations = {
         /* HERO */
 
         "hero.eyebrow":
-            "Premium korealainen karaoke Helsingissä",
+            "Premium korealainen karaoke Suomessa",
 
         "hero.title":
             "Pala Soulia<br>päivääsi.",
@@ -1116,13 +1116,13 @@ const translations = {
         /* ABOUT US */
 
         "about.eyebrow":
-            "Pala Soulia Helsingissä",
+            "Pala Soulia Suomessa",
 
         "about.title":
             "Korealainen noraebang.<br>Teidän tavallanne.",
 
         "about.text":
-            "SiNG BOX tuo korealaisen yksityishuonekaraoken Helsinkiin – musiikkia, ruokaa, juomia ja oma tila yhteiseen illanviettoon.",
+            "SiNG BOX tuo korealaisen yksityishuonekaraoken Suomeen – musiikkia, ruokaa, juomia ja oma tila yhteiseen illanviettoon.",
 
        /* CONTACT */
 
