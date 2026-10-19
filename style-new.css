@@ -2247,10 +2247,20 @@ h2 {
     }
 
 
-    .campaign-content h2 {
-        font-size:
-            3rem;
-    }
+.campaign-content h2 {
+    max-width: 100%;
+
+    font-size:
+        clamp(
+            2.5rem,
+            12vw,
+            3rem
+        );
+
+    line-height: 0.92;
+
+    white-space: normal;
+}
 
 }
 
