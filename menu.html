@@ -186,66 +186,100 @@
 </header>
 
 
-<main>
 
 
-<!-- =====================================================
-     MENU
-===================================================== -->
-
-<section
-    class="menu-section"
-    id="menu"
->
-
-    <div class="menu-heading">
-
-        <p
-            class="eyebrow"
-            data-i18n="menu.eyebrow"
-        >
-            Jotain pöytään
-        </p>
-
-        <h1 data-i18n="menu.title">
-            Menu
-        </h1>
-
-        <p data-i18n="menu.text">
-            Ruokaa, juomia ja jotain makeaa.
-        </p>
-
-    </div>
+<main class="menu-page">
 
 
-    <!-- OFFERS FROM SUPABASE -->
+    <!-- =====================================================
+         MENU HERO
+    ===================================================== -->
 
-    <div
-        class="offers-area"
-        id="offersArea"
+    <section class="menu-hero">
+
+        <div class="menu-hero-background"></div>
+
+        <div class="menu-hero-content">
+
+            <p
+                class="eyebrow"
+                data-i18n="menu.eyebrow"
+            >
+                Karaoke · ruoka · juomat · ystävät
+            </p>
+
+            <h1 data-i18n="menu.title">
+                Ruoka & juomat
+            </h1>
+
+            <p
+                class="menu-hero-text"
+                data-i18n="menu.text"
+            >
+                Korealaisella twistillä. Hyvää ruokaa,
+                raikkaita juomia ja unohtumattomia hetkiä
+                karaokehuoneissa.
+            </p>
+
+            <div class="gold-line"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CAMPAIGNS / OFFERS
+         Generated from Supabase
+    ===================================================== -->
+
+    <section
+        class="campaign-section"
+        id="campaignSection"
         hidden
-    ></div>
-
-
-    <!-- SATURDAY BRUNCH
-         rakennetaan tähän myöhemmin -->
-
-
-    <!-- PRODUCTS FROM SUPABASE -->
-
-    <div
-        class="menu-grid"
-        id="menuGrid"
     >
 
-        <!-- Products are loaded from Supabase -->
+        <div
+            class="offers-area"
+            id="offersArea"
+        ></div>
 
-    </div>
+    </section>
 
-</section>
+
+    <!-- =====================================================
+         FULL MENU
+    ===================================================== -->
+
+    <section class="full-menu-section">
+
+        <div class="full-menu-heading">
+
+            <span class="heading-line"></span>
+
+            <h2 data-i18n="menu.fullMenu">
+                Koko menu
+            </h2>
+
+            <span class="heading-line"></span>
+
+        </div>
+
+
+        <div
+            class="menu-grid"
+            id="menuGrid"
+        >
+
+            <!-- Products are loaded from Supabase -->
+
+        </div>
+
+    </section>
 
 
 </main>
+
 
 
 <!-- =====================================================
