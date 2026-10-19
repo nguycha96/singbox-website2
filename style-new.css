@@ -2418,7 +2418,7 @@ h2 {
     gap:
         clamp(55px, 7vw, 105px);
 
-    align-items: center;
+    align-items: start;
 }
 
 
