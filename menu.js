@@ -653,6 +653,11 @@ function renderOffers() {
             "offersArea"
         );
 
+    const campaignSection =
+        document.getElementById(
+            "campaignSection"
+        );
+
 
     if (!offersArea) {
         return;
@@ -662,20 +667,18 @@ function renderOffers() {
     offersArea.replaceChildren();
 
 
-    offers.forEach((offer) => {
+    offers.forEach((offer, index) => {
 
         const items =
             offerItems.filter(
                 (item) =>
-                    item.offer_id ===
-                    offer.id
+                    item.offer_id === offer.id
             );
 
 
-        if (
-            items.length === 0
-        ) {
+        /* Ei aktiivisia tuotteita = ei näytetä kampanjaa */
 
+        if (items.length === 0) {
             return;
         }
 
@@ -686,16 +689,40 @@ function renderOffers() {
             );
 
         card.className =
-            "offer-card";
+            "campaign-card";
 
 
-        const title =
+        /*
+            Joka toinen kampanja peilikuvana.
+        */
+
+        if (index % 2 === 1) {
+            card.classList.add(
+                "campaign-card-reverse"
+            );
+        }
+
+
+        /* =========================
+           TEKSTIPUOLI
+        ========================= */
+
+        const content =
             document.createElement(
-                "h2"
+                "div"
             );
 
-        title.className =
-            "offer-title";
+        content.className =
+            "campaign-content";
+
+
+        const label =
+            document.createElement(
+                "span"
+            );
+
+        label.className =
+            "campaign-label";
 
 
         const titleText =
@@ -705,6 +732,41 @@ function renderOffers() {
                     offer.title_en ||
                     offer.title_fi
                 );
+
+
+        const titleForCheck =
+            (
+                offer.title_en ||
+                offer.title_fi ||
+                ""
+            ).toLowerCase();
+
+
+        if (
+            titleForCheck.includes(
+                "brunch"
+            )
+        ) {
+
+            label.textContent =
+                "WEEKEND VIBES";
+
+        } else {
+
+            label.textContent =
+                currentLanguage === "fi"
+                    ? "AJANKOHTAISTA"
+                    : "CURRENT";
+        }
+
+
+        const title =
+            document.createElement(
+                "h2"
+            );
+
+        title.textContent =
+            titleText;
 
 
         const startTime =
@@ -718,42 +780,37 @@ function renderOffers() {
             );
 
 
-        title.textContent =
-            startTime && endTime
-                ? `${titleText} · ${startTime}–${endTime}`
-                : titleText;
-
-
-        card.appendChild(
-            title
-        );
-
-
-        const descriptionText =
-            currentLanguage === "fi"
-                ? offer.description_fi
-                : offer.description_en;
-
-
-        if (descriptionText) {
-
-            const description =
-                document.createElement(
-                    "p"
-                );
-
-            description.className =
-                "offer-description";
-
-            description.textContent =
-                descriptionText;
-
-
-            card.appendChild(
-                description
+        const time =
+            document.createElement(
+                "div"
             );
+
+        time.className =
+            "campaign-time";
+
+
+        if (
+            startTime &&
+            endTime
+        ) {
+
+            time.textContent =
+                `${startTime}–${endTime}`;
         }
 
+
+        content.appendChild(label);
+        content.appendChild(title);
+
+
+        if (time.textContent) {
+            content.appendChild(time);
+        }
+
+
+        /* =========================
+           KAMPANJAN TUOTTEET
+        ========================= */
 
         const itemsContainer =
             document.createElement(
@@ -761,7 +818,7 @@ function renderOffers() {
             );
 
         itemsContainer.className =
-            "offer-items";
+            "campaign-items";
 
 
         items.forEach((item) => {
@@ -772,7 +829,7 @@ function renderOffers() {
                 );
 
             row.className =
-                "offer-item";
+                "campaign-item";
 
 
             const name =
@@ -800,14 +857,8 @@ function renderOffers() {
                 );
 
 
-            row.appendChild(
-                name
-            );
-
-            row.appendChild(
-                price
-            );
-
+            row.appendChild(name);
+            row.appendChild(price);
 
             itemsContainer.appendChild(
                 row
@@ -816,22 +867,52 @@ function renderOffers() {
         });
 
 
-        card.appendChild(
+        content.appendChild(
             itemsContainer
         );
 
 
-        offersArea.appendChild(
-            card
-        );
+        /* =========================
+           KUVA
+        ========================= */
+
+        const image =
+            document.createElement(
+                "div"
+            );
+
+        image.className =
+            "campaign-image";
+
+        image.style.backgroundImage =
+            'url("images/photo3.png")';
+
+
+        card.appendChild(content);
+        card.appendChild(image);
+
+        offersArea.appendChild(card);
 
     });
 
 
-    offersArea.hidden =
-        offersArea.children.length === 0;
-}
+    /* Jos kampanjoita ei ole, koko alue katoaa */
 
+    const hasOffers =
+        offersArea.children.length > 0;
+
+
+    offersArea.hidden =
+        !hasOffers;
+
+
+    if (campaignSection) {
+
+        campaignSection.hidden =
+            !hasOffers;
+    }
+
+}
 
 
 /* =========================================================
