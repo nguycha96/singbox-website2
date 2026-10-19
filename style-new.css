@@ -3821,7 +3821,7 @@ a.footer-contact-link:hover svg {
     }
 
     .about-inner h2 {
-        font-size: 3.5rem;
+        font-size: 3.2rem;
     }
 
 
@@ -3962,16 +3962,13 @@ a.footer-contact-link:hover svg {
         min-height: 390px;
     }
 
-    .rooms-copy h2,
-    .food-copy h2,
-    .about-inner h2,
-    .cta-content h2 {
-        font-size: 3.15rem;
-    }
-
-    .pricing-heading h2 {
-        font-size: 3.15rem;
-    }
+.rooms-copy h2,
+.food-copy h2,
+.about-inner h2,
+.cta-content h2,
+.pricing-heading h2 {
+    font-size: 3rem;
+}
 
     .room-meta {
         align-items: flex-start;
