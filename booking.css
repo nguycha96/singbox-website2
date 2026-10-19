@@ -1924,6 +1924,9 @@ a {
 
 /* Oikean reunan FI | EN + takaisin */
 .booking-header-actions {
+    position: relative;
+    z-index: 101;
+
     display: flex;
     align-items: center;
     gap: 30px;
