@@ -750,7 +750,7 @@ if (
 
     label.textContent =
         currentLanguage === "fi"
-            ? "VIIKONLOPPUFIILIS"
+            ? "VIIKONLOPUN TUNNELMA"
             : "WEEKEND VIBES";
 
 } else {
