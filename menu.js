@@ -742,22 +742,24 @@ function renderOffers() {
             ).toLowerCase();
 
 
-        if (
-            titleForCheck.includes(
-                "brunch"
-            )
-        ) {
+if (
+    titleForCheck.includes(
+        "brunch"
+    )
+) {
 
-            label.textContent =
-                "WEEKEND VIBES";
+    label.textContent =
+        currentLanguage === "fi"
+            ? "VIIKONLOPPUFIILIS"
+            : "WEEKEND VIBES";
 
-        } else {
+} else {
 
-            label.textContent =
-                currentLanguage === "fi"
-                    ? "AJANKOHTAISTA"
-                    : "CURRENT";
-        }
+    label.textContent =
+        currentLanguage === "fi"
+            ? "AJANKOHTAISTA"
+            : "CURRENT";
+}
 
 
         const title =
