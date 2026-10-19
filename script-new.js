@@ -647,7 +647,7 @@ const translations = {
             "Up to 4 guests",
 
         "room.sixGuests":
-            "Up to 6 guests",
+            "Up to 7 guests",
 
         "room.from":
             "From",
@@ -674,7 +674,7 @@ const translations = {
             "Up to 4 guests",
 
         "pricing.sixPeople":
-            "Up to 6 guests",
+            "Up to 7 guests",
 
         "pricing.monThu":
             "Mon–Thu",
@@ -930,7 +930,7 @@ const translations = {
             "Enintään 4 henkilöä",
 
         "room.sixGuests":
-            "Enintään 6 henkilöä",
+            "Enintään 7 henkilöä",
 
         "room.from":
             "Alkaen",
@@ -957,7 +957,7 @@ const translations = {
             "Enintään 4 henkilöä",
 
         "pricing.sixPeople":
-            "Enintään 6 henkilöä",
+            "Enintään 7 henkilöä",
 
         "pricing.monThu":
             "Ma–To",
