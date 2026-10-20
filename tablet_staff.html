@@ -142,6 +142,91 @@
     </div>
 </section>
 
+        <section class="stock-section">
+
+    <div class="staff-eyebrow">
+        TUOTTEET
+    </div>
+
+    <h2>
+        Kirjaa poistuma
+    </h2>
+
+    <div class="stock-form">
+
+        <label>
+            Tuote
+
+            <select id="stockProduct">
+                <option value="">
+                    Valitse tuote
+                </option>
+            </select>
+        </label>
+
+
+        <label>
+            Syy
+
+            <select id="stockMovementType">
+                <option value="waste">
+                    Hävikki / vanhentunut
+                </option>
+
+                <option value="broken">
+                    Rikki
+                </option>
+
+                <option value="staff">
+                    Henkilökunnan käyttö
+                </option>
+
+                <option value="other">
+                    Muu poisto
+                </option>
+            </select>
+        </label>
+
+
+        <label>
+            Määrä
+
+            <input
+                id="stockQuantity"
+                type="number"
+                min="1"
+                value="1"
+            >
+        </label>
+
+
+        <label>
+            Huomio
+
+            <input
+                id="stockNote"
+                type="text"
+                placeholder="Vapaaehtoinen"
+            >
+        </label>
+
+
+        <button
+            type="button"
+            id="saveStockMovement"
+        >
+            KIRJAA POISTUMA
+        </button>
+
+    </div>
+
+    <p
+        id="stockMessage"
+        hidden
+    ></p>
+
+</section>
+
     </main>
 
 
