@@ -1504,6 +1504,29 @@ h2 {
     margin-bottom: 25px;
 }
 
+.food-brunch-teaser {
+    margin-bottom: 25px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    color: var(--pink);
+
+    font-size: 0.68rem;
+    font-weight: 600;
+
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.food-brunch-teaser[hidden] {
+    display: none;
+}
+
+.food-brunch-dot {
+    color: var(--gold);
+}
 
 /* =========================================================
    MENU PAGE
