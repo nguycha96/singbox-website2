@@ -1346,6 +1346,171 @@ setLanguage(
     getInitialLanguage()
 );
 
+/* =========================================================
+   SATURDAY BRUNCH TEASER
+========================================================= */
+
+const SITE_SUPABASE_URL =
+    "https://tikatiahzawstvrdqfix.supabase.co";
+
+const SITE_SUPABASE_KEY =
+    "sb_publishable_ZfYe1fy7Dxu59HfTLSQ7Cw_EK0xGl34";
+
+const siteSupabaseClient =
+    supabase.createClient(
+        SITE_SUPABASE_URL,
+        SITE_SUPABASE_KEY
+    );
+
+
+let activeBrunchOffer = null;
+
+
+function shortTime(time) {
+
+    if (!time) {
+        return "";
+    }
+
+    return time.slice(0, 5);
+}
+
+
+function renderBrunchTeaser() {
+
+    const teaser =
+        document.getElementById(
+            "foodBrunchTeaser"
+        );
+
+    const title =
+        document.getElementById(
+            "foodBrunchTitle"
+        );
+
+    const time =
+        document.getElementById(
+            "foodBrunchTime"
+        );
+
+
+    if (
+        !teaser ||
+        !title ||
+        !time
+    ) {
+        return;
+    }
+
+
+    if (!activeBrunchOffer) {
+
+        teaser.hidden = true;
+        return;
+    }
+
+
+    const language =
+        document.documentElement.lang === "en"
+            ? "en"
+            : "fi";
+
+
+    title.textContent =
+        language === "fi"
+            ? (
+                activeBrunchOffer.title_fi ||
+                "Lauantain brunssi"
+            )
+            : (
+                activeBrunchOffer.title_en ||
+                "Saturday Brunch"
+            );
+
+
+    const start =
+        shortTime(
+            activeBrunchOffer.starts_at
+        );
+
+    const end =
+        shortTime(
+            activeBrunchOffer.ends_at
+        );
+
+
+    time.textContent =
+        start && end
+            ? `${start}–${end}`
+            : "";
+
+
+    teaser.hidden = false;
+}
+
+
+async function loadBrunchTeaser() {
+
+    const {
+        data,
+        error
+    } =
+        await siteSupabaseClient
+            .from("offers")
+            .select(
+                "id, title_fi, title_en, starts_at, ends_at, active"
+            )
+            .eq(
+                "active",
+                true
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Could not load brunch teaser:",
+            error
+        );
+
+        return;
+    }
+
+
+    activeBrunchOffer =
+        (data || []).find(
+            (offer) => {
+
+                const title =
+                    `${offer.title_fi || ""} ${offer.title_en || ""}`
+                        .toLowerCase();
+
+                return (
+                    title.includes("brunssi") ||
+                    title.includes("brunch")
+                );
+
+            }
+        ) || null;
+
+
+    renderBrunchTeaser();
+}
+
+
+languageButtons.forEach(
+    (button) => {
+
+        button.addEventListener(
+            "click",
+            renderBrunchTeaser
+        );
+
+    }
+);
+
+
+loadBrunchTeaser();
 
 
 /* =========================================================
