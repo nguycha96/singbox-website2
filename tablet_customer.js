@@ -70,7 +70,7 @@ let activeCategory = "snacks";
 async function loadProducts() {
 
     const { data, error } = await supabaseClient
-        .from("products")
+        .from("customer_products")
 .select(
     "id, category, price, name_fi, name_en, available, sort_order"
 )
