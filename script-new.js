@@ -839,7 +839,7 @@ const translations = {
             "Korean noraebang.<br>Your way.",
 
         "about.text":
-            "SiNG BOX brings Korean private-room karaoke culture to Finland with music, food, drinks and a space made for spending time together.",
+            "SiNG BOX brings the Korean private-room karaoke experience to Finland – music, food, drinks, and your own space to enjoy the evening together.",
 
 /* CONTACT */
 
@@ -1122,7 +1122,7 @@ const translations = {
             "Korealainen noraebang.<br>Teidän tavallanne.",
 
         "about.text":
-            "SiNG BOX tuo korealaisen yksityishuonekaraoken Suomeen – musiikkia, ruokaa, juomia ja oma tila yhteiseen illanviettoon.",
+            "SiNG BOX tuo korealaiset yksityiset karaokehuoneet Suomeen – musiikkia, ruokaa, juomia ja oma tila yhteiseen illanviettoon.",
 
        /* CONTACT */
 
