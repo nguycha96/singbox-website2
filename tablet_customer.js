@@ -14,6 +14,227 @@ const supabaseClient =
         SUPABASE_KEY
     );
 
+/* =========================================================
+   CUSTOMER TABLET — DEVICE PAIRING
+========================================================= */
+
+const CUSTOMER_DEVICE_STORAGE_KEY =
+    "singbox-customer-device-uuid";
+
+
+function getCustomerDeviceUuid() {
+
+    return localStorage.getItem(
+        CUSTOMER_DEVICE_STORAGE_KEY
+    );
+}
+
+
+function showCustomerPairingScreen() {
+
+    const screen =
+        document.getElementById(
+            "customerPairingScreen"
+        );
+
+    if (screen) {
+        screen.hidden = false;
+    }
+}
+
+
+function hideCustomerPairingScreen() {
+
+    const screen =
+        document.getElementById(
+            "customerPairingScreen"
+        );
+
+    if (screen) {
+        screen.hidden = true;
+    }
+}
+
+
+async function validateCustomerDevice() {
+
+    const deviceUuid =
+        getCustomerDeviceUuid();
+
+
+    if (!deviceUuid) {
+
+        showCustomerPairingScreen();
+        return false;
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.rpc(
+            "validate_customer_device",
+            {
+                p_device_uuid:
+                    deviceUuid
+            }
+        );
+
+
+    if (
+        error ||
+        data !== true
+    ) {
+
+        localStorage.removeItem(
+            CUSTOMER_DEVICE_STORAGE_KEY
+        );
+
+        showCustomerPairingScreen();
+
+        return false;
+    }
+
+
+    hideCustomerPairingScreen();
+
+    return true;
+}
+
+
+async function pairCustomerDevice() {
+
+    const input =
+        document.getElementById(
+            "customerPairingCode"
+        );
+
+    const button =
+        document.getElementById(
+            "pairCustomerDevice"
+        );
+
+    const message =
+        document.getElementById(
+            "customerPairingMessage"
+        );
+
+
+    const pairingCode =
+        input?.value.trim();
+
+
+    if (!pairingCode) {
+
+        if (message) {
+
+            message.hidden = false;
+
+            message.textContent =
+                "Syötä parituskoodi.";
+        }
+
+        return;
+    }
+
+
+    if (button) {
+        button.disabled = true;
+    }
+
+
+    if (message) {
+
+        message.hidden = false;
+
+        message.textContent =
+            "Yhdistetään...";
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.rpc(
+            "pair_customer_device",
+            {
+                p_pairing_code:
+                    pairingCode
+            }
+        );
+
+
+    if (
+        error ||
+        !data
+    ) {
+
+        if (button) {
+            button.disabled = false;
+        }
+
+        if (message) {
+
+            message.textContent =
+                "Parituskoodi ei kelpaa tai se on jo käytetty.";
+        }
+
+        return;
+    }
+
+
+    localStorage.setItem(
+        CUSTOMER_DEVICE_STORAGE_KEY,
+        data
+    );
+
+
+    if (input) {
+        input.value = "";
+    }
+
+
+    if (message) {
+
+        message.textContent =
+            "Tabletti yhdistetty ✓";
+    }
+
+
+    setTimeout(
+        () => {
+
+            hideCustomerPairingScreen();
+
+        },
+        500
+    );
+}
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const pairingButton =
+            document.getElementById(
+                "pairCustomerDevice"
+            );
+
+
+        pairingButton
+            ?.addEventListener(
+                "click",
+                pairCustomerDevice
+            );
+
+
+        validateCustomerDevice();
+
+    }
+);
 
 /* =========================================================
    CUSTOMER TABLET — PRODUCTS
