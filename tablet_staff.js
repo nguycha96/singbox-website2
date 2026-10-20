@@ -1,4 +1,221 @@
 /* =========================================================
+   STAFF TABLET — DEVICE PAIRING
+========================================================= */
+
+const STAFF_SUPABASE_URL =
+    "https://tikatiahzawstvrdqfix.supabase.co";
+
+const STAFF_SUPABASE_KEY =
+    "sb_publishable_ZfYe1fy7Dxu59HfTLSQ7Cw_EK0xGl34";
+
+
+const staffSupabaseClient =
+    supabase.createClient(
+        STAFF_SUPABASE_URL,
+        STAFF_SUPABASE_KEY
+    );
+
+
+const STAFF_DEVICE_STORAGE_KEY =
+    "singbox-staff-device-uuid";
+
+
+const staffApp =
+    document.getElementById(
+        "staffApp"
+    );
+
+const staffPairingScreen =
+    document.getElementById(
+        "staffPairingScreen"
+    );
+
+const staffPairingCode =
+    document.getElementById(
+        "staffPairingCode"
+    );
+
+const pairStaffDeviceButton =
+    document.getElementById(
+        "pairStaffDevice"
+    );
+
+const staffPairingMessage =
+    document.getElementById(
+        "staffPairingMessage"
+    );
+
+
+function showPairingScreen() {
+
+    if (staffApp) {
+        staffApp.hidden = true;
+    }
+
+    if (staffPairingScreen) {
+        staffPairingScreen.hidden = false;
+    }
+}
+
+
+function showStaffApp() {
+
+    if (staffPairingScreen) {
+        staffPairingScreen.hidden = true;
+    }
+
+    if (staffApp) {
+        staffApp.hidden = false;
+    }
+}
+
+
+async function validateStoredStaffDevice() {
+
+    const deviceUuid =
+        localStorage.getItem(
+            STAFF_DEVICE_STORAGE_KEY
+        );
+
+
+    if (!deviceUuid) {
+
+        showPairingScreen();
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await staffSupabaseClient.rpc(
+            "validate_staff_device",
+            {
+                p_device_uuid:
+                    deviceUuid
+            }
+        );
+
+
+    if (
+        error ||
+        data !== true
+    ) {
+
+        localStorage.removeItem(
+            STAFF_DEVICE_STORAGE_KEY
+        );
+
+        showPairingScreen();
+
+        return;
+    }
+
+
+    showStaffApp();
+}
+
+
+async function pairStaffDevice() {
+
+    const pairingCode =
+        staffPairingCode
+            ?.value
+            .trim();
+
+
+    if (!pairingCode) {
+
+        staffPairingMessage.hidden =
+            false;
+
+        staffPairingMessage.textContent =
+            "Syötä parituskoodi.";
+
+        return;
+    }
+
+
+    pairStaffDeviceButton.disabled =
+        true;
+
+
+    staffPairingMessage.hidden =
+        false;
+
+    staffPairingMessage.textContent =
+        "Yhdistetään...";
+
+
+    const {
+        data,
+        error
+    } =
+        await staffSupabaseClient.rpc(
+            "pair_staff_device",
+            {
+                p_pairing_code:
+                    pairingCode
+            }
+        );
+
+
+    if (
+        error ||
+        !data
+    ) {
+
+        pairStaffDeviceButton.disabled =
+            false;
+
+        staffPairingMessage.textContent =
+            "Parituskoodi ei kelpaa tai se on jo käytetty.";
+
+        return;
+    }
+
+
+    localStorage.setItem(
+        STAFF_DEVICE_STORAGE_KEY,
+        data
+    );
+
+
+    staffPairingMessage.textContent =
+        "Tabletti yhdistetty.";
+
+
+    staffPairingCode.value =
+        "";
+
+
+    setTimeout(
+        () => {
+
+            showStaffApp();
+
+        },
+        500
+    );
+}
+
+
+pairStaffDeviceButton
+    ?.addEventListener(
+        "click",
+        pairStaffDevice
+    );
+
+
+if (staffApp) {
+    staffApp.hidden = true;
+}
+
+
+validateStoredStaffDevice();
+
+/* =========================================================
    SUPABASE
 ========================================================= */
 
