@@ -1061,3 +1061,71 @@ button {
 .staff-call-confirm:active {
     transform: scale(0.98);
 }
+
+.customer-pairing-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    display: grid;
+    place-items: center;
+
+    padding: 30px;
+
+    background: rgba(0, 24, 17, 0.98);
+}
+
+.customer-pairing-screen[hidden] {
+    display: none;
+}
+
+.customer-pairing-card {
+    width: min(520px, 100%);
+
+    padding: 40px;
+
+    border: 1px solid rgba(218, 176, 67, 0.4);
+    border-radius: 22px;
+
+    background: #002117;
+}
+
+.customer-pairing-card h1 {
+    margin: 12px 0 16px;
+}
+
+.customer-pairing-card p {
+    margin-bottom: 24px;
+}
+
+.customer-pairing-card input {
+    width: 100%;
+
+    margin-bottom: 16px;
+    padding: 16px 18px;
+
+    border: 1px solid rgba(218, 176, 67, 0.45);
+    border-radius: 12px;
+
+    background: #001810;
+    color: #f5e7be;
+
+    font: inherit;
+}
+
+.customer-pairing-card button {
+    width: 100%;
+
+    padding: 16px 20px;
+
+    border: 0;
+    border-radius: 999px;
+
+    background: #ff1493;
+    color: #001810;
+
+    font-weight: 700;
+    letter-spacing: 0.08em;
+
+    cursor: pointer;
+}
