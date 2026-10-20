@@ -872,17 +872,84 @@ if (staffCallCancel) {
 }
 
 
-/*
-   Oikea henkilökuntakutsu lisätään myöhemmin,
-   kun huonetabletin turvallinen tunnistautuminen on käytössä.
-*/
-
 if (staffCallConfirm) {
 
     staffCallConfirm.addEventListener(
         "click",
-        () => {
-            closeStaffCall();
+        async () => {
+
+            const deviceUuid =
+                getCustomerDeviceUuid();
+
+
+            if (!deviceUuid) {
+
+                showCustomerPairingScreen();
+                return;
+            }
+
+
+            staffCallConfirm.disabled = true;
+
+            staffCallConfirm.textContent =
+                currentLanguage === "fi"
+                    ? "Lähetetään..."
+                    : "Sending...";
+
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient.rpc(
+                    "customer_create_service_call",
+                    {
+                        p_device_uuid:
+                            deviceUuid
+                    }
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "Staff call failed:",
+                    error
+                );
+
+                staffCallConfirm.disabled = false;
+
+                staffCallConfirm.textContent =
+                    currentLanguage === "fi"
+                        ? "Yritä uudelleen"
+                        : "Try again";
+
+                return;
+            }
+
+
+            staffCallConfirm.textContent =
+                currentLanguage === "fi"
+                    ? "Kutsu lähetetty ✓"
+                    : "Staff called ✓";
+
+
+            setTimeout(
+                () => {
+
+                    closeStaffCall();
+
+                    staffCallConfirm.disabled =
+                        false;
+
+                    staffCallConfirm.textContent =
+                        currentLanguage === "fi"
+                            ? "Kutsu henkilökunta"
+                            : "Call staff";
+
+                },
+                900
+            );
         }
     );
 }
