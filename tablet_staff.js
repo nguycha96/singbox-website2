@@ -537,3 +537,292 @@ if (roomBookings.length === 0) {
 ========================================================= */
 
 loadRooms();
+
+
+/* =========================================================
+   STOCK MOVEMENTS
+========================================================= */
+
+const stockProduct =
+    document.getElementById(
+        "stockProduct"
+    );
+
+const stockMovementType =
+    document.getElementById(
+        "stockMovementType"
+    );
+
+const stockQuantity =
+    document.getElementById(
+        "stockQuantity"
+    );
+
+const stockNote =
+    document.getElementById(
+        "stockNote"
+    );
+
+const saveStockMovementButton =
+    document.getElementById(
+        "saveStockMovement"
+    );
+
+const stockMessage =
+    document.getElementById(
+        "stockMessage"
+    );
+
+
+/* =========================================================
+   LOAD PRODUCTS
+========================================================= */
+
+async function loadStockProducts() {
+
+    if (!stockProduct) {
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await staffSupabaseClient
+            .from(
+                "customer_products"
+            )
+            .select(
+                "id, name_fi, category, available"
+            )
+            .order(
+                "name_fi",
+                {
+                    ascending: true
+                }
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Could not load stock products:",
+            error
+        );
+
+        return;
+    }
+
+
+    stockProduct.innerHTML = `
+        <option value="">
+            Valitse tuote
+        </option>
+    `;
+
+
+    (data || []).forEach(
+        (product) => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                product.id;
+
+
+            option.textContent =
+                product.available
+                    ? product.name_fi
+                    : `${product.name_fi} (ei myynnissä)`;
+
+
+            stockProduct.appendChild(
+                option
+            );
+
+        }
+    );
+}
+
+
+/* =========================================================
+   SAVE STOCK MOVEMENT
+========================================================= */
+
+async function saveStockMovement() {
+
+    const deviceUuid =
+        localStorage.getItem(
+            STAFF_DEVICE_STORAGE_KEY
+        );
+
+
+    if (!deviceUuid) {
+
+        showPairingScreen();
+        return;
+    }
+
+
+    const productId =
+        Number(
+            stockProduct.value
+        );
+
+
+    const quantity =
+        Number(
+            stockQuantity.value
+        );
+
+
+    const movementType =
+        stockMovementType.value;
+
+
+    const note =
+        stockNote.value.trim();
+
+
+    if (!productId) {
+
+        stockMessage.hidden =
+            false;
+
+        stockMessage.textContent =
+            "Valitse tuote.";
+
+        return;
+    }
+
+
+    if (
+        !Number.isInteger(quantity) ||
+        quantity < 1
+    ) {
+
+        stockMessage.hidden =
+            false;
+
+        stockMessage.textContent =
+            "Määrän täytyy olla vähintään 1.";
+
+        return;
+    }
+
+
+    saveStockMovementButton.disabled =
+        true;
+
+
+    stockMessage.hidden =
+        false;
+
+    stockMessage.textContent =
+        "Tallennetaan...";
+
+
+    const {
+        data,
+        error
+    } =
+        await staffSupabaseClient.rpc(
+            "staff_log_stock_movement",
+            {
+                p_device_uuid:
+                    deviceUuid,
+
+                p_product_id:
+                    productId,
+
+                p_quantity:
+                    quantity,
+
+                p_movement_type:
+                    movementType,
+
+                p_note:
+                    note || null
+            }
+        );
+
+
+    saveStockMovementButton.disabled =
+        false;
+
+
+    if (error) {
+
+        console.error(
+            "Could not save stock movement:",
+            error
+        );
+
+
+        if (
+            error.message
+                ?.toLowerCase()
+                .includes(
+                    "unauthorized staff device"
+                )
+        ) {
+
+            localStorage.removeItem(
+                STAFF_DEVICE_STORAGE_KEY
+            );
+
+            showPairingScreen();
+
+            return;
+        }
+
+
+        stockMessage.textContent =
+            "Tallennus epäonnistui.";
+
+        return;
+    }
+
+
+    stockMessage.textContent =
+        "Poistuma kirjattu ✓";
+
+
+    stockProduct.value =
+        "";
+
+    stockMovementType.value =
+        "waste";
+
+    stockQuantity.value =
+        "1";
+
+    stockNote.value =
+        "";
+
+
+    setTimeout(
+        () => {
+
+            stockMessage.hidden =
+                true;
+
+        },
+        3000
+    );
+}
+
+
+saveStockMovementButton
+    ?.addEventListener(
+        "click",
+        saveStockMovement
+    );
+
+
+loadStockProducts();
