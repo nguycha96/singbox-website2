@@ -798,10 +798,11 @@ if (sendRoomOrderButton) {
         cart.length === 0;
 }
 
+}
+
 /* =========================================================
    SEND ROOM ORDER
 ========================================================= */
-
 async function sendRoomOrder() {
 
     if (cart.length === 0) {
