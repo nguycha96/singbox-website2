@@ -370,9 +370,11 @@ async function loadRooms() {
         "Ladataan huoneita...";
 
 
+    /* ROOMS */
+
     const {
         data: rooms,
-        error
+        error: roomsError
     } =
         await supabaseClient
             .from("rooms")
@@ -385,11 +387,11 @@ async function loadRooms() {
             );
 
 
-    if (error) {
+    if (roomsError) {
 
         console.error(
             "Could not load rooms:",
-            error
+            roomsError
         );
 
         roomsContainer.textContent =
@@ -399,58 +401,55 @@ async function loadRooms() {
     }
 
 
+    /* BOOKINGS
+       Huoneet piirretään silti, vaikka varausten haku epäonnistuisi.
+    */
+
+    const deviceUuid =
+        localStorage.getItem(
+            STAFF_DEVICE_STORAGE_KEY
+        );
+
+
+    let bookings = [];
+
+
+    if (deviceUuid) {
+
+        const {
+            data: bookingsData,
+            error: bookingsError
+        } =
+            await supabaseClient.rpc(
+                "staff_get_bookings",
+                {
+                    p_device_uuid:
+                        deviceUuid
+                }
+            );
+
+
+        if (bookingsError) {
+
+            console.error(
+                "Could not load bookings:",
+                bookingsError
+            );
+
+        } else {
+
+            bookings =
+                bookingsData || [];
+        }
+    }
+
+
+    const now =
+        new Date();
+
+
     roomsContainer.replaceChildren();
 
-
-    rooms.forEach((room) => {
-
-        const card =
-            document.createElement(
-                "article"
-            );
-
-        card.className =
-            "staff-room-card";
-
-
-        const header =
-            document.createElement(
-                "div"
-            );
-
-        header.className =
-            "room-card-header";
-
-
-        const name =
-            document.createElement(
-                "h2"
-            );
-
-        name.textContent =
-            room.name;
-
-
-        const status =
-            document.createElement(
-                "span"
-            );
-
-        status.className =
-            "room-status";
-
-        status.textContent =
-            "Testi";
-
-
-        header.appendChild(name);
-        header.appendChild(status);
-
-        card.appendChild(header);
-
-        roomsContainer.appendChild(card);
-    });
-}
 
     /* =====================================================
        HELPERS
@@ -470,9 +469,31 @@ async function loadRooms() {
         booking
     ) {
 
-        return new Date(
-            `${booking.booking_date}T${booking.end_time}`
-        );
+        const start =
+            bookingStartDate(
+                booking
+            );
+
+        const end =
+            new Date(
+                `${booking.booking_date}T${booking.end_time}`
+            );
+
+
+        /*
+           Jos varaus jatkuu keskiyön yli,
+           loppuaika kuuluu seuraavalle päivälle.
+        */
+
+        if (end <= start) {
+
+            end.setDate(
+                end.getDate() + 1
+            );
+        }
+
+
+        return end;
     }
 
 
@@ -507,16 +528,24 @@ async function loadRooms() {
             "staff-booking-summary";
 
 
-        const label =
-            document.createElement(
-                "div"
+        if (labelText) {
+
+            const label =
+                document.createElement(
+                    "div"
+                );
+
+            label.className =
+                "staff-booking-label";
+
+            label.textContent =
+                labelText;
+
+
+            block.appendChild(
+                label
             );
-
-        label.className =
-            "staff-booking-label";
-
-        label.textContent =
-            labelText;
+        }
 
 
         const date =
@@ -559,10 +588,6 @@ async function loadRooms() {
 
 
         block.appendChild(
-            label
-        );
-
-        block.appendChild(
             date
         );
 
@@ -587,7 +612,7 @@ async function loadRooms() {
         (room) => {
 
             const roomBookings =
-                (bookings || [])
+                bookings
                     .filter(
                         booking =>
                             Number(
@@ -605,8 +630,8 @@ async function loadRooms() {
 
 
             /*
-               Past bookings do not need
-               to fill the staff screen.
+               Vanhat varaukset eivät täytä
+               henkilökunnan näkymää.
             */
 
             const relevantBookings =
@@ -638,7 +663,7 @@ async function loadRooms() {
                             now < end
                         );
                     }
-                );
+                ) || null;
 
 
             const futureBookings =
@@ -656,11 +681,7 @@ async function loadRooms() {
 
 
             const hiddenBookings =
-                futureBookings.filter(
-                    booking =>
-                        booking !==
-                        nextBooking
-                );
+                futureBookings.slice(1);
 
 
             /* CARD */
@@ -788,11 +809,7 @@ async function loadRooms() {
             }
 
 
-            if (
-                nextBooking &&
-                nextBooking !==
-                    currentBooking
-            ) {
+            if (nextBooking) {
 
                 bookingColumn.appendChild(
                     createBookingSummary(
@@ -860,7 +877,9 @@ async function loadRooms() {
 
             /* ================================
                RIGHT — ROOM ORDERS
-               Kytketään Supabaseen seuraavaksi.
+
+               Varsinainen tilaushaku
+               kytketään seuraavassa vaiheessa.
             ================================ */
 
             const ordersColumn =
@@ -940,7 +959,6 @@ async function loadRooms() {
 ========================================================= */
 
 loadRooms();
-
 
 /* =========================================================
    STOCK MOVEMENTS
