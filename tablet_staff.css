@@ -716,3 +716,166 @@ body {
     opacity: 0.55;
     cursor: default;
 }
+
+
+/* =========================================================
+   COMPACT ROOM STATUS LAYOUT
+========================================================= */
+
+.staff-room-body {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+
+    gap: 0;
+
+    min-height: 180px;
+}
+
+
+.staff-room-bookings,
+.staff-room-orders {
+    min-width: 0;
+
+    padding:
+        18px
+        22px;
+}
+
+
+.staff-room-orders {
+    border-left:
+        1px solid
+        rgba(218, 176, 67, 0.18);
+}
+
+
+/* BOOKING LABEL */
+
+.staff-booking-label,
+.staff-room-orders-heading {
+    margin-bottom: 7px;
+
+    color: #ff1493;
+
+    font-size: 0.68rem;
+    font-weight: 700;
+
+    letter-spacing: 0.16em;
+}
+
+
+/* CURRENT / NEXT BOOKING */
+
+.staff-booking-summary {
+    margin-bottom: 18px;
+}
+
+
+.staff-booking-date {
+    margin-bottom: 3px;
+
+    color:
+        rgba(245, 231, 190, 0.65);
+
+    font-size: 0.72rem;
+
+    text-transform: uppercase;
+}
+
+
+.staff-booking-time {
+    color: #f5e7be;
+
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+
+.staff-booking-customer {
+    margin-top: 3px;
+
+    color:
+        rgba(245, 231, 190, 0.8);
+
+    font-size: 0.82rem;
+}
+
+
+.staff-room-free {
+    margin-bottom: 18px;
+
+    color:
+        rgba(245, 231, 190, 0.7);
+
+    font-size: 0.9rem;
+}
+
+
+/* OTHER BOOKINGS */
+
+.staff-more-bookings {
+    margin-top: 8px;
+}
+
+
+.staff-more-bookings summary {
+    color: #d9b566;
+
+    font-size: 0.76rem;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.staff-booking-summary.compact {
+    margin:
+        12px
+        0
+        0;
+
+    padding-left: 12px;
+
+    border-left:
+        2px solid
+        rgba(255, 20, 147, 0.35);
+}
+
+
+.staff-booking-summary.compact
+.staff-booking-label {
+    display: none;
+}
+
+
+/* ROOM ORDERS */
+
+.staff-no-orders {
+    margin-top: 12px;
+
+    color:
+        rgba(245, 231, 190, 0.55);
+
+    font-size: 0.85rem;
+}
+
+
+/* MOBILE / NARROW TABLET */
+
+@media (max-width: 850px) {
+
+    .staff-room-body {
+        grid-template-columns: 1fr;
+    }
+
+    .staff-room-orders {
+        border-left: 0;
+
+        border-top:
+            1px solid
+            rgba(218, 176, 67, 0.18);
+    }
+}
