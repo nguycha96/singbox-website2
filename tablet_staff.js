@@ -393,29 +393,32 @@ async function loadRooms() {
 
 
     const {
-        data: bookings,
-        error: bookingsError
-    } =
-        await supabaseClient
-            .rpc(
-                "staff_get_bookings",
-                {
-                    p_device_uuid:
-                        deviceUuid
-                }
-            );
-
-
-    if (bookingsError) {
-
-        console.error(
-            "Could not load bookings:",
-            bookingsError
+    data: bookingsData,
+    error: bookingsError
+} =
+    await supabaseClient
+        .rpc(
+            "staff_get_bookings",
+            {
+                p_device_uuid:
+                    deviceUuid
+            }
         );
 
-        return;
-    }
 
+if (bookingsError) {
+
+    console.error(
+        "Could not load bookings:",
+        bookingsError
+    );
+}
+
+
+const bookings =
+    bookingsError
+        ? []
+        : (bookingsData || []);
 
     roomsContainer.replaceChildren();
 
