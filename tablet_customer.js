@@ -782,8 +782,20 @@ function renderCart() {
         );
 
 
-    cartTotal.textContent =
-        `${total.toFixed(2)} €`;
+cartTotal.textContent =
+    `${total.toFixed(2)} €`;
+
+
+const sendRoomOrderButton =
+    document.getElementById(
+        "sendRoomOrder"
+    );
+
+
+if (sendRoomOrderButton) {
+
+    sendRoomOrderButton.disabled =
+        cart.length === 0;
 }
 
 /* =========================================================
