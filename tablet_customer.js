@@ -784,7 +784,6 @@ function renderCart() {
 
     cartTotal.textContent =
         `${total.toFixed(2)} €`;
-   ensureOrderButton();
 }
 
 /* =========================================================
@@ -960,98 +959,6 @@ async function sendRoomOrder() {
 
 
 /* =========================================================
-   ORDER BUTTON
-========================================================= */
-
-function ensureOrderButton() {
-
-    const cartTotal =
-        document.getElementById(
-            "cartTotal"
-        );
-
-
-    if (!cartTotal) {
-        return;
-    }
-
-
-    let orderButton =
-        document.getElementById(
-            "sendRoomOrder"
-        );
-
-
-    let orderMessage =
-        document.getElementById(
-            "orderMessage"
-        );
-
-
-    if (!orderButton) {
-
-        orderButton =
-            document.createElement(
-                "button"
-            );
-
-        orderButton.id =
-            "sendRoomOrder";
-
-        orderButton.type =
-            "button";
-
-        orderButton.className =
-            "send-room-order";
-
-        orderButton.addEventListener(
-            "click",
-            sendRoomOrder
-        );
-
-
-        cartTotal.insertAdjacentElement(
-            "afterend",
-            orderButton
-        );
-    }
-
-
-    if (!orderMessage) {
-
-        orderMessage =
-            document.createElement(
-                "p"
-            );
-
-        orderMessage.id =
-            "orderMessage";
-
-        orderMessage.className =
-            "order-message";
-
-        orderMessage.hidden =
-            true;
-
-
-        orderButton.insertAdjacentElement(
-            "afterend",
-            orderMessage
-        );
-    }
-
-
-    orderButton.textContent =
-        currentLanguage === "fi"
-            ? "Lähetä tilaus"
-            : "Send order";
-
-
-    orderButton.disabled =
-        cart.length === 0;
-}
-
-/* =========================================================
    CART EVENTS
 ========================================================= */
 
@@ -1061,6 +968,10 @@ const cartButton =
 const cartClose =
     document.getElementById("cartClose");
 
+const sendRoomOrderButton =
+    document.getElementById(
+        "sendRoomOrder"
+    );
 
 if (cartButton) {
 
