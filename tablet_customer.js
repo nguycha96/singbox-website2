@@ -992,6 +992,14 @@ if (cartClose) {
 
 }
 
+if (sendRoomOrderButton) {
+
+    sendRoomOrderButton.addEventListener(
+        "click",
+        sendRoomOrder
+    );
+}
+
 /* =========================================================
    STAFF CALL
 ========================================================= */
