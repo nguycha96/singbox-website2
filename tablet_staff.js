@@ -826,3 +826,367 @@ saveStockMovementButton
 
 
 loadStockProducts();
+
+
+/* =========================================================
+   STAFF — SERVICE CALLS
+========================================================= */
+
+let serviceCallPanel = null;
+
+
+function createServiceCallPanel() {
+
+    if (serviceCallPanel) {
+        return;
+    }
+
+
+    serviceCallPanel =
+        document.createElement(
+            "section"
+        );
+
+
+    serviceCallPanel.id =
+        "serviceCallPanel";
+
+    serviceCallPanel.className =
+        "service-call-panel";
+
+    serviceCallPanel.hidden =
+        true;
+
+
+    const staffIntro =
+        document.querySelector(
+            ".staff-intro"
+        );
+
+
+    if (staffIntro) {
+
+        staffIntro.insertAdjacentElement(
+            "afterend",
+            serviceCallPanel
+        );
+
+    } else if (staffApp) {
+
+        staffApp.prepend(
+            serviceCallPanel
+        );
+    }
+}
+
+
+/* =========================================================
+   LOAD OPEN SERVICE CALLS
+========================================================= */
+
+async function loadServiceCalls() {
+
+    const deviceUuid =
+        localStorage.getItem(
+            STAFF_DEVICE_STORAGE_KEY
+        );
+
+
+    if (!deviceUuid) {
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await staffSupabaseClient.rpc(
+            "staff_get_service_calls",
+            {
+                p_device_uuid:
+                    deviceUuid
+            }
+        );
+
+
+    if (error) {
+
+        console.error(
+            "Could not load service calls:",
+            error
+        );
+
+
+        if (
+            error.message
+                ?.toLowerCase()
+                .includes(
+                    "unauthorized staff device"
+                )
+        ) {
+
+            localStorage.removeItem(
+                STAFF_DEVICE_STORAGE_KEY
+            );
+
+            showPairingScreen();
+        }
+
+
+        return;
+    }
+
+
+    renderServiceCalls(
+        data || []
+    );
+}
+
+
+/* =========================================================
+   RENDER CALLS
+========================================================= */
+
+function renderServiceCalls(calls) {
+
+    createServiceCallPanel();
+
+
+    if (!serviceCallPanel) {
+        return;
+    }
+
+
+    serviceCallPanel.replaceChildren();
+
+
+    if (calls.length === 0) {
+
+        serviceCallPanel.hidden =
+            true;
+
+        return;
+    }
+
+
+    serviceCallPanel.hidden =
+        false;
+
+
+    calls.forEach(
+        (call) => {
+
+            const card =
+                document.createElement(
+                    "article"
+                );
+
+
+            card.className =
+                "service-call-card";
+
+
+            const info =
+                document.createElement(
+                    "div"
+                );
+
+
+            info.className =
+                "service-call-info";
+
+
+            const label =
+                document.createElement(
+                    "div"
+                );
+
+
+            label.className =
+                "service-call-label";
+
+            label.textContent =
+                "HENKILÖKUNTAKUTSU";
+
+
+            const title =
+                document.createElement(
+                    "strong"
+                );
+
+
+            title.className =
+                "service-call-title";
+
+            title.textContent =
+                call.room_name;
+
+
+            const time =
+                document.createElement(
+                    "span"
+                );
+
+
+            time.className =
+                "service-call-time";
+
+
+            time.textContent =
+                new Date(
+                    call.created_at
+                ).toLocaleTimeString(
+                    "fi-FI",
+                    {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    }
+                );
+
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.type =
+                "button";
+
+            button.className =
+                "resolve-service-call";
+
+            button.textContent =
+                "KUITTAA HOIDETUKSI";
+
+
+            button.addEventListener(
+                "click",
+                async () => {
+
+                    button.disabled =
+                        true;
+
+                    button.textContent =
+                        "Kuitataan...";
+
+
+                    const success =
+                        await resolveServiceCall(
+                            call.call_id
+                        );
+
+
+                    if (!success) {
+
+                        button.disabled =
+                            false;
+
+                        button.textContent =
+                            "YRITÄ UUDELLEEN";
+                    }
+
+                }
+            );
+
+
+            info.appendChild(
+                label
+            );
+
+            info.appendChild(
+                title
+            );
+
+            info.appendChild(
+                time
+            );
+
+
+            card.appendChild(
+                info
+            );
+
+            card.appendChild(
+                button
+            );
+
+
+            serviceCallPanel.appendChild(
+                card
+            );
+
+        }
+    );
+}
+
+
+/* =========================================================
+   RESOLVE CALL
+========================================================= */
+
+async function resolveServiceCall(
+    callId
+) {
+
+    const deviceUuid =
+        localStorage.getItem(
+            STAFF_DEVICE_STORAGE_KEY
+        );
+
+
+    if (!deviceUuid) {
+        return false;
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await staffSupabaseClient.rpc(
+            "staff_resolve_service_call",
+            {
+                p_device_uuid:
+                    deviceUuid,
+
+                p_call_id:
+                    callId
+            }
+        );
+
+
+    if (
+        error ||
+        data !== true
+    ) {
+
+        console.error(
+            "Could not resolve service call:",
+            error
+        );
+
+        return false;
+    }
+
+
+    await loadServiceCalls();
+
+    return true;
+}
+
+
+/* =========================================================
+   SERVICE CALL POLLING
+========================================================= */
+
+createServiceCallPanel();
+
+loadServiceCalls();
+
+
+setInterval(
+    loadServiceCalls,
+    3000
+);
