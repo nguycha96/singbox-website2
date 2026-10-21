@@ -385,11 +385,22 @@ async function loadRooms() {
         return;
     }
 
+const deviceUuid =
+    localStorage.getItem(
+        STAFF_DEVICE_STORAGE_KEY
+    );
+
 const {
     data: bookings,
     error: bookingsError
 } = await supabaseClient
-    .rpc("get_staff_bookings");
+    .rpc(
+        "staff_get_bookings",
+        {
+            p_device_uuid:
+                deviceUuid
+        }
+    );
 
 
 if (bookingsError) {
