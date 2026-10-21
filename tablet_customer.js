@@ -784,8 +784,272 @@ function renderCart() {
 
     cartTotal.textContent =
         `${total.toFixed(2)} €`;
+   ensureOrderButton();
 }
 
+/* =========================================================
+   SEND ROOM ORDER
+========================================================= */
+
+async function sendRoomOrder() {
+
+    if (cart.length === 0) {
+        return;
+    }
+
+
+    const deviceUuid =
+        getCustomerDeviceUuid();
+
+
+    if (!deviceUuid) {
+
+        showCustomerPairingScreen();
+        return;
+    }
+
+
+    const orderButton =
+        document.getElementById(
+            "sendRoomOrder"
+        );
+
+    const orderMessage =
+        document.getElementById(
+            "orderMessage"
+        );
+
+
+    if (orderButton) {
+
+        orderButton.disabled =
+            true;
+
+        orderButton.textContent =
+            currentLanguage === "fi"
+                ? "Lähetetään..."
+                : "Sending...";
+    }
+
+
+    if (orderMessage) {
+
+        orderMessage.hidden =
+            true;
+    }
+
+
+    const items =
+        cart.map(
+            item => ({
+                product_id:
+                    item.product.id,
+
+                quantity:
+                    item.quantity
+            })
+        );
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.rpc(
+            "customer_create_room_order",
+            {
+                p_device_uuid:
+                    deviceUuid,
+
+                p_items:
+                    items
+            }
+        );
+
+
+    if (error) {
+
+        console.error(
+            "Could not create room order:",
+            error
+        );
+
+
+        if (orderButton) {
+
+            orderButton.disabled =
+                false;
+
+            orderButton.textContent =
+                currentLanguage === "fi"
+                    ? "Lähetä tilaus"
+                    : "Send order";
+        }
+
+
+        if (orderMessage) {
+
+            orderMessage.hidden =
+                false;
+
+            if (
+                error.message
+                    ?.toLowerCase()
+                    .includes(
+                        "no active booking"
+                    )
+            ) {
+
+                orderMessage.textContent =
+                    currentLanguage === "fi"
+                        ? "Tälle huoneelle ei löytynyt aktiivista varausta."
+                        : "No active booking was found for this room.";
+
+            } else {
+
+                orderMessage.textContent =
+                    currentLanguage === "fi"
+                        ? "Tilauksen lähetys epäonnistui."
+                        : "Could not send order.";
+            }
+        }
+
+
+        return;
+    }
+
+
+    cart = [];
+
+    updateCartCount();
+    renderProducts();
+    renderCart();
+
+
+    if (orderMessage) {
+
+        orderMessage.hidden =
+            false;
+
+        orderMessage.textContent =
+            currentLanguage === "fi"
+                ? `Tilaus lähetetty ✓ #${data}`
+                : `Order sent ✓ #${data}`;
+    }
+
+
+    if (orderButton) {
+
+        orderButton.disabled =
+            true;
+
+        orderButton.textContent =
+            currentLanguage === "fi"
+                ? "Tilaus lähetetty ✓"
+                : "Order sent ✓";
+    }
+
+
+    setTimeout(
+        () => {
+            closeCart();
+        },
+        1200
+    );
+}
+
+
+/* =========================================================
+   ORDER BUTTON
+========================================================= */
+
+function ensureOrderButton() {
+
+    const cartTotal =
+        document.getElementById(
+            "cartTotal"
+        );
+
+
+    if (!cartTotal) {
+        return;
+    }
+
+
+    let orderButton =
+        document.getElementById(
+            "sendRoomOrder"
+        );
+
+
+    let orderMessage =
+        document.getElementById(
+            "orderMessage"
+        );
+
+
+    if (!orderButton) {
+
+        orderButton =
+            document.createElement(
+                "button"
+            );
+
+        orderButton.id =
+            "sendRoomOrder";
+
+        orderButton.type =
+            "button";
+
+        orderButton.className =
+            "send-room-order";
+
+        orderButton.addEventListener(
+            "click",
+            sendRoomOrder
+        );
+
+
+        cartTotal.insertAdjacentElement(
+            "afterend",
+            orderButton
+        );
+    }
+
+
+    if (!orderMessage) {
+
+        orderMessage =
+            document.createElement(
+                "p"
+            );
+
+        orderMessage.id =
+            "orderMessage";
+
+        orderMessage.className =
+            "order-message";
+
+        orderMessage.hidden =
+            true;
+
+
+        orderButton.insertAdjacentElement(
+            "afterend",
+            orderMessage
+        );
+    }
+
+
+    orderButton.textContent =
+        currentLanguage === "fi"
+            ? "Lähetä tilaus"
+            : "Send order";
+
+
+    orderButton.disabled =
+        cart.length === 0;
+}
 
 /* =========================================================
    CART EVENTS
