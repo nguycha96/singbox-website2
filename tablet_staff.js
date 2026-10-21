@@ -366,148 +366,166 @@ async function loadRooms() {
     }
 
 
-    const { data, error } =
+    /* ROOMS */
+
+    const {
+        data: rooms,
+        error: roomsError
+    } =
         await supabaseClient
             .from("rooms")
             .select("id, name")
-            .order("id", {
-                ascending: true
-            });
+            .order(
+                "id",
+                {
+                    ascending: true
+                }
+            );
 
 
-    if (error) {
+    if (roomsError) {
 
         console.error(
             "Could not load rooms:",
-            error
+            roomsError
         );
 
         return;
     }
 
-const deviceUuid =
-    localStorage.getItem(
-        STAFF_DEVICE_STORAGE_KEY
-    );
 
-const {
-    data: bookings,
-    error: bookingsError
-} = await supabaseClient
-    .rpc(
-        "staff_get_bookings",
-        {
-            p_device_uuid:
-                deviceUuid
-        }
-    );
+    /* STAFF DEVICE */
+
+    const deviceUuid =
+        localStorage.getItem(
+            STAFF_DEVICE_STORAGE_KEY
+        );
 
 
-if (bookingsError) {
+    if (!deviceUuid) {
+        return;
+    }
 
-    console.error(
-        "Could not load bookings:",
-        bookingsError
-    );
 
-    return;
-}
-   
+    /* BOOKINGS */
+
+    const {
+        data: bookings,
+        error: bookingsError
+    } =
+        await supabaseClient
+            .rpc(
+                "staff_get_bookings",
+                {
+                    p_device_uuid:
+                        deviceUuid
+                }
+            );
+
+
+    if (bookingsError) {
+
+        console.error(
+            "Could not load bookings:",
+            bookingsError
+        );
+
+        return;
+    }
+
+
     roomsContainer.replaceChildren();
 
 
-    data.forEach((room) => {
-
-        const card =
-            document.createElement("article");
-
-        card.className =
-            "staff-room-card";
+    const now =
+        new Date();
 
 
-        const header =
-            document.createElement("div");
+    /* =====================================================
+       HELPERS
+    ===================================================== */
 
-        header.className =
-            "room-card-header";
+    function bookingStartDate(
+        booking
+    ) {
 
-
-        const name =
-            document.createElement("h2");
-
-        name.textContent =
-            room.name;
-
-
-const roomBookings =
-    bookings.filter(
-        (booking) =>
-            booking.room_id === room.id
-    );
+        return new Date(
+            `${booking.booking_date}T${booking.start_time}`
+        );
+    }
 
 
-const status =
-    document.createElement("span");
+    function bookingEndDate(
+        booking
+    ) {
 
-status.className =
-    "room-status";
-
-status.textContent =
-    roomBookings.length === 1
-        ? "1 varaus"
-        : roomBookings.length > 1
-            ? `${roomBookings.length} varausta`
-            : "Ei varauksia";
+        return new Date(
+            `${booking.booking_date}T${booking.end_time}`
+        );
+    }
 
 
-        header.appendChild(name);
-        header.appendChild(status);
+    function formatBookingDate(
+        booking
+    ) {
+
+        return new Date(
+            `${booking.booking_date}T00:00:00`
+        ).toLocaleDateString(
+            "fi-FI",
+            {
+                weekday: "short",
+                day: "numeric",
+                month: "numeric"
+            }
+        );
+    }
 
 
-const content =
-    document.createElement("div");
+    function createBookingSummary(
+        booking,
+        labelText
+    ) {
 
-content.className =
-    "room-card-content";
+        const block =
+            document.createElement(
+                "div"
+            );
+
+        block.className =
+            "staff-booking-summary";
 
 
-if (roomBookings.length === 0) {
+        const label =
+            document.createElement(
+                "div"
+            );
 
-    content.textContent =
-        "Ei varauksia.";
+        label.className =
+            "staff-booking-label";
 
-} else {
-
-    roomBookings.forEach((booking) => {
-
-        const bookingBlock =
-            document.createElement("div");
-
-        bookingBlock.className =
-            "staff-booking";
+        label.textContent =
+            labelText;
 
 
         const date =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
         date.className =
             "staff-booking-date";
 
         date.textContent =
-            new Date(
-                `${booking.booking_date}T00:00:00`
-            ).toLocaleDateString(
-                "fi-FI",
-                {
-                    weekday: "long",
-                    day: "numeric",
-                    month: "numeric"
-                }
+            formatBookingDate(
+                booking
             );
 
 
         const time =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
         time.className =
             "staff-booking-time";
@@ -517,29 +535,392 @@ if (roomBookings.length === 0) {
 
 
         const customer =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
         customer.className =
             "staff-booking-customer";
 
         customer.textContent =
-            `Varaaja: ${booking.customer_name}`;
+            booking.customer_name ||
+            "Ei nimeä";
 
 
-        bookingBlock.appendChild(date);
-        bookingBlock.appendChild(time);
-        bookingBlock.appendChild(customer);
+        block.appendChild(
+            label
+        );
 
-        content.appendChild(bookingBlock);
-    });
-}
+        block.appendChild(
+            date
+        );
+
+        block.appendChild(
+            time
+        );
+
+        block.appendChild(
+            customer
+        );
 
 
-        card.appendChild(header);
-        card.appendChild(content);
+        return block;
+    }
 
-        roomsContainer.appendChild(card);
-    });
+
+    /* =====================================================
+       ROOM CARDS
+    ===================================================== */
+
+    rooms.forEach(
+        (room) => {
+
+            const roomBookings =
+                (bookings || [])
+                    .filter(
+                        booking =>
+                            Number(
+                                booking.room_id
+                            ) ===
+                            Number(
+                                room.id
+                            )
+                    )
+                    .sort(
+                        (a, b) =>
+                            bookingStartDate(a) -
+                            bookingStartDate(b)
+                    );
+
+
+            /*
+               Past bookings do not need
+               to fill the staff screen.
+            */
+
+            const relevantBookings =
+                roomBookings.filter(
+                    booking =>
+                        bookingEndDate(
+                            booking
+                        ) > now
+                );
+
+
+            const currentBooking =
+                relevantBookings.find(
+                    booking => {
+
+                        const start =
+                            bookingStartDate(
+                                booking
+                            );
+
+                        const end =
+                            bookingEndDate(
+                                booking
+                            );
+
+
+                        return (
+                            now >= start &&
+                            now < end
+                        );
+                    }
+                );
+
+
+            const futureBookings =
+                relevantBookings.filter(
+                    booking =>
+                        bookingStartDate(
+                            booking
+                        ) > now
+                );
+
+
+            const nextBooking =
+                futureBookings[0] ||
+                null;
+
+
+            const hiddenBookings =
+                futureBookings.filter(
+                    booking =>
+                        booking !==
+                        nextBooking
+                );
+
+
+            /* CARD */
+
+            const card =
+                document.createElement(
+                    "article"
+                );
+
+            card.className =
+                "staff-room-card";
+
+
+            /* HEADER */
+
+            const header =
+                document.createElement(
+                    "div"
+                );
+
+            header.className =
+                "room-card-header";
+
+
+            const name =
+                document.createElement(
+                    "h2"
+                );
+
+            name.textContent =
+                room.name;
+
+
+            const status =
+                document.createElement(
+                    "span"
+                );
+
+            status.className =
+                "room-status";
+
+
+            if (
+                relevantBookings.length ===
+                0
+            ) {
+
+                status.textContent =
+                    "Ei tulevia varauksia";
+
+            } else if (
+                relevantBookings.length ===
+                1
+            ) {
+
+                status.textContent =
+                    "1 varaus";
+
+            } else {
+
+                status.textContent =
+                    `${relevantBookings.length} varausta`;
+            }
+
+
+            header.appendChild(
+                name
+            );
+
+            header.appendChild(
+                status
+            );
+
+
+            /* BODY */
+
+            const body =
+                document.createElement(
+                    "div"
+                );
+
+            body.className =
+                "staff-room-body";
+
+
+            /* ================================
+               LEFT — BOOKINGS
+            ================================ */
+
+            const bookingColumn =
+                document.createElement(
+                    "div"
+                );
+
+            bookingColumn.className =
+                "staff-room-bookings";
+
+
+            if (currentBooking) {
+
+                bookingColumn.appendChild(
+                    createBookingSummary(
+                        currentBooking,
+                        "NYT"
+                    )
+                );
+
+            } else {
+
+                const free =
+                    document.createElement(
+                        "div"
+                    );
+
+                free.className =
+                    "staff-room-free";
+
+                free.textContent =
+                    "Huone vapaa";
+
+
+                bookingColumn.appendChild(
+                    free
+                );
+            }
+
+
+            if (
+                nextBooking &&
+                nextBooking !==
+                    currentBooking
+            ) {
+
+                bookingColumn.appendChild(
+                    createBookingSummary(
+                        nextBooking,
+                        "SEURAAVA"
+                    )
+                );
+            }
+
+
+            if (
+                hiddenBookings.length >
+                0
+            ) {
+
+                const details =
+                    document.createElement(
+                        "details"
+                    );
+
+                details.className =
+                    "staff-more-bookings";
+
+
+                const summary =
+                    document.createElement(
+                        "summary"
+                    );
+
+                summary.textContent =
+                    `Muut varaukset (${hiddenBookings.length})`;
+
+
+                details.appendChild(
+                    summary
+                );
+
+
+                hiddenBookings.forEach(
+                    booking => {
+
+                        const block =
+                            createBookingSummary(
+                                booking,
+                                ""
+                            );
+
+                        block.classList.add(
+                            "compact"
+                        );
+
+
+                        details.appendChild(
+                            block
+                        );
+                    }
+                );
+
+
+                bookingColumn.appendChild(
+                    details
+                );
+            }
+
+
+            /* ================================
+               RIGHT — ROOM ORDERS
+               Kytketään Supabaseen seuraavaksi.
+            ================================ */
+
+            const ordersColumn =
+                document.createElement(
+                    "div"
+                );
+
+            ordersColumn.className =
+                "staff-room-orders";
+
+
+            const ordersHeading =
+                document.createElement(
+                    "div"
+                );
+
+            ordersHeading.className =
+                "staff-room-orders-heading";
+
+            ordersHeading.textContent =
+                "HUONETILAUKSET";
+
+
+            const noOrders =
+                document.createElement(
+                    "div"
+                );
+
+            noOrders.className =
+                "staff-no-orders";
+
+            noOrders.textContent =
+                currentBooking
+                    ? "Ei avoimia tilauksia"
+                    : "Ei aktiivista asiakasta";
+
+
+            ordersColumn.appendChild(
+                ordersHeading
+            );
+
+            ordersColumn.appendChild(
+                noOrders
+            );
+
+
+            /* BUILD */
+
+            body.appendChild(
+                bookingColumn
+            );
+
+            body.appendChild(
+                ordersColumn
+            );
+
+
+            card.appendChild(
+                header
+            );
+
+            card.appendChild(
+                body
+            );
+
+
+            roomsContainer.appendChild(
+                card
+            );
+        }
+    );
 }
 
 
