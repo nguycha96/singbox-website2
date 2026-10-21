@@ -918,11 +918,9 @@ async function sendRoomOrder() {
 
             } else {
 
-                orderMessage.textContent =
-                    currentLanguage === "fi"
-                        ? "Tilauksen lähetys epäonnistui."
-                        : "Could not send order.";
-            }
+    orderMessage.textContent =
+        `Virhe: ${error.message}`;
+}
         }
 
 
