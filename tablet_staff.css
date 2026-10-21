@@ -611,3 +611,108 @@ body {
 
     cursor: pointer;
 }
+
+
+/* =========================================================
+   SERVICE CALLS
+========================================================= */
+
+.service-call-panel {
+    margin:
+        0
+        0
+        28px;
+
+    padding:
+        0
+        28px;
+}
+
+.service-call-panel[hidden] {
+    display: none;
+}
+
+.service-call-card {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 30px;
+
+    padding:
+        22px
+        26px;
+
+    border:
+        1px solid
+        rgba(255, 20, 147, 0.75);
+
+    border-left:
+        5px solid
+        #ff1493;
+
+    border-radius:
+        16px;
+
+    background:
+        rgba(255, 20, 147, 0.08);
+
+    box-shadow:
+        0 0 30px
+        rgba(255, 20, 147, 0.08);
+}
+
+.service-call-info {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+.service-call-label {
+    color: #ff1493;
+
+    font-size: 0.68rem;
+    font-weight: 700;
+
+    letter-spacing: 0.18em;
+}
+
+.service-call-title {
+    color: #f5e7be;
+
+    font-size: 1.7rem;
+}
+
+.service-call-time {
+    color:
+        rgba(255,255,255,0.65);
+
+    font-size: 0.8rem;
+}
+
+.resolve-service-call {
+    padding:
+        13px
+        22px;
+
+    border:
+        1px solid #ff1493;
+
+    border-radius:
+        999px;
+
+    background: #ff1493;
+    color: #001810;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.resolve-service-call:disabled {
+    opacity: 0.55;
+    cursor: default;
+}
