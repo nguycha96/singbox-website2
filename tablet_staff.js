@@ -1538,6 +1538,17 @@ if (
 
             let billTotal =
                 0;
+           
+billTotal = group.orderItems.reduce(
+    (sum, item) => {
+        const payableQuantity =
+            item.quantity - item.cancelledQuantity;
+
+        return sum +
+            payableQuantity * item.unitPrice;
+    },
+    0
+);
 
 
             group.items.forEach(
@@ -1564,10 +1575,6 @@ if (
                     const rowTotal =
                         item.quantity *
                         item.unitPrice;
-
-
-                    billTotal +=
-                        rowTotal;
 
 
                     const price =
