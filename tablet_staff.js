@@ -1632,13 +1632,18 @@ function renderGroupedRows(
         if (!grouped.has(key)) {
 
             grouped.set(key, {
-                name: item.productName,
-                quantity: 0,
-                unitPrice: item.unitPrice
-            });
+    name: item.productName,
+    quantity: 0,
+    unitPrice: item.unitPrice,
+    orderItems: []
+});
         }
 
         grouped.get(key).quantity += count;
+       grouped.get(key).orderItems.push({
+    orderItemId: item.orderItemId,
+    quantity: count
+});
     });
 
     grouped.forEach((item) => {
