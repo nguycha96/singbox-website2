@@ -1687,6 +1687,15 @@ product.textContent =
                 totalPrice
             );
 
+           
+if (deliveredItems.length > 0) {
+    bill.appendChild(deliveredDetails);
+}
+
+if (cancelledItems.length > 0) {
+    bill.appendChild(cancelledDetails);
+}
+
 
             bill.appendChild(
                 total
