@@ -1551,8 +1551,8 @@ billTotal = group.orderItems.reduce(
 );
 
 
-            group.items.forEach(
-                (item) => {
+            group.orderItems.forEach(
+    (item) => {
 
                     const row =
                         document.createElement(
@@ -1568,13 +1568,16 @@ billTotal = group.orderItems.reduce(
                             "span"
                         );
 
-                    product.textContent =
-                        `${item.quantity} × ${item.productName}`;
+                    const payableQuantity =
+    item.quantity - item.cancelledQuantity;
+
+product.textContent =
+    `${payableQuantity} × ${item.productName}`;
 
 
                     const rowTotal =
-                        item.quantity *
-                        item.unitPrice;
+    payableQuantity *
+    item.unitPrice;
 
 
                     const price =
