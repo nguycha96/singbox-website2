@@ -636,11 +636,7 @@ const renderKey =
         roomOrders:
             roomOrders || [],
 
-        minute:
-            Math.floor(
-                now.getTime() /
-                60000
-            )
+
     });
 
 
@@ -1945,6 +1941,9 @@ loadStockProducts();
 
 let serviceCallPanel = null;
 
+let lastServiceCallsRenderKey =
+    null;
+
 
 function createServiceCallPanel() {
 
@@ -2067,6 +2066,42 @@ function renderServiceCalls(calls) {
     if (!serviceCallPanel) {
         return;
     }
+
+
+    const renderKey =
+        JSON.stringify(
+            (calls || [])
+                .map(
+                    call => ({
+                        call_id:
+                            Number(call.call_id),
+
+                        room_name:
+                            call.room_name,
+
+                        created_at:
+                            call.created_at
+                    })
+                )
+                .sort(
+                    (a, b) =>
+                        a.call_id -
+                        b.call_id
+                )
+        );
+
+
+    if (
+        renderKey ===
+        lastServiceCallsRenderKey
+    ) {
+
+        return;
+    }
+
+
+    lastServiceCallsRenderKey =
+        renderKey;
 
 
     serviceCallPanel.replaceChildren();
