@@ -2726,6 +2726,12 @@ a.contact-row {
         height: 28px;
     }
 
+    /* Keep the clock beside the opening-hours heading on phones. */
+    .opening-hours-row .contact-icon {
+        grid-row: 1 / 2;
+        align-self: center;
+    }
+
     .contact-icon svg {
         width: 17px;
         height: 17px;
