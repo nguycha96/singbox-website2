@@ -1193,12 +1193,13 @@ function getHourlyPrice(
 
         dayGroup = "mon_thu";
 
-    } else if (
-        day === 5 ||
-        day === 6
-    ) {
+    } else if (day === 5) {
 
-        dayGroup = "fri_sat";
+        dayGroup = "fri";
+
+    } else if (day === 6) {
+
+        dayGroup = "sat";
 
     } else {
 
@@ -1384,7 +1385,7 @@ function normalizeMinutes(minutes) {
         01:00 becomes 25:00 internally.
     */
 
-    if (minutes < 14 * 60) {
+    if (minutes < 6 * 60) {
         return minutes + 24 * 60;
     }
 
