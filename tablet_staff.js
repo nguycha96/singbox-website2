@@ -1724,6 +1724,55 @@ if (quantityField === "pending") {
     );
 
     destination.appendChild(deliverButton);
+   
+const cancelButton =
+    document.createElement("button");
+
+cancelButton.type = "button";
+
+cancelButton.className =
+    "mark-order-delivered";
+
+cancelButton.textContent =
+    "PERUUTA 1 KPL";
+
+cancelButton.addEventListener(
+    "click",
+    async () => {
+
+        const firstAvailable =
+            item.orderItems.find(
+                entry => entry.quantity > 0
+            );
+
+        if (!firstAvailable) {
+            return;
+        }
+
+        if (!confirm(
+            "Peruutetaanko 1 kpl tuotetta?"
+        )) {
+            return;
+        }
+
+        cancelButton.disabled = true;
+
+        const success =
+            await cancelOrderItem(
+                firstAvailable.orderItemId,
+                1
+            );
+
+        if (!success) {
+            cancelButton.disabled = false;
+            cancelButton.textContent =
+                "YRITÄ UUDELLEEN";
+        }
+    }
+);
+
+destination.appendChild(cancelButton);
+
 }
 
     });
