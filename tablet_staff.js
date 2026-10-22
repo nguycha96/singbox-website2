@@ -1550,6 +1550,25 @@ billTotal = group.orderItems.reduce(
     0
 );
 
+           
+const pendingItems =
+    group.orderItems.filter(
+        item =>
+            item.quantity -
+            item.deliveredQuantity -
+            item.cancelledQuantity > 0
+    );
+
+const deliveredItems =
+    group.orderItems.filter(
+        item => item.deliveredQuantity > 0
+    );
+
+const cancelledItems =
+    group.orderItems.filter(
+        item => item.cancelledQuantity > 0
+    );
+
 
             group.orderItems.forEach(
     (item) => {
