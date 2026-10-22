@@ -513,6 +513,72 @@ async function restoreOrderItem(
 
 
 /* =========================================================
+   MARK ROOM ORDERS DELIVERED
+========================================================= */
+
+async function markRoomOrdersDelivered(orderIds) {
+
+    const deviceUuid =
+        localStorage.getItem(
+            STAFF_DEVICE_STORAGE_KEY
+        );
+
+    if (!deviceUuid) {
+        showPairingScreen();
+        return false;
+    }
+
+    const uniqueOrderIds =
+        [...new Set(orderIds.map(Number))];
+
+    if (
+        uniqueOrderIds.length === 0 ||
+        uniqueOrderIds.some(
+            id => !Number.isSafeInteger(id) || id <= 0
+        )
+    ) {
+        return false;
+    }
+
+    for (const orderId of uniqueOrderIds) {
+
+        const {
+            data,
+            error
+        } =
+            await staffSupabaseClient.rpc(
+                "staff_mark_order_delivered",
+                {
+                    p_device_uuid:
+                        deviceUuid,
+
+                    p_order_id:
+                        orderId
+                }
+            );
+
+        if (
+            error ||
+            data !== true
+        ) {
+            console.error(
+                "Could not deliver room order:",
+                orderId,
+                error
+            );
+
+            await loadRooms();
+            return false;
+        }
+    }
+
+    await loadRooms();
+
+    return true;
+}
+  
+
+/* =========================================================
    MARK BOOKING PAID
 ========================================================= */
 
