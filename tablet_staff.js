@@ -1600,6 +1600,7 @@ cancelledDetails.appendChild(cancelledSummary);
 
 
 
+
 /* GROUP PRODUCTS FOR DISPLAY */
 
 function renderGroupedRows(
@@ -1630,26 +1631,24 @@ function renderGroupedRows(
             `${item.productId}:${item.unitPrice}`;
 
         if (!grouped.has(key)) {
-
             grouped.set(key, {
-    name: item.productName,
-    quantity: 0,
-    unitPrice: item.unitPrice,
-    productId: item.productId,
-    orderItems: []
-});
+                name: item.productName,
+                quantity: 0,
+                unitPrice: item.unitPrice,
+                orderItems: []
+            });
         }
 
-        grouped.get(key).quantity += count;
-       grouped.get(key).orderItems.push({
-    orderItemId: item.orderItemId,
-    quantity: count
-});
-       grouped.get(key).orderItems.push({
-    orderItemId: item.orderItemId,
-    quantity: count
-});
+        const entry = grouped.get(key);
+
+        entry.quantity += count;
+
+        entry.orderItems.push({
+            orderItemId: item.orderItemId,
+            quantity: count
+        });
     });
+
 
     grouped.forEach((item) => {
 
@@ -1659,11 +1658,20 @@ function renderGroupedRows(
         row.className =
             "staff-room-order-row";
 
+        row.style.display = "flex";
+        row.style.alignItems = "center";
+        row.style.gap = "8px";
+
+
         const product =
             document.createElement("span");
 
         product.textContent =
             `${item.quantity} × ${item.name}`;
+
+        product.style.flex = "1";
+        product.style.minWidth = "0";
+
 
         const price =
             document.createElement("strong");
@@ -1674,109 +1682,164 @@ function renderGroupedRows(
                 : `${(
                     item.quantity *
                     item.unitPrice
-                  ).toFixed(2)} €`;
+                ).toFixed(2)} €`;
+
+        price.style.whiteSpace = "nowrap";
+
 
         row.appendChild(product);
         row.appendChild(price);
 
+
+        const actions =
+            document.createElement("div");
+
+        actions.style.display = "flex";
+        actions.style.gap = "6px";
+        actions.style.flexShrink = "0";
+
+
+        const actionButtons = [];
+
+        function createActionButton(
+            symbol,
+            label,
+            color,
+            action,
+            needsConfirmation = false
+        ) {
+
+            const button =
+                document.createElement("button");
+
+            button.type = "button";
+            button.textContent = symbol;
+            button.title = label;
+
+            button.setAttribute(
+                "aria-label",
+                `${label}: ${item.name}`
+            );
+
+            button.style.width = "36px";
+            button.style.height = "36px";
+            button.style.padding = "0";
+            button.style.borderRadius = "8px";
+            button.style.border =
+                `1px solid ${color}`;
+            button.style.background =
+                "transparent";
+            button.style.color = color;
+            button.style.fontSize = "20px";
+            button.style.cursor = "pointer";
+
+            actionButtons.push(button);
+
+            button.addEventListener(
+                "click",
+                async () => {
+
+                    const firstAvailable =
+                        item.orderItems.find(
+                            entry =>
+                                entry.quantity > 0
+                        );
+
+                    if (!firstAvailable) {
+                        return;
+                    }
+
+                    if (
+                        needsConfirmation &&
+                        !window.confirm(
+                            `${label}: ${item.name}, 1 kpl?`
+                        )
+                    ) {
+                        return;
+                    }
+
+                    actionButtons.forEach(
+                        b => b.disabled = true
+                    );
+
+                    try {
+
+                        const success =
+                            await action(
+                                firstAvailable.orderItemId,
+                                1
+                            );
+
+                        if (!success) {
+                            window.alert(
+                                "Toiminto epäonnistui. " +
+                                "Tarkista tilauksen tila."
+                            );
+                        }
+
+                    } catch (error) {
+
+                        console.error(
+                            "Product action failed:",
+                            error
+                        );
+
+                        window.alert(
+                            "Toiminto epäonnistui."
+                        );
+
+                    } finally {
+
+                        actionButtons.forEach(
+                            b => b.disabled = false
+                        );
+                    }
+                }
+            );
+
+            actions.appendChild(button);
+        }
+
+
+        if (quantityField === "pending") {
+
+            createActionButton(
+                "✓",
+                "Toimita 1 kpl",
+                "#38d88a",
+                deliverOrderItem
+            );
+
+            createActionButton(
+                "✕",
+                "Peruuta 1 kpl",
+                "#ff3b75",
+                cancelOrderItem,
+                true
+            );
+        }
+
+
+        if (quantityField === "cancelled") {
+
+            createActionButton(
+                "↶",
+                "Kumoa peruutus 1 kpl",
+                "#38d88a",
+                restoreOrderItem,
+                true
+            );
+        }
+
+
+        if (actions.children.length > 0) {
+            row.appendChild(actions);
+        }
+
         destination.appendChild(row);
-       
-if (quantityField === "pending") {
-
-    const deliverButton =
-        document.createElement("button");
-
-    deliverButton.type = "button";
-
-    deliverButton.className =
-        "mark-order-delivered";
-
-    deliverButton.textContent =
-        "TOIMITA 1 KPL";
-
-    deliverButton.addEventListener(
-        "click",
-        async () => {
-
-            const firstAvailable =
-                item.orderItems.find(
-                    entry => entry.quantity > 0
-                );
-
-            if (!firstAvailable) {
-                return;
-            }
-
-            deliverButton.disabled = true;
-
-            const success =
-                await deliverOrderItem(
-                    firstAvailable.orderItemId,
-                    1
-                );
-
-            if (!success) {
-                deliverButton.disabled = false;
-                deliverButton.textContent =
-                    "YRITÄ UUDELLEEN";
-            }
-        }
-    );
-
-    destination.appendChild(deliverButton);
-   
-const cancelButton =
-    document.createElement("button");
-
-cancelButton.type = "button";
-
-cancelButton.className =
-    "mark-order-delivered";
-
-cancelButton.textContent =
-    "PERUUTA 1 KPL";
-
-cancelButton.addEventListener(
-    "click",
-    async () => {
-
-        const firstAvailable =
-            item.orderItems.find(
-                entry => entry.quantity > 0
-            );
-
-        if (!firstAvailable) {
-            return;
-        }
-
-        if (!confirm(
-            "Peruutetaanko 1 kpl tuotetta?"
-        )) {
-            return;
-        }
-
-        cancelButton.disabled = true;
-
-        const success =
-            await cancelOrderItem(
-                firstAvailable.orderItemId,
-                1
-            );
-
-        if (!success) {
-            cancelButton.disabled = false;
-            cancelButton.textContent =
-                "YRITÄ UUDELLEEN";
-        }
-    }
-);
-
-destination.appendChild(cancelButton);
-
-}
-
     });
 }
+
 
 
 /* SHOW PRODUCTS IN CORRECT SECTIONS */
