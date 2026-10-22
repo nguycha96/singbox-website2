@@ -645,7 +645,9 @@ let roomsLoadedOnce =
    LOAD ROOMS
 ========================================================= */
 
-async function loadRooms() {
+let roomsLoadRequestId = 0;
+
+async function loadRooms(force = false) {
 
     const roomsContainer =
         document.getElementById("staffRooms");
@@ -653,6 +655,15 @@ async function loadRooms() {
     if (!roomsContainer) {
         return;
     }
+
+    if (
+        !force &&
+        roomsContainer.querySelector("button:disabled")
+    ) {
+        return;
+    }
+
+    const requestId = ++roomsLoadRequestId;
 
 
     if (!roomsLoadedOnce) {
@@ -771,7 +782,16 @@ if (deviceUuid) {
    
     const now =
     new Date();
-
+   
+   if (
+    requestId !== roomsLoadRequestId ||
+    (
+        !force &&
+        roomsContainer.querySelector("button:disabled")
+    )
+) {
+    return;
+}
 
 
 const bookingPhases = bookings.map(booking => {
