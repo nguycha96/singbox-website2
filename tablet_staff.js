@@ -400,7 +400,7 @@ async function deliverOrderItem(
     }
 
 
-    await loadRooms();
+    await loadRooms(true);
 
     return true;
 }
@@ -453,7 +453,7 @@ async function cancelOrderItem(
     }
 
 
-    await loadRooms();
+    await loadRooms(true);
 
     return true;
 }
@@ -506,7 +506,7 @@ async function restoreOrderItem(
     }
 
 
-    await loadRooms();
+    await loadRooms(true);
 
     return true;
 }
@@ -630,7 +630,7 @@ async function markBookingPaid(
     }
 
 
-    await loadRooms();
+    await loadRooms(true);
 
     return true;
 }
@@ -2171,7 +2171,7 @@ if (pendingItems.length > 0) {
             } finally {
 
                 try {
-                    await loadRooms();
+                    await loadRooms(true);
                 } catch (error) {
                     console.error(
                         "Room refresh failed:",
@@ -2293,7 +2293,10 @@ setInterval(async () => {
 
     if (
         staffRefreshRunning ||
-        document.hidden
+        document.hidden ||
+        document.querySelector(
+            "#staffRooms button:disabled"
+        )
     ) {
         return;
     }
