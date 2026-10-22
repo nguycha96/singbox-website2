@@ -1635,11 +1635,16 @@ function renderGroupedRows(
     name: item.productName,
     quantity: 0,
     unitPrice: item.unitPrice,
+    productId: item.productId,
     orderItems: []
 });
         }
 
         grouped.get(key).quantity += count;
+       grouped.get(key).orderItems.push({
+    orderItemId: item.orderItemId,
+    quantity: count
+});
        grouped.get(key).orderItems.push({
     orderItemId: item.orderItemId,
     quantity: count
@@ -1675,6 +1680,52 @@ function renderGroupedRows(
         row.appendChild(price);
 
         destination.appendChild(row);
+       
+if (quantityField === "pending") {
+
+    const deliverButton =
+        document.createElement("button");
+
+    deliverButton.type = "button";
+
+    deliverButton.className =
+        "mark-order-delivered";
+
+    deliverButton.textContent =
+        "TOIMITA 1 KPL";
+
+    deliverButton.addEventListener(
+        "click",
+        async () => {
+
+            const firstAvailable =
+                item.orderItems.find(
+                    entry => entry.quantity > 0
+                );
+
+            if (!firstAvailable) {
+                return;
+            }
+
+            deliverButton.disabled = true;
+
+            const success =
+                await deliverOrderItem(
+                    firstAvailable.orderItemId,
+                    1
+                );
+
+            if (!success) {
+                deliverButton.disabled = false;
+                deliverButton.textContent =
+                    "YRITÄ UUDELLEEN";
+            }
+        }
+    );
+
+    destination.appendChild(deliverButton);
+}
+
     });
 }
 
