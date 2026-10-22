@@ -353,6 +353,84 @@ staffViewButtons.forEach((button) => {
 });
 
 /* =========================================================
+   MARK ROOM ORDERS DELIVERED
+========================================================= */
+
+async function markRoomOrdersDelivered(
+    orderIds
+) {
+
+    const deviceUuid =
+        localStorage.getItem(
+            STAFF_DEVICE_STORAGE_KEY
+        );
+
+
+    if (!deviceUuid) {
+
+        showPairingScreen();
+        return false;
+    }
+
+
+    const uniqueOrderIds =
+        [
+            ...new Set(
+                orderIds
+                    .map(Number)
+                    .filter(Number.isFinite)
+            )
+        ];
+
+
+    if (uniqueOrderIds.length === 0) {
+        return false;
+    }
+
+
+    for (
+        const orderId
+        of uniqueOrderIds
+    ) {
+
+        const {
+            data,
+            error
+        } =
+            await staffSupabaseClient.rpc(
+                "staff_mark_order_delivered",
+                {
+                    p_device_uuid:
+                        deviceUuid,
+
+                    p_order_id:
+                        orderId
+                }
+            );
+
+
+        if (
+            error ||
+            data !== true
+        ) {
+
+            console.error(
+                "Could not mark order delivered:",
+                orderId,
+                error
+            );
+
+            return false;
+        }
+    }
+
+
+    await loadRooms();
+
+    return true;
+}
+
+/* =========================================================
    LOAD ROOMS
 ========================================================= */
 
@@ -1151,6 +1229,61 @@ if (!currentBooking) {
     orderList.appendChild(
         total
     );
+
+   const deliveredButton =
+    document.createElement(
+        "button"
+    );
+
+deliveredButton.type =
+    "button";
+
+deliveredButton.className =
+    "mark-order-delivered";
+
+deliveredButton.textContent =
+    "KUITTAA TOIMITETUKSI";
+
+
+deliveredButton.addEventListener(
+    "click",
+    async () => {
+
+        const orderIds =
+            currentRoomOrders.map(
+                (order) =>
+                    order.order_id
+            );
+
+
+        deliveredButton.disabled =
+            true;
+
+        deliveredButton.textContent =
+            "KUITATAAN...";
+
+
+        const success =
+            await markRoomOrdersDelivered(
+                orderIds
+            );
+
+
+        if (!success) {
+
+            deliveredButton.disabled =
+                false;
+
+            deliveredButton.textContent =
+                "YRITÄ UUDELLEEN";
+        }
+    }
+);
+
+
+orderList.appendChild(
+    deliveredButton
+);
 
     ordersColumn.appendChild(
         orderList
