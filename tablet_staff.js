@@ -1110,6 +1110,7 @@ if (!group.orderItems) {
 
 group.orderItems.push({
     orderItemId: Number(order.order_item_id),
+    productId: Number(order.product_id),
     productName: order.product_name,
     quantity: Number(order.quantity),
     deliveredQuantity: Number(order.delivered_quantity ?? 0),
@@ -1598,58 +1599,102 @@ cancelledSummary.textContent =
 cancelledDetails.appendChild(cancelledSummary);
 
 
-            group.orderItems.forEach(
-    (item) => {
 
-                    const row =
-                        document.createElement(
-                            "div"
-                        );
+/* GROUP PRODUCTS FOR DISPLAY */
 
-                    row.className =
-                        "staff-room-order-row";
+function renderGroupedRows(
+    items,
+    quantityField,
+    destination,
+    cancelled = false
+) {
+
+    const grouped = new Map();
+
+    items.forEach((item) => {
+
+        const count =
+            quantityField === "pending"
+                ? item.quantity -
+                  item.deliveredQuantity -
+                  item.cancelledQuantity
+                : quantityField === "delivered"
+                    ? item.deliveredQuantity
+                    : item.cancelledQuantity;
+
+        if (count <= 0) {
+            return;
+        }
+
+        const key =
+            `${item.productId}:${item.unitPrice}`;
+
+        if (!grouped.has(key)) {
+
+            grouped.set(key, {
+                name: item.productName,
+                quantity: 0,
+                unitPrice: item.unitPrice
+            });
+        }
+
+        grouped.get(key).quantity += count;
+    });
+
+    grouped.forEach((item) => {
+
+        const row =
+            document.createElement("div");
+
+        row.className =
+            "staff-room-order-row";
+
+        const product =
+            document.createElement("span");
+
+        product.textContent =
+            `${item.quantity} × ${item.name}`;
+
+        const price =
+            document.createElement("strong");
+
+        price.textContent =
+            cancelled
+                ? "PERUUTETTU"
+                : `${(
+                    item.quantity *
+                    item.unitPrice
+                  ).toFixed(2)} €`;
+
+        row.appendChild(product);
+        row.appendChild(price);
+
+        destination.appendChild(row);
+    });
+}
 
 
-                    const product =
-                        document.createElement(
-                            "span"
-                        );
+/* SHOW PRODUCTS IN CORRECT SECTIONS */
 
-                    const payableQuantity =
-    item.quantity - item.cancelledQuantity;
+renderGroupedRows(
+    pendingItems,
+    "pending",
+    bill
+);
 
-product.textContent =
-    `${payableQuantity} × ${item.productName}`;
+renderGroupedRows(
+    deliveredItems,
+    "delivered",
+    deliveredDetails
+);
 
+renderGroupedRows(
+    cancelledItems,
+    "cancelled",
+    cancelledDetails,
+    true
+);
 
-                    const rowTotal =
-    payableQuantity *
-    item.unitPrice;
-
-
-                    const price =
-                        document.createElement(
-                            "strong"
-                        );
-
-                    price.textContent =
-                        `${rowTotal.toFixed(2)} €`;
-
-
-                    row.appendChild(
-                        product
-                    );
-
-                    row.appendChild(
-                        price
-                    );
-
-
-                    bill.appendChild(
-                        row
-                    );
-                }
-            );
 
 
             const total =
