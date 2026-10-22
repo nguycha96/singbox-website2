@@ -443,7 +443,40 @@ async function loadRooms() {
         }
     }
 
+/* ROOM ORDERS */
 
+let roomOrders = [];
+
+
+if (deviceUuid) {
+
+    const {
+        data: roomOrdersData,
+        error: roomOrdersError
+    } =
+        await supabaseClient.rpc(
+            "staff_get_room_orders",
+            {
+                p_device_uuid:
+                    deviceUuid
+            }
+        );
+
+
+    if (roomOrdersError) {
+
+        console.error(
+            "Could not load room orders:",
+            roomOrdersError
+        );
+
+    } else {
+
+        roomOrders =
+            roomOrdersData || [];
+    }
+}
+   
     const now =
         new Date();
 
@@ -683,6 +716,74 @@ async function loadRooms() {
             const hiddenBookings =
                 futureBookings.slice(1);
 
+           /* ORDERS FOR CURRENT CUSTOMER */
+
+const currentRoomOrders =
+    currentBooking
+        ? roomOrders.filter(
+            (order) =>
+                Number(order.room_id) ===
+                    Number(room.id) &&
+                Number(order.booking_id) ===
+                    Number(currentBooking.booking_id)
+        )
+        : [];
+
+
+/* Combine same products */
+
+const aggregatedRoomOrders =
+    [];
+
+
+currentRoomOrders.forEach(
+    (order) => {
+
+        const key =
+            `${order.product_id}-${order.unit_price}`;
+
+
+        const existing =
+            aggregatedRoomOrders.find(
+                (item) =>
+                    item.key === key
+            );
+
+
+        if (existing) {
+
+            existing.quantity +=
+                Number(order.quantity);
+
+        } else {
+
+            aggregatedRoomOrders.push({
+                key: key,
+
+                productName:
+                    order.product_name,
+
+                quantity:
+                    Number(order.quantity),
+
+                unitPrice:
+                    Number(order.unit_price)
+            });
+        }
+    }
+);
+
+
+const roomOrderTotal =
+    aggregatedRoomOrders.reduce(
+        (sum, item) =>
+            sum +
+            (
+                item.quantity *
+                item.unitPrice
+            ),
+        0
+    );
 
             /* CARD */
 
@@ -875,55 +976,186 @@ async function loadRooms() {
             }
 
 
-            /* ================================
-               RIGHT — ROOM ORDERS
+/* ================================
+   RIGHT — ROOM ORDERS
+================================ */
 
-               Varsinainen tilaushaku
-               kytketään seuraavassa vaiheessa.
-            ================================ */
+const ordersColumn =
+    document.createElement(
+        "div"
+    );
 
-            const ordersColumn =
+ordersColumn.className =
+    "staff-room-orders";
+
+
+const ordersHeading =
+    document.createElement(
+        "div"
+    );
+
+ordersHeading.className =
+    "staff-room-orders-heading";
+
+ordersHeading.textContent =
+    "HUONETILAUKSET";
+
+
+ordersColumn.appendChild(
+    ordersHeading
+);
+
+
+/* NO ACTIVE CUSTOMER */
+
+if (!currentBooking) {
+
+    const message =
+        document.createElement(
+            "div"
+        );
+
+    message.className =
+        "staff-no-orders";
+
+    message.textContent =
+        "Ei aktiivista asiakasta";
+
+
+    ordersColumn.appendChild(
+        message
+    );
+
+
+/* ACTIVE CUSTOMER, NO ORDERS */
+
+} else if (
+    aggregatedRoomOrders.length === 0
+) {
+
+    const message =
+        document.createElement(
+            "div"
+        );
+
+    message.className =
+        "staff-no-orders";
+
+    message.textContent =
+        "Ei avoimia tilauksia";
+
+
+    ordersColumn.appendChild(
+        message
+    );
+
+
+/* ACTIVE CUSTOMER + ORDERS */
+
+} else {
+
+    const orderList =
+        document.createElement(
+            "div"
+        );
+
+    orderList.className =
+        "staff-room-order-list";
+
+
+    aggregatedRoomOrders.forEach(
+        (item) => {
+
+            const row =
                 document.createElement(
                     "div"
                 );
 
-            ordersColumn.className =
-                "staff-room-orders";
+            row.className =
+                "staff-room-order-row";
 
 
-            const ordersHeading =
+            const product =
                 document.createElement(
-                    "div"
+                    "span"
                 );
 
-            ordersHeading.className =
-                "staff-room-orders-heading";
-
-            ordersHeading.textContent =
-                "HUONETILAUKSET";
+            product.textContent =
+                `${item.quantity} × ${item.productName}`;
 
 
-            const noOrders =
+            const price =
                 document.createElement(
-                    "div"
+                    "strong"
                 );
 
-            noOrders.className =
-                "staff-no-orders";
-
-            noOrders.textContent =
-                currentBooking
-                    ? "Ei avoimia tilauksia"
-                    : "Ei aktiivista asiakasta";
+            price.textContent =
+                `${(
+                    item.quantity *
+                    item.unitPrice
+                ).toFixed(2)} €`;
 
 
-            ordersColumn.appendChild(
-                ordersHeading
+            row.appendChild(
+                product
             );
 
-            ordersColumn.appendChild(
-                noOrders
+            row.appendChild(
+                price
             );
+
+
+            orderList.appendChild(
+                row
+            );
+        }
+    );
+
+
+    const total =
+        document.createElement(
+            "div"
+        );
+
+    total.className =
+        "staff-room-order-total";
+
+
+    const totalLabel =
+        document.createElement(
+            "span"
+        );
+
+    totalLabel.textContent =
+        "Yhteensä";
+
+
+    const totalPrice =
+        document.createElement(
+            "strong"
+        );
+
+    totalPrice.textContent =
+        `${roomOrderTotal.toFixed(2)} €`;
+
+
+    total.appendChild(
+        totalLabel
+    );
+
+    total.appendChild(
+        totalPrice
+    );
+
+
+    orderList.appendChild(
+        total
+    );
+
+    ordersColumn.appendChild(
+        orderList
+    );
+}
 
 
             /* BUILD */
