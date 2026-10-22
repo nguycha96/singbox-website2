@@ -1569,6 +1569,34 @@ const cancelledItems =
         item => item.cancelledQuantity > 0
     );
 
+           
+const deliveredDetails =
+    document.createElement("details");
+
+const deliveredSummary =
+    document.createElement("summary");
+
+deliveredSummary.textContent =
+    `TOIMITETUT (${deliveredItems.reduce(
+        (sum, item) => sum + item.deliveredQuantity, 0
+    )})`;
+
+deliveredDetails.appendChild(deliveredSummary);
+
+
+const cancelledDetails =
+    document.createElement("details");
+
+const cancelledSummary =
+    document.createElement("summary");
+
+cancelledSummary.textContent =
+    `PERUUTETUT (${cancelledItems.reduce(
+        (sum, item) => sum + item.cancelledQuantity, 0
+    )})`;
+
+cancelledDetails.appendChild(cancelledSummary);
+
 
             group.orderItems.forEach(
     (item) => {
