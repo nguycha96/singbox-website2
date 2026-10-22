@@ -1103,6 +1103,20 @@ roomUnpaidOrders.forEach(
                 bookingId
             );
 
+       
+if (!group.orderItems) {
+    group.orderItems = [];
+}
+
+group.orderItems.push({
+    orderItemId: Number(order.order_item_id),
+    productName: order.product_name,
+    quantity: Number(order.quantity),
+    deliveredQuantity: Number(order.delivered_quantity ?? 0),
+    cancelledQuantity: Number(order.cancelled_quantity ?? 0),
+    unitPrice: Number(order.unit_price)
+});
+
 
         group.orderIds.push(
             Number(order.order_id)
