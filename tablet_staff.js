@@ -1916,10 +1916,203 @@ if (cancelledItems.length > 0) {
 
 
             
-/* PRODUCT DELIVERY ACTIONS
-   Tuotekohtaiset painikkeet lisätään tähän.
-*/
 
+/* =====================================================
+   DELIVER ALL PENDING ITEMS
+===================================================== */
+
+if (pendingItems.length > 0) {
+
+    const deliverAllButton =
+        document.createElement("button");
+
+    deliverAllButton.type = "button";
+
+    deliverAllButton.className =
+        "mark-order-delivered";
+
+    deliverAllButton.textContent =
+        "KUITTAA KAIKKI TOIMITETUKSI";
+
+    let batchRunning = false;
+
+    deliverAllButton.addEventListener(
+        "click",
+        async () => {
+
+            if (batchRunning) {
+                return;
+            }
+
+            if (!window.confirm(
+                "Kuitataanko kaikki tämän asiakkaan " +
+                "toimittamattomat tuotteet toimitetuiksi?"
+            )) {
+                return;
+            }
+
+            batchRunning = true;
+            deliverAllButton.disabled = true;
+            deliverAllButton.textContent =
+                "TARKISTETAAN TILAUKSET...";
+
+            let completed = 0;
+            let total = 0;
+            let failure = false;
+
+            try {
+
+                const deviceUuid =
+                    localStorage.getItem(
+                        STAFF_DEVICE_STORAGE_KEY
+                    );
+
+                if (!deviceUuid) {
+                    throw new Error(
+                        "Henkilökuntalaitetta ei ole yhdistetty."
+                    );
+                }
+
+                /* GET FRESH ITEM QUANTITIES */
+
+                const {
+                    data: latestOrders,
+                    error: fetchError
+                } =
+                    await staffSupabaseClient.rpc(
+                        "staff_get_unpaid_room_orders",
+                        {
+                            p_device_uuid: deviceUuid
+                        }
+                    );
+
+                if (fetchError) {
+                    throw fetchError;
+                }
+
+                const itemsToDeliver =
+                    (latestOrders || [])
+                        .filter(
+                            order =>
+                                Number(order.booking_id) ===
+                                Number(group.bookingId)
+                        )
+                        .map(order => ({
+                            orderItemId:
+                                Number(order.order_item_id),
+
+                            quantity:
+                                Number(order.quantity) -
+                                Number(order.delivered_quantity) -
+                                Number(order.cancelled_quantity)
+                        }))
+                        .filter(
+                            item => item.quantity > 0
+                        );
+
+                total = itemsToDeliver.reduce(
+                    (sum, item) =>
+                        sum + item.quantity,
+                    0
+                );
+
+                if (total === 0) {
+                    window.alert(
+                        "Ei enää toimittamattomia tuotteita."
+                    );
+                    return;
+                }
+
+                /* DELIVER ITEMS ONE BY ONE */
+
+                for (const item of itemsToDeliver) {
+
+                    deliverAllButton.textContent =
+                        `KUITATAAN ${completed}/${total}...`;
+
+                    const {
+                        data,
+                        error
+                    } =
+                        await staffSupabaseClient.rpc(
+                            "staff_deliver_order_item",
+                            {
+                                p_device_uuid:
+                                    deviceUuid,
+
+                                p_order_item_id:
+                                    item.orderItemId,
+
+                                p_quantity:
+                                    item.quantity
+                            }
+                        );
+
+                    if (error || data !== true) {
+
+                        console.error(
+                            "Bulk delivery failed:",
+                            item.orderItemId,
+                            error
+                        );
+
+                        failure = true;
+                        break;
+                    }
+
+                    completed += item.quantity;
+                }
+
+                if (failure) {
+
+                    window.alert(
+                        "Kuittaus keskeytyi. " +
+                        "Onnistuneita kirjauksia: " +
+                        completed + "/" + total + " kpl. " +
+                        "Tarkista tilanne ennen uutta yritystä."
+                    );
+
+                } else {
+
+                    deliverAllButton.textContent =
+                        "KAIKKI KUITATTU ✓";
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Bulk delivery error:",
+                    error
+                );
+
+                window.alert(
+                    "Kuittauksen tilaa ei voitu varmistaa. " +
+                    "Tarkista toimitetut tuotteet " +
+                    "ennen uutta yritystä."
+                );
+
+            } finally {
+
+                try {
+                    await loadRooms();
+                } catch (error) {
+                    console.error(
+                        "Room refresh failed:",
+                        error
+                    );
+                }
+
+                batchRunning = false;
+                deliverAllButton.disabled = false;
+
+                deliverAllButton.textContent =
+                    "KUITTAA KAIKKI TOIMITETUKSI";
+            }
+        }
+    );
+
+    bill.appendChild(deliverAllButton);
+}
 
 
             /* PAYMENT */
