@@ -773,19 +773,38 @@ if (deviceUuid) {
     new Date();
 
 
-const renderKey =
-    JSON.stringify({
-        rooms:
-            rooms || [],
 
-        bookings:
-            bookings || [],
+const bookingPhases = bookings.map(booking => {
+    const start = new Date(
+        `${booking.booking_date}T${booking.start_time}`
+    );
 
-        roomOrders:
-            roomOrders || [],
+    const end = new Date(
+        `${booking.booking_date}T${booking.end_time}`
+    );
 
+    if (end <= start) {
+        end.setDate(end.getDate() + 1);
+    }
 
-    });
+    return {
+        id: booking.booking_id,
+        phase:
+            now < start
+                ? "future"
+                : now >= end
+                    ? "past"
+                    : "current"
+    };
+});
+
+const renderKey = JSON.stringify({
+    rooms: rooms || [],
+    bookings: bookings || [],
+    roomOrders: roomOrders || [],
+    bookingPhases
+});
+
 
 
 if (
@@ -802,6 +821,17 @@ lastRoomsRenderKey =
 
 roomsLoadedOnce =
     true;
+
+   
+const openDetailsKeys = new Set(
+    Array.from(
+        roomsContainer.querySelectorAll(
+            "details[data-staff-key]"
+        )
+    )
+        .filter(details => details.open)
+        .map(details => details.dataset.staffKey)
+);
 
 
 roomsContainer.replaceChildren();
@@ -1368,6 +1398,15 @@ const unpaidBookingGroups =
                 details.className =
                     "staff-more-bookings";
 
+               
+details.dataset.staffKey =
+    `bookings:${room.id}`;
+
+details.open = openDetailsKeys.has(
+    details.dataset.staffKey
+);
+
+
 
                 const summary =
                     document.createElement(
@@ -1574,6 +1613,15 @@ const cancelledItems =
 const deliveredDetails =
     document.createElement("details");
 
+           
+deliveredDetails.dataset.staffKey =
+    `delivered:${room.id}:${group.bookingId}`;
+
+deliveredDetails.open = openDetailsKeys.has(
+    deliveredDetails.dataset.staffKey
+);
+
+
 const deliveredSummary =
     document.createElement("summary");
 
@@ -1587,6 +1635,15 @@ deliveredDetails.appendChild(deliveredSummary);
 
 const cancelledDetails =
     document.createElement("details");
+
+           
+cancelledDetails.dataset.staffKey =
+    `cancelled:${room.id}:${group.bookingId}`;
+
+cancelledDetails.open = openDetailsKeys.has(
+    cancelledDetails.dataset.staffKey
+);
+
 
 const cancelledSummary =
     document.createElement("summary");
@@ -2205,14 +2262,38 @@ if (pendingItems.length > 0) {
    START
 ========================================================= */
 
+
 loadRooms();
 
-/*
-setInterval(
-    loadRooms,
-    5000
-);
-*/
+/* AUTOMATIC REFRESH */
+
+let staffRefreshRunning = false;
+
+setInterval(async () => {
+
+    if (
+        staffRefreshRunning ||
+        document.hidden
+    ) {
+        return;
+    }
+
+    staffRefreshRunning = true;
+
+    try {
+        await loadRooms();
+        await loadServiceCalls();
+    } catch (error) {
+        console.error(
+            "Staff automatic refresh failed:",
+            error
+        );
+    } finally {
+        staffRefreshRunning = false;
+    }
+
+}, 5000);
+
 
 /* =========================================================
    STOCK MOVEMENTS
