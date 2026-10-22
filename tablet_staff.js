@@ -431,6 +431,63 @@ async function markRoomOrdersDelivered(
 }
 
 /* =========================================================
+   MARK BOOKING PAID
+========================================================= */
+
+async function markBookingPaid(
+    bookingId
+) {
+
+    const deviceUuid =
+        localStorage.getItem(
+            STAFF_DEVICE_STORAGE_KEY
+        );
+
+
+    if (!deviceUuid) {
+
+        showPairingScreen();
+        return false;
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await staffSupabaseClient.rpc(
+            "staff_mark_booking_paid",
+            {
+                p_device_uuid:
+                    deviceUuid,
+
+                p_booking_id:
+                    Number(bookingId)
+            }
+        );
+
+
+    if (
+        error ||
+        Number(data) < 1
+    ) {
+
+        console.error(
+            "Could not mark booking paid:",
+            bookingId,
+            error
+        );
+
+        return false;
+    }
+
+
+    await loadRooms();
+
+    return true;
+}
+
+/* =========================================================
    LOAD ROOMS
 ========================================================= */
 
@@ -794,49 +851,108 @@ if (deviceUuid) {
             const hiddenBookings =
                 futureBookings.slice(1);
 
-           /* ORDERS FOR CURRENT CUSTOMER */
+           /* UNPAID ORDERS FOR THIS ROOM */
 
-const currentRoomOrders =
-    currentBooking
-        ? roomOrders.filter(
-            (order) =>
-                Number(order.room_id) ===
-                    Number(room.id) &&
-                Number(order.booking_id) ===
-                    Number(currentBooking.booking_id)
-        )
-        : [];
+const roomUnpaidOrders =
+    roomOrders.filter(
+        (order) =>
+            Number(order.room_id) ===
+            Number(room.id)
+    );
 
 
-/* Combine same products */
-
-const aggregatedRoomOrders =
-    [];
+const unpaidBookingsMap =
+    new Map();
 
 
-currentRoomOrders.forEach(
+roomUnpaidOrders.forEach(
     (order) => {
 
-        const key =
-            `${order.product_id}-${order.unit_price}`;
+        const bookingId =
+            Number(order.booking_id);
 
 
-        const existing =
-            aggregatedRoomOrders.find(
-                (item) =>
-                    item.key === key
+        if (
+            !unpaidBookingsMap.has(
+                bookingId
+            )
+        ) {
+
+            unpaidBookingsMap.set(
+                bookingId,
+                {
+                    bookingId:
+                        bookingId,
+
+                    customerName:
+                        order.customer_name ||
+                        "Ei nimeä",
+
+                    bookingDate:
+                        order.booking_date,
+
+                    startTime:
+                        order.start_time,
+
+                    endTime:
+                        order.end_time,
+
+                    items:
+                        [],
+
+                    orderIds:
+                        [],
+
+                    undeliveredOrderIds:
+                        []
+                }
+            );
+        }
+
+
+        const group =
+            unpaidBookingsMap.get(
+                bookingId
             );
 
 
-        if (existing) {
+        group.orderIds.push(
+            Number(order.order_id)
+        );
 
-            existing.quantity +=
+
+        if (
+            order.order_status !==
+            "delivered"
+        ) {
+
+            group.undeliveredOrderIds.push(
+                Number(order.order_id)
+            );
+        }
+
+
+        const itemKey =
+            `${order.product_id}-${order.unit_price}`;
+
+
+        const existingItem =
+            group.items.find(
+                (item) =>
+                    item.key === itemKey
+            );
+
+
+        if (existingItem) {
+
+            existingItem.quantity +=
                 Number(order.quantity);
 
         } else {
 
-            aggregatedRoomOrders.push({
-                key: key,
+            group.items.push({
+                key:
+                    itemKey,
 
                 productName:
                     order.product_name,
@@ -852,15 +968,52 @@ currentRoomOrders.forEach(
 );
 
 
-const roomOrderTotal =
-    aggregatedRoomOrders.reduce(
-        (sum, item) =>
-            sum +
-            (
-                item.quantity *
-                item.unitPrice
-            ),
-        0
+const unpaidBookingGroups =
+    [
+        ...unpaidBookingsMap.values()
+    ].sort(
+        (a, b) => {
+
+            const aCurrent =
+                currentBooking &&
+                Number(
+                    currentBooking.booking_id
+                ) ===
+                a.bookingId;
+
+            const bCurrent =
+                currentBooking &&
+                Number(
+                    currentBooking.booking_id
+                ) ===
+                b.bookingId;
+
+
+            if (
+                aCurrent &&
+                !bCurrent
+            ) {
+                return -1;
+            }
+
+
+            if (
+                bCurrent &&
+                !aCurrent
+            ) {
+                return 1;
+            }
+
+
+            return (
+                new Date(
+                    `${b.bookingDate}T${b.startTime}`
+                ) -
+                new Date(
+                    `${a.bookingDate}T${a.startTime}`
+                )
+            );
+        }
     );
 
             /* CARD */
@@ -1084,31 +1237,10 @@ ordersColumn.appendChild(
 );
 
 
-/* NO ACTIVE CUSTOMER */
+/* NO UNPAID BILLS */
 
-if (!currentBooking) {
-
-    const message =
-        document.createElement(
-            "div"
-        );
-
-    message.className =
-        "staff-no-orders";
-
-    message.textContent =
-        "Ei aktiivista asiakasta";
-
-
-    ordersColumn.appendChild(
-        message
-    );
-
-
-/* ACTIVE CUSTOMER, NO ORDERS */
-
-} else if (
-    aggregatedRoomOrders.length === 0
+if (
+    unpaidBookingGroups.length === 0
 ) {
 
     const message =
@@ -1120,7 +1252,9 @@ if (!currentBooking) {
         "staff-no-orders";
 
     message.textContent =
-        "Ei avoimia tilauksia";
+        currentBooking
+            ? "Ei maksamattomia tilauksia"
+            : "Ei maksamattomia laskuja";
 
 
     ordersColumn.appendChild(
@@ -1128,168 +1262,310 @@ if (!currentBooking) {
     );
 
 
-/* ACTIVE CUSTOMER + ORDERS */
+/* UNPAID BILLS */
 
 } else {
 
-    const orderList =
-        document.createElement(
-            "div"
-        );
+    unpaidBookingGroups.forEach(
+        (group) => {
 
-    orderList.className =
-        "staff-room-order-list";
+            const bill =
+                document.createElement(
+                    "section"
+                );
+
+            bill.className =
+                "staff-room-order-list";
 
 
-    aggregatedRoomOrders.forEach(
-        (item) => {
+            const isCurrentBooking =
+                currentBooking &&
+                Number(
+                    currentBooking.booking_id
+                ) ===
+                group.bookingId;
 
-            const row =
+
+            const billStatus =
                 document.createElement(
                     "div"
                 );
 
-            row.className =
-                "staff-room-order-row";
+            billStatus.className =
+                "staff-room-orders-heading";
+
+            billStatus.textContent =
+                isCurrentBooking
+                    ? "NYKYINEN ASIAKAS · MAKSAMATTA"
+                    : "MAKSAMATTA";
 
 
-            const product =
-                document.createElement(
-                    "span"
-                );
-
-            product.textContent =
-                `${item.quantity} × ${item.productName}`;
-
-
-            const price =
+            const customer =
                 document.createElement(
                     "strong"
                 );
 
-            price.textContent =
-                `${(
-                    item.quantity *
-                    item.unitPrice
-                ).toFixed(2)} €`;
+            customer.textContent =
+                group.customerName;
 
 
-            row.appendChild(
-                product
+            const bookingTime =
+                document.createElement(
+                    "div"
+                );
+
+            bookingTime.className =
+                "staff-booking-date";
+
+            bookingTime.textContent =
+                `${group.bookingDate} · ${group.startTime.slice(0, 5)}–${group.endTime.slice(0, 5)}`;
+
+
+            bill.appendChild(
+                billStatus
             );
 
-            row.appendChild(
-                price
+            bill.appendChild(
+                customer
+            );
+
+            bill.appendChild(
+                bookingTime
             );
 
 
-            orderList.appendChild(
-                row
+            let billTotal =
+                0;
+
+
+            group.items.forEach(
+                (item) => {
+
+                    const row =
+                        document.createElement(
+                            "div"
+                        );
+
+                    row.className =
+                        "staff-room-order-row";
+
+
+                    const product =
+                        document.createElement(
+                            "span"
+                        );
+
+                    product.textContent =
+                        `${item.quantity} × ${item.productName}`;
+
+
+                    const rowTotal =
+                        item.quantity *
+                        item.unitPrice;
+
+
+                    billTotal +=
+                        rowTotal;
+
+
+                    const price =
+                        document.createElement(
+                            "strong"
+                        );
+
+                    price.textContent =
+                        `${rowTotal.toFixed(2)} €`;
+
+
+                    row.appendChild(
+                        product
+                    );
+
+                    row.appendChild(
+                        price
+                    );
+
+
+                    bill.appendChild(
+                        row
+                    );
+                }
+            );
+
+
+            const total =
+                document.createElement(
+                    "div"
+                );
+
+            total.className =
+                "staff-room-order-total";
+
+
+            const totalLabel =
+                document.createElement(
+                    "span"
+                );
+
+            totalLabel.textContent =
+                "Yhteensä";
+
+
+            const totalPrice =
+                document.createElement(
+                    "strong"
+                );
+
+            totalPrice.textContent =
+                `${billTotal.toFixed(2)} €`;
+
+
+            total.appendChild(
+                totalLabel
+            );
+
+            total.appendChild(
+                totalPrice
+            );
+
+
+            bill.appendChild(
+                total
+            );
+
+
+            /* NOT YET DELIVERED */
+
+            if (
+                group.undeliveredOrderIds.length >
+                0
+            ) {
+
+                const deliveredButton =
+                    document.createElement(
+                        "button"
+                    );
+
+                deliveredButton.type =
+                    "button";
+
+                deliveredButton.className =
+                    "mark-order-delivered";
+
+                deliveredButton.textContent =
+                    "KUITTAA TOIMITETUKSI";
+
+
+                deliveredButton.addEventListener(
+                    "click",
+                    async () => {
+
+                        deliveredButton.disabled =
+                            true;
+
+                        deliveredButton.textContent =
+                            "KUITATAAN...";
+
+
+                        const success =
+                            await markRoomOrdersDelivered(
+                                group.undeliveredOrderIds
+                            );
+
+
+                        if (!success) {
+
+                            deliveredButton.disabled =
+                                false;
+
+                            deliveredButton.textContent =
+                                "YRITÄ UUDELLEEN";
+                        }
+                    }
+                );
+
+
+                bill.appendChild(
+                    deliveredButton
+                );
+
+            } else {
+
+                const deliveredLabel =
+                    document.createElement(
+                        "div"
+                    );
+
+                deliveredLabel.className =
+                    "staff-booking-label";
+
+                deliveredLabel.textContent =
+                    "TOIMITETTU";
+
+
+                bill.appendChild(
+                    deliveredLabel
+                );
+            }
+
+
+            /* PAYMENT */
+
+            const paidButton =
+                document.createElement(
+                    "button"
+                );
+
+            paidButton.type =
+                "button";
+
+            paidButton.className =
+                "mark-order-delivered";
+
+            paidButton.textContent =
+                "MERKITSE MAKSETUKSI";
+
+
+            paidButton.addEventListener(
+                "click",
+                async () => {
+
+                    paidButton.disabled =
+                        true;
+
+                    paidButton.textContent =
+                        "MERKITÄÄN...";
+
+
+                    const success =
+                        await markBookingPaid(
+                            group.bookingId
+                        );
+
+
+                    if (!success) {
+
+                        paidButton.disabled =
+                            false;
+
+                        paidButton.textContent =
+                            "YRITÄ UUDELLEEN";
+                    }
+                }
+            );
+
+
+            bill.appendChild(
+                paidButton
+            );
+
+
+            ordersColumn.appendChild(
+                bill
             );
         }
-    );
-
-
-    const total =
-        document.createElement(
-            "div"
-        );
-
-    total.className =
-        "staff-room-order-total";
-
-
-    const totalLabel =
-        document.createElement(
-            "span"
-        );
-
-    totalLabel.textContent =
-        "Yhteensä";
-
-
-    const totalPrice =
-        document.createElement(
-            "strong"
-        );
-
-    totalPrice.textContent =
-        `${roomOrderTotal.toFixed(2)} €`;
-
-
-    total.appendChild(
-        totalLabel
-    );
-
-    total.appendChild(
-        totalPrice
-    );
-
-
-    orderList.appendChild(
-        total
-    );
-
-   const deliveredButton =
-    document.createElement(
-        "button"
-    );
-
-deliveredButton.type =
-    "button";
-
-deliveredButton.className =
-    "mark-order-delivered";
-
-deliveredButton.textContent =
-    "KUITTAA TOIMITETUKSI";
-
-
-deliveredButton.addEventListener(
-    "click",
-    async () => {
-
-        const orderIds =
-            currentRoomOrders.map(
-                (order) =>
-                    order.order_id
-            );
-
-
-        deliveredButton.disabled =
-            true;
-
-        deliveredButton.textContent =
-            "KUITATAAN...";
-
-
-        const success =
-            await markRoomOrdersDelivered(
-                orderIds
-            );
-
-
-        if (!success) {
-
-            deliveredButton.disabled =
-                false;
-
-            deliveredButton.textContent =
-                "YRITÄ UUDELLEEN";
-        }
-    }
-);
-
-
-orderList.appendChild(
-    deliveredButton
-);
-
-    ordersColumn.appendChild(
-        orderList
     );
 }
-
 
             /* BUILD */
 
