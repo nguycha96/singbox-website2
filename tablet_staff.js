@@ -533,7 +533,7 @@ if (deviceUuid) {
         error: roomOrdersError
     } =
         await supabaseClient.rpc(
-            "staff_get_room_orders",
+    "staff_get_unpaid_room_orders",
             {
                 p_device_uuid:
                     deviceUuid
