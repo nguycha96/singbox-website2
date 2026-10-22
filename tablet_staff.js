@@ -487,6 +487,12 @@ async function markBookingPaid(
     return true;
 }
 
+let lastRoomsRenderKey =
+    null;
+
+let roomsLoadedOnce =
+    false;
+
 /* =========================================================
    LOAD ROOMS
 ========================================================= */
@@ -501,8 +507,11 @@ async function loadRooms() {
     }
 
 
+    if (!roomsLoadedOnce) {
+
     roomsContainer.textContent =
         "Ladataan huoneita...";
+}
 
 
     /* ROOMS */
@@ -613,10 +622,45 @@ if (deviceUuid) {
 }
    
     const now =
-        new Date();
+    new Date();
 
 
-    roomsContainer.replaceChildren();
+const renderKey =
+    JSON.stringify({
+        rooms:
+            rooms || [],
+
+        bookings:
+            bookings || [],
+
+        roomOrders:
+            roomOrders || [],
+
+        minute:
+            Math.floor(
+                now.getTime() /
+                60000
+            )
+    });
+
+
+if (
+    roomsLoadedOnce &&
+    renderKey === lastRoomsRenderKey
+) {
+
+    return;
+}
+
+
+lastRoomsRenderKey =
+    renderKey;
+
+roomsLoadedOnce =
+    true;
+
+
+roomsContainer.replaceChildren();
 
 
     /* =====================================================
