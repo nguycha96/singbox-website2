@@ -1702,79 +1702,11 @@ if (cancelledItems.length > 0) {
             );
 
 
-            /* NOT YET DELIVERED */
+            
+/* PRODUCT DELIVERY ACTIONS
+   Tuotekohtaiset painikkeet lisätään tähän.
+*/
 
-            if (
-                group.undeliveredOrderIds.length >
-                0
-            ) {
-
-                const deliveredButton =
-                    document.createElement(
-                        "button"
-                    );
-
-                deliveredButton.type =
-                    "button";
-
-                deliveredButton.className =
-                    "mark-order-delivered";
-
-                deliveredButton.textContent =
-                    "KUITTAA TOIMITETUKSI";
-
-
-                deliveredButton.addEventListener(
-                    "click",
-                    async () => {
-
-                        deliveredButton.disabled =
-                            true;
-
-                        deliveredButton.textContent =
-                            "KUITATAAN...";
-
-
-                        const success =
-                            await markRoomOrdersDelivered(
-                                group.undeliveredOrderIds
-                            );
-
-
-                        if (!success) {
-
-                            deliveredButton.disabled =
-                                false;
-
-                            deliveredButton.textContent =
-                                "YRITÄ UUDELLEEN";
-                        }
-                    }
-                );
-
-
-                bill.appendChild(
-                    deliveredButton
-                );
-
-            } else {
-
-                const deliveredLabel =
-                    document.createElement(
-                        "div"
-                    );
-
-                deliveredLabel.className =
-                    "staff-booking-label";
-
-                deliveredLabel.textContent =
-                    "TOIMITETTU";
-
-
-                bill.appendChild(
-                    deliveredLabel
-                );
-            }
 
 
             /* PAYMENT */
