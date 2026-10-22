@@ -1641,10 +1641,12 @@ if (
 
 loadRooms();
 
+/*
 setInterval(
     loadRooms,
     5000
 );
+*/
 
 /* =========================================================
    STOCK MOVEMENTS
@@ -2332,7 +2334,9 @@ createServiceCallPanel();
 loadServiceCalls();
 
 
+/*
 setInterval(
     loadServiceCalls,
     3000
 );
+*/
