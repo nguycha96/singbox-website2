@@ -353,11 +353,12 @@ staffViewButtons.forEach((button) => {
 });
 
 /* =========================================================
-   MARK ROOM ORDERS DELIVERED
+   ORDER ITEM ACTIONS
 ========================================================= */
 
-async function markRoomOrdersDelivered(
-    orderIds
+async function deliverOrderItem(
+    orderItemId,
+    quantity
 ) {
 
     const deviceUuid =
@@ -366,62 +367,36 @@ async function markRoomOrdersDelivered(
         );
 
 
-    if (!deviceUuid) {
+    const {
+        data,
+        error
+    } =
+        await staffSupabaseClient.rpc(
+            "staff_deliver_order_item",
+            {
+                p_device_uuid:
+                    deviceUuid,
 
-        showPairingScreen();
-        return false;
-    }
+                p_order_item_id:
+                    Number(orderItemId),
 
-
-    const uniqueOrderIds =
-        [
-            ...new Set(
-                orderIds
-                    .map(Number)
-                    .filter(Number.isFinite)
-            )
-        ];
-
-
-    if (uniqueOrderIds.length === 0) {
-        return false;
-    }
+                p_quantity:
+                    Number(quantity)
+            }
+        );
 
 
-    for (
-        const orderId
-        of uniqueOrderIds
+    if (
+        error ||
+        data !== true
     ) {
 
-        const {
-            data,
+        console.error(
+            "Could not deliver order item:",
             error
-        } =
-            await staffSupabaseClient.rpc(
-                "staff_mark_order_delivered",
-                {
-                    p_device_uuid:
-                        deviceUuid,
+        );
 
-                    p_order_id:
-                        orderId
-                }
-            );
-
-
-        if (
-            error ||
-            data !== true
-        ) {
-
-            console.error(
-                "Could not mark order delivered:",
-                orderId,
-                error
-            );
-
-            return false;
-        }
+        return false;
     }
 
 
@@ -429,6 +404,113 @@ async function markRoomOrdersDelivered(
 
     return true;
 }
+
+
+async function cancelOrderItem(
+    orderItemId,
+    quantity
+) {
+
+    const deviceUuid =
+        localStorage.getItem(
+            STAFF_DEVICE_STORAGE_KEY
+        );
+
+
+    const {
+        data,
+        error
+    } =
+        await staffSupabaseClient.rpc(
+            "staff_cancel_order_item",
+            {
+                p_device_uuid:
+                    deviceUuid,
+
+                p_order_item_id:
+                    Number(orderItemId),
+
+                p_quantity:
+                    Number(quantity),
+
+                p_note:
+                    null
+            }
+        );
+
+
+    if (
+        error ||
+        data !== true
+    ) {
+
+        console.error(
+            "Could not cancel order item:",
+            error
+        );
+
+        return false;
+    }
+
+
+    await loadRooms();
+
+    return true;
+}
+
+
+async function restoreOrderItem(
+    orderItemId,
+    quantity
+) {
+
+    const deviceUuid =
+        localStorage.getItem(
+            STAFF_DEVICE_STORAGE_KEY
+        );
+
+
+    const {
+        data,
+        error
+    } =
+        await staffSupabaseClient.rpc(
+            "staff_restore_order_item",
+            {
+                p_device_uuid:
+                    deviceUuid,
+
+                p_order_item_id:
+                    Number(orderItemId),
+
+                p_quantity:
+                    Number(quantity),
+
+                p_note:
+                    "Peruutus palautettu staff-tabletilta"
+            }
+        );
+
+
+    if (
+        error ||
+        data !== true
+    ) {
+
+        console.error(
+            "Could not restore order item:",
+            error
+        );
+
+        return false;
+    }
+
+
+    await loadRooms();
+
+    return true;
+}
+
 
 /* =========================================================
    MARK BOOKING PAID
