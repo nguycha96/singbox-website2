@@ -1,1 +1,0 @@
-SiNG BOX - testijulkaisu
