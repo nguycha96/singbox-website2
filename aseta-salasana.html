@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>SiNG BOX · Aseta raportin salasana</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin:0; min-height:100vh; display:grid; place-items:center; padding:24px; background:#001810; color:#f5e8c1; }
+    main { width:min(100%,470px); padding:clamp(22px,5vw,38px); border:1px solid #2a6148; background:#003020; border-radius:16px; box-shadow:0 20px 80px #0005; }
+    .brand { letter-spacing:.02em; color:#e5ad41; text-transform:none; font-size:14px; font-weight:700; }
+    h1 { margin:13px 0 8px; font-family:Georgia,serif; font-size:clamp(30px,6vw,43px); font-weight:500; }
+    p { color:#d2dfd3; line-height:1.5; }
+    label { display:block; margin:20px 0 7px; color:#f9ca64; font-weight:600; }
+    input { display:block; width:100%; padding:15px; background:#001d16; border:1px solid #436957; border-radius:9px; color:#fff; font:inherit; }
+    input:focus { outline:2px solid #f3b84c; outline-offset:1px; }
+    button { display:block; width:100%; margin:20px 0 0; padding:15px; border:0; border-radius:9px; color:#001810; background:#f1ba4c; font-weight:700; cursor:pointer; font:inherit; }
+    button:disabled { opacity:.6; cursor:wait; }
+    .notice { margin:18px 0 0; padding:12px 14px; color:#fff; border:1px solid #536e5c; border-radius:8px; background:#162d25; overflow-wrap:anywhere; }
+    .notice.error { color:#ffd5d5; border-color:#a65c5c; }
+    section[hidden], div[hidden], p[hidden] { display:none!important; }
+    small { color:#c3d2c7; display:block; margin-top:16px; line-height:1.5; }
+    .footer { margin-top:24px; font-size:12px; opacity:.8; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<main>
+  <div class="brand">SiNG BOX · YLLÄPITO</div>
+  <h1>Aseta uusi salasana</h1>
+  <p>Tällä sivulla voit asettaa uuden salasanan SiNG BOXin raportin käyttäjätunnukselle.</p>
+  <section id="requestSection">
+    <form id="requestForm">
+      <label for="email">Sähköpostiosoite</label>
+      <input type="email" id="email" required autocomplete="email" placeholder="oma@osoite.fi">
+      <button type="submit" id="requestButton">Lähetä palautuslinkki</button>
+    </form>
+    <small>Supabase lähettää sähköpostiin linkin. Avaa linkki samassa selaimessa. Älä jaa palautuslinkkiä kenellekään.</small>
+  </section>
+  <section id="updateSection" hidden>
+    <form id="updateForm">
+      <label for="password">Uusi salasana (vähintään 12 merkkiä)</label>
+      <input type="password" id="password" required minlength="12" autocomplete="new-password">
+      <label for="passwordAgain">Toista salasana</label>
+      <input type="password" id="passwordAgain" required minlength="12" autocomplete="new-password">
+      <button type="submit" id="updateButton">Tallenna uusi salasana</button>
+    </form>
+  </section>
+  <p id="notice" class="notice" role="status" aria-live="polite" hidden></p>
+  <p class="footer">Sivu käyttää vain Supabasen julkista avainta. Salasanaa ei tallenneta verkkosivun tiedostoihin.</p>
+</main>
+<script>
+(() => {
+  'use strict';
+  const SUPABASE_URL = 'https://tikatiahzawstvrdqfix.supabase.co';
+  const PUBLISHABLE_KEY = 'sb_publishable_ZfYe1fy7Dxu59HfTLSQ7Cw_EK0xGl34';
+  const REDIRECT_TO = 'https://nguycha96.github.io/singbox-website2/aseta-salasana.html';
+  const $ = id => document.getElementById(id);
+  const setNotice = (message, isError=false) => {
+    const n = $('notice'); n.textContent=message; n.classList.toggle('error',isError); n.hidden=false;
+  };
+  if (location.protocol !== 'https:' || location.origin + location.pathname !== REDIRECT_TO) {
+    $('requestButton').disabled=true;
+    setNotice('Avaa tämä sivu sen GitHub Pages -osoitteesta. Sähköpostin palautuslinkkiä ei voi käsitellä paikallisesta tiedostosta.', true);
+    return;
+  }
+  if (!window.supabase?.createClient) {
+    $('requestButton').disabled=true; setNotice('Supabase-kirjasto ei latautunut. Tarkista verkkoyhteys.',true); return;
+  }
+  const client = window.supabase.createClient(SUPABASE_URL,PUBLISHABLE_KEY,{auth:{detectSessionInUrl:true}});
+  const showPasswordForm = () => {
+    $('requestSection').hidden=true; $('updateSection').hidden=false;
+    setNotice('Palautuslinkki vahvistettu. Valitse nyt uusi salasana.');
+  };
+  client.auth.onAuthStateChange((event, session) => {
+    if (event === 'PASSWORD_RECOVERY' && session) showPasswordForm();
+  });
+  // Email recovery grants a temporary authenticated session; handle late event or refresh, too.
+  client.auth.getSession().then(({data,error}) => {
+    if (error) setNotice('Kirjautumislinkin tarkistaminen epäonnistui: '+error.message,true);
+    if (data?.session && (location.hash.includes('access_token') || location.search.includes('code='))) showPasswordForm();
+  });
+  $('requestForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    $('requestButton').disabled=true;
+    try {
+      const {error} = await client.auth.resetPasswordForEmail($('email').value.trim(), {redirectTo:REDIRECT_TO});
+      if (error) throw error;
+      setNotice('Jos sähköpostiosoite kuuluu tähän Supabase-projektiin, siihen on lähetetty palautuslinkki. Tarkista myös roskaposti.');
+    } catch (error) { setNotice('Linkin lähetys epäonnistui: '+(error.message||error),true); }
+    finally { $('requestButton').disabled=false; }
+  });
+  $('updateForm').addEventListener('submit',async e => {
+    e.preventDefault();
+    if ($('password').value !== $('passwordAgain').value) {setNotice('Salasanat eivät ole samat.',true); return;}
+    if ($('password').value.length < 12) {setNotice('Salasanassa täytyy olla vähintään 12 merkkiä.',true); return;}
+    $('updateButton').disabled=true;
+    try {
+      const {error} = await client.auth.updateUser({password:$('password').value});
+      if (error) throw error;
+      $('password').value=''; $('passwordAgain').value='';
+      setNotice('Salasana päivitetty onnistuneesti! Voit nyt kirjautua SiNG BOX -raporttiin uudella salasanalla.');
+      $('updateSection').hidden=true;
+      await client.auth.signOut();
+    } catch(error) {setNotice('Salasanan tallennus epäonnistui: '+(error.message||error),true);}
+    finally { $('updateButton').disabled=false; }
+  });
+})();
+</script>
+</body>
+</html>
