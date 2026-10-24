@@ -12,6 +12,24 @@
   :root{color-scheme:dark;--bg:#00130e;--panel:#06231c;--panel2:#0b2d23;--gold:#d7a846;--cream:#f0dcb5;--pink:#ff2f92;--text:#f7f2e8;--muted:#b0c1b8;--line:rgba(215,168,70,.32)}
   *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0%,#15362b 0%,var(--bg) 42%);color:var(--text);font:400 16px/1.5 Outfit,system-ui,sans-serif;min-height:100vh}
   .top{padding:27px 20px 23px;text-align:center;border-bottom:1px solid var(--line)}.logo{font:600 42px/.93 'Cormorant Garamond',serif;color:var(--cream);letter-spacing:.015em}.sub{color:var(--gold);letter-spacing:.28em;font-size:10px;margin-top:7px}.wrap{width:min(720px,100%);margin:auto;padding:24px 18px 130px}.table-chip{display:inline-block;padding:7px 14px;background:#143b2e;border:1px solid var(--line);border-radius:999px;color:var(--cream);font-size:13px}.lead{margin-top:22px;font:600 36px/1.05 'Cormorant Garamond',Georgia,serif;color:var(--cream)}.info{margin:10px 0 21px;color:var(--muted);font-size:14px}.alert{border:1px solid #b9755f;background:#46221d;border-radius:12px;padding:15px;line-height:1.5;margin:20px 0}.section-title{margin:26px 0 11px;font-size:12px;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:.14em}.product{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:16px;padding:15px;margin:10px 0;background:rgba(6,35,28,.8)}.product-data{flex:1;min-width:0}.product-name{font-size:16px;font-weight:500}.desc{font-size:13px;color:var(--muted);margin:5px 0 7px}.price{color:var(--cream);font-weight:600;font-size:15px}.qty{display:flex;gap:10px;align-items:center}.qty button{background:#163d31;color:var(--cream);border:1px solid var(--line);font-size:22px;width:34px;height:36px;border-radius:9px;cursor:pointer}.qty button:disabled{opacity:.3;cursor:default}.qty span{min-width:18px;text-align:center;font-weight:600}.sticky{position:fixed;bottom:0;left:0;right:0;background:#00130ef2;backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:13px max(16px,calc((100% - 700px)/2));display:flex;gap:10px}.sticky button{border:0;border-radius:12px;min-height:50px;font:600 14px Outfit,sans-serif;padding:12px 14px}.primary{flex:2;background:var(--pink);color:white}.secondary{flex:1;background:#173c30;color:var(--cream);border:1px solid var(--line)!important}.sticky button:disabled{opacity:.55;cursor:not-allowed}.totals{margin-top:24px;padding:18px;border:1px solid var(--line);border-radius:15px;background:var(--panel)}.totals div{display:flex;justify-content:space-between;gap:12px}.totals strong{color:var(--cream)}.notice{font-size:13px;color:var(--muted);margin-top:10px}.lang{display:flex;justify-content:flex-end;gap:6px;margin-bottom:12px}.lang button{background:transparent;color:var(--muted);border:1px solid var(--line);padding:6px 12px;border-radius:8px;font:inherit;cursor:pointer}.lang button[aria-pressed=true]{color:var(--cream);border-color:var(--gold)}.loader{color:var(--muted);padding:24px 0}.tag{font-size:11px;display:inline-block;margin-top:10px;padding:5px 9px;border:1px solid var(--line);border-radius:6px;color:var(--gold)}
+
+  /* Tilauksen tarkistus näkyy sivun sisällä, ei selaimen ponnahdusikkunana. */
+  [hidden]{display:none!important}
+  .order-review{margin:22px 0 4px;padding:22px 20px;border:1px solid var(--gold);border-radius:18px;background:linear-gradient(155deg,#0e3a2d,#061f18);box-shadow:0 10px 26px rgba(0,0,0,.14);scroll-margin-top:20px}
+  .review-eyebrow{color:var(--gold);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+  .order-review h2{font:600 32px/1.1 'Cormorant Garamond',Georgia,serif;color:var(--cream);margin:8px 0 6px}
+  .review-meta{color:var(--muted);font-size:14px;margin-bottom:16px}
+  .review-line{display:flex;justify-content:space-between;gap:14px;align-items:start;padding:11px 0;border-bottom:1px solid var(--line)}
+  .review-line span:last-child{white-space:nowrap;color:var(--cream);font-weight:600}
+  .review-total{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:19px 0 7px;font-size:18px;font-weight:700;color:var(--cream)}
+  .review-note{color:var(--muted);font-size:13px;margin:0 0 17px}
+  .review-actions{display:grid;grid-template-columns:1fr 1.6fr;gap:10px}
+  .review-actions button{min-height:51px;padding:12px;border-radius:11px;font:600 14px Outfit,sans-serif;cursor:pointer}
+  .review-actions button:disabled{opacity:.55;cursor:wait}
+  .review-back{background:transparent;color:var(--cream);border:1px solid var(--line)}
+  .review-confirm{background:var(--pink);color:white;border:1px solid var(--pink)}
+  .order-review:focus{outline:2px solid var(--gold);outline-offset:3px}
+  @media(max-width:420px){.review-actions{grid-template-columns:1fr}.order-review{padding:19px 15px}}
   </style>
 </head>
 <body>
@@ -26,6 +44,19 @@
   <div id="loading" class="loader">Ladataan tuotteita…</div>
   <div id="products" aria-live="polite"></div>
   <div class="totals"><div><span id="cart-label">Ostoskori</span><span id="total">0,00 €</span></div><div class="notice" id="cart-count">0 tuotetta</div><div class="tag" id="stage">TESTIVAIHE · TILAAMINEN EI VIELÄ KÄYTÖSSÄ</div></div>
+
+  <section id="order-review" class="order-review" hidden tabindex="-1" aria-labelledby="review-heading">
+    <div class="review-eyebrow" id="review-eyebrow">PÖYTÄTILAUS</div>
+    <h2 id="review-heading">Tarkista tilauksesi</h2>
+    <p id="review-meta" class="review-meta"></p>
+    <div id="review-items"></div>
+    <div class="review-total"><span id="review-total-label">Yhteensä</span><strong id="review-total-amount"></strong></div>
+    <p id="review-note" class="review-note">Maksu suoritetaan lopussa henkilökunnalle.</p>
+    <div class="review-actions">
+      <button type="button" class="review-back" id="review-back">Muokkaa tilausta</button>
+      <button type="button" class="review-confirm" id="review-confirm">Vahvista ja lähetä tilaus</button>
+    </div>
+  </section>
 </main>
 <div class="sticky"><button id="call" class="secondary" disabled>Kutsu myyjä</button><button id="order" class="primary" disabled>Lähetä tilaus · maksu lopussa</button></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -35,32 +66,78 @@
   const url='https://tikatiahzawstvrdqfix.supabase.co';
   const key='sb_publishable_ZfYe1fy7Dxu59HfTLSQ7Cw_EK0xGl34';
   const $=id=>document.getElementById(id);
-  const state={lang:'fi',products:[],qty:new Map(),table:'',token:'',orderingEnabled:false,callEnabled:false,busy:false};
+  const state={lang:'fi',products:[],qty:new Map(),table:'',token:'',orderingEnabled:false,callEnabled:false,busy:false,reviewOpen:false};
   const words={fi:{heading:'Tilaa pöytään.',description:'Valitse tuotteet ja tilaa pöytään. Maksu suoritetaan lopussa henkilökunnalle.',loading:'Ladataan tuotteita…',cart:'Ostoskori',piece:'tuotetta',call:'Kutsu myyjä',order:'Lähetä tilaus · maksu lopussa',stage:'MAKSU LOPUSSA · TILAUS MENEE HENKILÖKUNNALLE',empty:'Tuotteita ei ole vielä saatavilla.',invalid:'QR-koodi ei ole voimassa tai pöytä ei ole käytössä.',error:'Tuotteiden lataaminen epäonnistui. Yritä myöhemmin.',common:'Yhteistila'},en:{heading:'Order to your table.',description:'Choose your items and order to the table. Pay the staff at the end.',loading:'Loading products…',cart:'Your basket',piece:'items',call:'Call staff',order:'Send order · pay later',stage:'PAY LATER · ORDER SENT TO STAFF',empty:'No products available yet.',invalid:'This QR code is not valid or the table is inactive.',error:'Unable to load products. Please try again later.',common:'Common area'}};
+
+  const reviewWords={
+    fi:{open:'Tarkista tilaus',eyebrow:'PÖYTÄTILAUS',heading:'Tarkista tilauksesi',total:'Yhteensä',note:'Maksu suoritetaan lopussa henkilökunnalle.',back:'Muokkaa tilausta',send:'Vahvista ja lähetä tilaus',sending:'Lähetetään…',table:'Pöytä'},
+    en:{open:'Review order',eyebrow:'TABLE ORDER',heading:'Review your order',total:'Total',note:'Pay the staff at the end.',back:'Edit order',send:'Confirm and send order',sending:'Sending…',table:'Table'}
+  };
   const euro=n=>new Intl.NumberFormat(state.lang==='fi'?'fi-FI':'en-IE',{style:'currency',currency:'EUR'}).format(n);
   const txt=(p)=>p['name_'+state.lang]||p.name_fi||p.name_en||'Tuote';
   const desc=(p)=>p['description_'+state.lang]||'';
   function fail(msg){$('loading').hidden=true;$('error').textContent=msg;$('error').hidden=false}
   function render(){const w=words[state.lang];$('heading').textContent=w.heading;$('description').textContent=w.description;$('cart-label').textContent=w.cart;$('call').textContent=w.call;$('order').textContent=w.order;$('stage').textContent=w.stage;$('table-chip').textContent=state.table||w.common;$('lang-fi').setAttribute('aria-pressed',String(state.lang==='fi'));$('lang-en').setAttribute('aria-pressed',String(state.lang==='en'));
-    const count=[...state.qty.values()].reduce((a,b)=>a+b,0);$('order').disabled=!state.orderingEnabled || state.busy || count===0;$('call').disabled=!state.callEnabled || state.busy;$('order').textContent=state.orderingEnabled?w.order:(state.lang==='fi'?'Tilaaminen ei vielä käytössä':'Ordering is not available');$('call').textContent=state.callEnabled?w.call:(state.lang==='fi'?'Myyjäkutsu ei vielä käytössä':'Staff calls unavailable');$('stage').textContent=state.orderingEnabled?w.stage:(state.lang==='fi'?'TESTIVAIHE · TILAAMINEN EI VIELÄ KÄYTÖSSÄ':'TEST MODE · ORDERING NOT YET AVAILABLE');
+    const count=[...state.qty.values()].reduce((a,b)=>a+b,0);$('order').disabled=!state.orderingEnabled || state.busy || count===0;$('call').disabled=!state.callEnabled || state.busy;$('order').textContent=state.orderingEnabled?reviewWords[state.lang].open:(state.lang==='fi'?'Tilaaminen ei vielä käytössä':'Ordering is not available');$('call').textContent=state.callEnabled?w.call:(state.lang==='fi'?'Myyjäkutsu ei vielä käytössä':'Staff calls unavailable');$('stage').textContent=state.orderingEnabled?w.stage:(state.lang==='fi'?'TESTIVAIHE · TILAAMINEN EI VIELÄ KÄYTÖSSÄ':'TEST MODE · ORDERING NOT YET AVAILABLE');
     const products=$('products');products.replaceChildren(); const byCategory=new Map();for(const p of state.products){const cat=p.category||'Muut';if(!byCategory.has(cat))byCategory.set(cat,[]);byCategory.get(cat).push(p)}
     for(const [category,items] of byCategory){const h=document.createElement('h2');h.className='section-title';h.textContent=category;products.append(h);for(const p of items){const row=document.createElement('article');row.className='product';const d=document.createElement('div');d.className='product-data';const name=document.createElement('div');name.className='product-name';name.textContent=txt(p);const info=document.createElement('div');info.className='desc';info.textContent=desc(p);const price=document.createElement('div');price.className='price';price.textContent=euro(Number(p.price));d.append(name,info,price);const qty=document.createElement('div');qty.className='qty';const minus=document.createElement('button');minus.textContent='−';minus.type='button';minus.setAttribute('aria-label',txt(p)+' miinus');const count=document.createElement('span');count.textContent=String(state.qty.get(p.id)||0);const plus=document.createElement('button');plus.textContent='+';plus.type='button';plus.setAttribute('aria-label',txt(p)+' plus');minus.disabled=!(state.qty.get(p.id)>0);plus.disabled=(state.qty.get(p.id)||0)>=20;minus.addEventListener('click',()=>change(p.id,-1));plus.addEventListener('click',()=>change(p.id,1));qty.append(minus,count,plus);row.append(d,qty);products.append(row)}}
     if(!state.products.length && !($('loading').hidden===false)){const p=document.createElement('p');p.className='info';p.textContent=w.empty;products.append(p)}
     const total=state.products.reduce((a,p)=>a+Number(p.price)*(state.qty.get(p.id)||0),0);$('cart-count').textContent=count+' '+w.piece;$('total').textContent=euro(total);
+    if(state.reviewOpen)renderReview();
   }
-  function change(id,amount){const val=Math.max(0,Math.min(20,(state.qty.get(id)||0)+amount));if(val===0)state.qty.delete(id);else state.qty.set(id,val);render()}
+  function change(id,amount){closeReview();const val=Math.max(0,Math.min(20,(state.qty.get(id)||0)+amount));if(val===0)state.qty.delete(id);else state.qty.set(id,val);render()}
   function showFeedback(text){$('feedback').textContent=text;$('feedback').hidden=false;$('error').hidden=true}
   function showFailure(text){$('error').textContent=text;$('error').hidden=false;$('feedback').hidden=true}
+
+  function renderReview(){
+    if(!state.reviewOpen)return;
+    const w=reviewWords[state.lang];
+    $('review-eyebrow').textContent=w.eyebrow;
+    $('review-heading').textContent=w.heading;
+    $('review-meta').textContent=state.table||w.table;
+    $('review-total-label').textContent=w.total;
+    $('review-note').textContent=w.note;
+    $('review-back').textContent=w.back;
+    $('review-confirm').textContent=state.busy?w.sending:w.send;
+    $('review-confirm').disabled=state.busy;
+    $('review-back').disabled=state.busy;
+    const holder=$('review-items');holder.replaceChildren();
+    let total=0;
+    for(const p of state.products){
+      const quantity=state.qty.get(p.id)||0;
+      if(!quantity)continue;
+      const sum=quantity*Number(p.price);
+      total+=sum;
+      const row=document.createElement('div');row.className='review-line';
+      const name=document.createElement('span');name.textContent=quantity+' × '+txt(p);
+      const price=document.createElement('span');price.textContent=euro(sum);
+      row.append(name,price);holder.append(row);
+    }
+    $('review-total-amount').textContent=euro(total);
+  }
+  function closeReview(){
+    state.reviewOpen=false;
+    $('order-review').hidden=true;
+  }
+  function openReview(){
+    if(state.busy||!state.orderingEnabled||state.qty.size===0)return;
+    state.reviewOpen=true;
+    $('error').hidden=true;
+    $('feedback').hidden=true;
+    $('order-review').hidden=false;
+    renderReview();
+    $('order-review').scrollIntoView({behavior:'smooth',block:'start'});
+    $('order-review').focus({preventScroll:true});
+  }
   async function submitOrder(){
-    if(state.busy||!state.orderingEnabled)return;
+    if(state.busy||!state.orderingEnabled||!state.reviewOpen)return;
     const items=[...state.qty.entries()].map(([product_id,quantity])=>({product_id,quantity}));
     if(!items.length)return;
-    if(!window.confirm(state.lang==='fi'?'Lähetetäänkö tilaus henkilökunnalle? Maksu suoritetaan lopussa.':'Send the order to staff? Payment is due at the end.'))return;
     state.busy=true;render();
     try{const {data,error}=await client.rpc('common_qr_create_order',{p_qr_token:state.token,p_items:items});if(error)throw error;
-      state.qty.clear();showFeedback((state.lang==='fi'?'Tilaus #':'Order #')+data+(state.lang==='fi'?' lähetetty henkilökunnalle. Maksa tilaus lopussa.':' sent to staff. Please pay at the end.'));
-    }catch(e){console.error('Order error',e?.message);showFailure(state.lang==='fi'?'Tilaus ei lähtenyt: '+(e?.message||'Yritä uudelleen'):'Order not sent: '+(e?.message||'Try again'));}
-    finally{state.busy=false;render()}
+      state.qty.clear();closeReview();showFeedback((state.lang==='fi'?'Tilaus #':'Order #')+data+(state.lang==='fi'?' lähetetty henkilökunnalle. Maksa tilaus lopussa.':' sent to staff. Please pay at the end.'));
+    }catch(e){console.error('Order error',e?.message);showFailure(state.lang==='fi'?'Tilaus ei lähtenyt. Yritä myöhemmin uudelleen tai pyydä henkilökuntaa auttamaan.':'Order could not be sent. Please try again later or ask staff for help.');}
+    finally{state.busy=false;render();if(!$('feedback').hidden){$('feedback').scrollIntoView({behavior:'smooth',block:'center'});}else if(!$('error').hidden){$('error').scrollIntoView({behavior:'smooth',block:'center'});}}
   }
   async function callStaff(){if(state.busy||!state.callEnabled)return;state.busy=true;render();
     try{const {error}=await client.rpc('common_qr_call_staff',{p_qr_token:state.token});if(error)throw error;
@@ -68,7 +145,7 @@
     }catch(e){console.error('Call error',e?.message);showFailure(state.lang==='fi'?'Kutsu ei lähtenyt: '+(e?.message||'Yritä uudelleen'):'Staff call failed: '+(e?.message||'Try again'));}
     finally{state.busy=false;render()}
   }
-  $('order').addEventListener('click',submitOrder);$('call').addEventListener('click',callStaff);
+  $('order').addEventListener('click',openReview);$('review-back').addEventListener('click',closeReview);$('review-confirm').addEventListener('click',submitOrder);$('call').addEventListener('click',callStaff);
   $('lang-fi').addEventListener('click',()=>{state.lang='fi';render()});$('lang-en').addEventListener('click',()=>{state.lang='en';render()});
   let client;
   async function start(){try{const token=decodeURIComponent(location.hash.slice(1).trim());if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(token)){fail(words[state.lang].invalid);return}if(!window.supabase?.createClient){fail(words[state.lang].error);return}client=window.supabase.createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});state.token=token;const {data,error}=await client.rpc('common_qr_get_menu',{p_qr_token:token});if(error)throw error;if(!data){fail(words[state.lang].invalid);return}state.table=data.table_name;state.orderingEnabled=data.ordering_enabled===true;state.callEnabled=data.call_enabled===true;state.products=Array.isArray(data.products)?data.products:[];$('loading').hidden=true;render()}catch(e){console.error('Menu load failed:',e?.message||'error');fail(words[state.lang].error)}}
