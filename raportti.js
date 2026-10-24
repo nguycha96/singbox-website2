@@ -1,0 +1,251 @@
+/* SiNG BOX yksityinen talousraportti – selainkoodi.
+   Vain Supabasen julkinen publishable-avain täällä; EI salaista avainta.
+   Taloustiedot haetaan tunnistautumisen ja ylläpitäjävaltuutuksen vaativasta
+   singbox-report-Edge Functionista.
+*/
+(() => {
+  "use strict";
+  const $ = (id) => document.getElementById(id);
+  const SETTINGS = window.SINGBOX_REPORT_CONFIG || {};
+  const eur = new Intl.NumberFormat("fi-FI", { style: "currency", currency: "EUR" });
+  const whole = new Intl.NumberFormat("fi-FI", { maximumFractionDigits: 0 });
+  const HELSINKI_DATE = new Intl.DateTimeFormat("sv-SE", {
+    timeZone: "Europe/Helsinki", year: "numeric", month: "2-digit", day: "2-digit",
+  });
+  const monthLabel = new Intl.DateTimeFormat("fi-FI", { month: "long", year: "numeric", timeZone: "UTC" });
+  let period = "day";
+  let anchor = HELSINKI_DATE.format(new Date());
+  let client = null;
+  let currentData = null;
+  let inFlight = false;
+  let pendingRefresh = false;
+
+  function errorText(err) {
+    if (!err) return "Tuntematon virhe.";
+    return err.message || String(err);
+  }
+  function showError(id, text) { $(id).textContent = text; $(id).hidden = !text; }
+  function value(id, text) { $(id).textContent = text; }
+  function asAmount(n) { return eur.format(Number(n || 0)); }
+  function dateForLabel(date) { return new Date(`${date}T00:00:00.000Z`); }
+  function safeDate(year, month, day) {
+    return new Date(Date.UTC(year, month, day)).toISOString().slice(0, 10);
+  }
+  function stepAnchor(direction) {
+    const d = dateForLabel(anchor);
+    const y = d.getUTCFullYear();
+    const m = d.getUTCMonth();
+    const day = d.getUTCDate();
+    if (period === "day") anchor = safeDate(y, m, day + direction);
+    if (period === "month") anchor = safeDate(y, m + direction, 1);
+    if (period === "year") anchor = safeDate(y + direction, 0, 1);
+    updateDateField();
+    fetchReport();
+  }
+  function updateDateField() {
+    const field = $("reportDate");
+    if (period === "day") { field.type = "date"; field.value = anchor; }
+    if (period === "month") { field.type = "month"; field.value = anchor.slice(0, 7); }
+    if (period === "year") { field.type = "number"; field.min = "2020"; field.max = "2100"; field.value = anchor.slice(0, 4); }
+    document.querySelectorAll("[data-period]").forEach((b) => {
+      b.classList.toggle("active", b.dataset.period === period);
+      b.setAttribute("aria-pressed", String(b.dataset.period === period));
+    });
+    const stamp = dateForLabel(anchor);
+    const label = period === "day"
+      ? new Intl.DateTimeFormat("fi-FI", { timeZone: "UTC", day: "numeric", month: "long", year: "numeric" }).format(stamp)
+      : period === "month" ? monthLabel.format(stamp) : anchor.slice(0, 4);
+    value("periodTitle", label.charAt(0).toUpperCase() + label.slice(1));
+    value("chartTitle", period === "day" ? "Tuntikohtainen myynti" : period === "month" ? "Päivittäinen myynti" : "Kuukausittainen myynti");
+  }
+  function drawChart(series) {
+    const chart = $("chart");
+    chart.replaceChildren();
+    const max = Math.max(1, ...series.map((x) => Number(x.revenue) || 0));
+    for (const item of series) {
+      const cell = document.createElement("div"); cell.className = "bar-cell";
+      const track = document.createElement("div"); track.className = "bar-track";
+      const bar = document.createElement("span"); bar.className = "bar";
+      bar.style.height = `${Math.max(1, Math.min(100, (Number(item.revenue || 0) / max) * 100))}%`;
+      bar.title = `${item.label}: ${asAmount(item.revenue)}`;
+      track.append(bar);
+      const label = document.createElement("span"); label.className = "bar-label";
+      label.textContent = item.label;
+      cell.append(track, label); chart.append(cell);
+    }
+  }
+  function appendCell(row, text) {
+    const td = document.createElement("td"); td.textContent = String(text); row.append(td);
+  }
+  function renderTable(rows, bodyId, factory) {
+    const body = $(bodyId); body.replaceChildren();
+    for (const item of rows) {
+      const tr = document.createElement("tr");
+      for (const text of factory(item)) appendCell(tr, text);
+      body.append(tr);
+    }
+  }
+  function render(data) {
+    currentData = data;
+    $("printReportButton").disabled = false;
+    const s = data.summary;
+    value("revenueMetric", asAmount(s.revenue));
+    value("costMetric", asAmount(s.productCost));
+    value("marginMetric", asAmount(s.grossMargin));
+    value("expensesMetric", asAmount(Number(s.manualExpenses) + Number(s.stockCost)));
+    value("orderMetric", whole.format(s.orderCount));
+    value("qtyMetric", `${whole.format(s.soldQuantity)} kpl`);
+    value("resultMetric", asAmount(s.resultAfterCosts));
+    value("manualExpenseMetric", asAmount(s.manualExpenses));
+    value("stockExpenseMetric", asAmount(s.stockCost));
+    value("bookingValue", asAmount(s.bookingValue));
+    value("bookingCount", `${whole.format(s.bookingCount)} varausta · ei sisälly myyntiin`);
+    drawChart(data.series || []);
+    renderTable(data.products || [], "productsBody", (p) => [p.name, whole.format(p.quantity), asAmount(p.revenue), asAmount(p.margin)]);
+    $("noProducts").hidden = !!(data.products && data.products.length);
+    renderTable(data.expenses || [], "expensesBody", (x) => [x.date, `${x.category}${x.note ? " – " + x.note : ""}`, asAmount(x.amount)]);
+    const warnings = [];
+    if (s.missingCostRows > 0) warnings.push(`${s.missingCostRows} myyntiriviltä puuttuu ostohinta. Kate voi olla liian suuri.`);
+    if (s.unvaluedStockRows > 0) warnings.push(`${s.unvaluedStockRows} varastokirjaukselta puuttuu yksikkökustannus. Menot voivat olla puutteellisia.`);
+    const warningBox = $("warnings");
+    warningBox.textContent = warnings.join(" ");
+    warningBox.hidden = warnings.length === 0;
+    const updated = "Päivitetty " + new Intl.DateTimeFormat("fi-FI", { timeZone: "Europe/Helsinki", hour: "2-digit", minute: "2-digit", day: "numeric", month: "numeric", year: "numeric" }).format(new Date(data.generated_at));
+    value("updatedText", updated);
+  }
+  // Raportin tiedot näytetään vasta, kun palvelin on varmistanut
+  // kirjautumisen, ylläpitäjäoikeuden ja palauttanut oikeat myyntitiedot.
+  function enterDashboard(reportData) {
+    $("loginPanel").hidden = true;
+    $("reportPanel").hidden = false;
+    $("logoutButton").hidden = false;
+    value("modeFlag", "Ylläpitäjän näkymä");
+    updateDateField();
+    render(reportData);
+  }
+  function clearReport() {
+    currentData = null;
+    $("printReportButton").disabled = true;
+    for (const id of ["revenueMetric", "costMetric", "marginMetric", "expensesMetric",
+      "orderMetric", "qtyMetric", "resultMetric", "manualExpenseMetric",
+      "stockExpenseMetric", "bookingValue", "bookingCount"]) value(id, "—");
+    $("chart").replaceChildren();
+    $("productsBody").replaceChildren();
+    $("expensesBody").replaceChildren();
+    $("noProducts").hidden = true;
+    $("warnings").hidden = true;
+    $("warnings").textContent = "";
+  }
+  function exitDashboard() {
+    $("reportPanel").hidden = true;
+    $("loginPanel").hidden = false;
+    $("logoutButton").hidden = true;
+    clearReport();
+    $("password").value = "";
+    showError("reportError", "");
+  }
+  async function functionRequest(payload) {
+    if (!client) throw new Error("Supabase-asetukset puuttuvat.");
+    const { data: sessionData } = await client.auth.getSession();
+    if (!sessionData?.session?.access_token) throw new Error("Kirjautuminen on vanhentunut. Kirjaudu uudelleen.");
+    const { data, error } = await client.functions.invoke(SETTINGS.functionName, { body: payload });
+    if (error) {
+      let message = errorText(error);
+      if (error.context?.json) {
+        try { const details = await error.context.json(); message = details.error || details.message || message; } catch { /* fallback */ }
+      }
+      throw new Error(message);
+    }
+    if (data?.error) throw new Error(data.error);
+    return data;
+  }
+  async function fetchReport() {
+    if (inFlight) { pendingRefresh = true; return; }
+    inFlight = true;
+    $("refreshButton").disabled = true;
+    showError("reportError", "");
+    clearReport();
+    value("updatedText", "Haetaan ajantasaiset tiedot…");
+    try {
+      const data = await functionRequest({ action: "report", period, anchor });
+      render(data);
+    } catch (error) {
+      showError("reportError", `Raporttia ei voitu hakea: ${errorText(error)}`);
+      value("updatedText", "Tietojen päivitys epäonnistui.");
+    } finally {
+      inFlight = false;
+      $("refreshButton").disabled = false;
+      if (pendingRefresh && !$("reportPanel").hidden) {
+        pendingRefresh = false;
+        void fetchReport();
+      }
+    }
+  }
+  async function signIn(event) {
+    event.preventDefault();
+    const btn = $("loginButton"); btn.disabled = true;
+    showError("loginError", "");
+    try {
+      if (!window.supabase || !SETTINGS.supabaseUrl || !SETTINGS.publishableKey) {
+        throw new Error("Supabase-yhteyden asetuksia ei ole määritelty.");
+      }
+      if (!client) {
+        client = window.supabase.createClient(SETTINGS.supabaseUrl, SETTINGS.publishableKey, {
+          auth: { persistSession: false, autoRefreshToken: true, detectSessionInUrl: false },
+        });
+      }
+      const { error } = await client.auth.signInWithPassword({
+        email: $("email").value.trim(), password: $("password").value,
+      });
+      if (error) throw error;
+      const firstReport = await functionRequest({ action: "report", period, anchor });
+      if (!firstReport?.summary) throw new Error("Raporttipalvelin ei palauttanut raporttitietoja.");
+      enterDashboard(firstReport);
+    } catch (error) { showError("loginError", errorText(error)); }
+    finally { btn.disabled = false; }
+  }
+  async function addExpense(event) {
+    event.preventDefault();
+    const button = $("saveExpenseButton"); button.disabled = true;
+    showError("expenseMessage", "");
+    const amount = Number($("expenseAmount").value);
+    try {
+      if (!(amount > 0)) throw new Error("Syötä positiivinen summa.");
+      await functionRequest({ action: "add_expense", date: $("expenseDate").value,
+        category: $("expenseCategory").value, amount, note: $("expenseNote").value });
+      $("expenseAmount").value = ""; $("expenseNote").value = "";
+      $("expenseMessage").textContent = "Meno tallennettu onnistuneesti.";
+      $("expenseMessage").hidden = false;
+      await fetchReport();
+    } catch (err) { showError("expenseMessage", `Tallennus epäonnistui: ${errorText(err)}`); }
+    finally { button.disabled = false; }
+  }
+  $("loginForm").addEventListener("submit", signIn);
+  $("expenseForm").addEventListener("submit", addExpense);
+  $("logoutButton").addEventListener("click", async () => {
+    if (client) await client.auth.signOut(); exitDashboard();
+  });
+  $("previousDate").addEventListener("click", () => stepAnchor(-1));
+  $("nextDate").addEventListener("click", () => stepAnchor(1));
+  $("refreshButton").addEventListener("click", fetchReport);
+  $("printReportButton").addEventListener("click", () => {
+    // Tulostetaan vain onnistuneesti ladattu ylläpitäjän raportti.
+    if (inFlight || !currentData || $("reportPanel").hidden || !$("reportError").hidden) return;
+    window.print();
+  });
+  $("reportDate").addEventListener("change", () => {
+    const val = $("reportDate").value;
+    if (period === "day" && /^20\d\d-\d\d-\d\d$/.test(val)) anchor = val;
+    if (period === "month" && /^20\d\d-\d\d$/.test(val)) anchor = val + "-01";
+    if (period === "year" && /^20\d\d$/.test(val)) anchor = val + "-01-01";
+    updateDateField(); fetchReport();
+  });
+  document.querySelectorAll("[data-period]").forEach((button) => button.addEventListener("click", () => {
+    period = button.dataset.period; updateDateField(); fetchReport();
+  }));
+  $("expenseDate").value = anchor;
+  // Automaattipäivitys vain kirjautuneessa oikeassa näkymässä.
+  setInterval(() => {
+    if (!$("reportPanel").hidden && document.visibilityState === "visible") fetchReport();
+  }, 60000);
+})();
