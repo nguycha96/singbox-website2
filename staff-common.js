@@ -9,7 +9,7 @@ const URL='https://tikatiahzawstvrdqfix.supabase.co';
 const PUBKEY='sb_publishable_ZfYe1fy7Dxu59HfTLSQ7Cw_EK0xGl34';
 const money=n=>new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(n||0);
 const when=stamp=>new Date(stamp).toLocaleString('fi-FI',{day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit'});
-let client,container,feedback,orders,calls,lastLoading=false,latest=[];
+let client,container,feedback,orders,globalCalls,lastLoading=false,latest=[];
 function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=String(text);return e}
 function btn(text,fn){const e=el('button','sc-btn',text);e.type='button';e.addEventListener('click',async()=>{e.disabled=true;try{await fn()}catch(err){showError(err?.message||'Toiminto epäonnistui')}finally{e.disabled=false}});return e}
 function msg(text){if(feedback){feedback.textContent=text;feedback.hidden=false}}
@@ -31,6 +31,17 @@ const css=`
 #singboxCommon .sc-btn:disabled{opacity:.4;cursor:default}
 #singboxCommon .sc-btn.sc-paid{background:#ff2f92;border-color:#ff2f92;color:#fff}
 #singboxCommon .sc-alert{padding:12px;border-radius:10px;background:#223c2b;border:1px solid #d7a846;margin:12px 0}
+/* Näkyy sekä Huoneet- että Yhteistila-näkymässä. */
+#singboxCommonCallPanel[hidden]{display:none!important}
+#singboxCommonCallPanel{padding:0;margin:15px 0 20px;color:#f0dcb5;font-family:inherit}
+#singboxCommonCallPanel .sc-call-heading{font-size:18px;font-weight:700;color:#f0dcb5;margin:0 0 12px}
+#singboxCommonCallPanel .sc-global-card{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;padding:16px;margin:10px 0;background:#163628;border:2px solid #d7a846;border-left:5px solid #ff2f92;border-radius:12px}
+#singboxCommonCallPanel .sc-global-label{display:block;color:#d7a846;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+#singboxCommonCallPanel .sc-global-name{color:#f0dcb5;font-size:21px;font-weight:700}
+#singboxCommonCallPanel .sc-global-time{font-size:13px;color:#d3ded7;margin-top:4px}
+#singboxCommonCallPanel .sc-global-btn{min-height:44px;padding:11px 16px;border-radius:10px;border:1px solid #d7a846;background:#0d4a35;color:#fff;font:inherit;font-weight:700;cursor:pointer}
+#singboxCommonCallPanel .sc-global-btn:disabled{opacity:.55;cursor:wait}
+#singboxCommonCallPanel .sc-global-error{background:#34281f;border:1px solid #d7a846;border-radius:10px;padding:14px;color:#f0dcb5}
 `;
 function init(){
   const parent=document.getElementById('commonView');
@@ -44,12 +55,27 @@ function init(){
   const b=btn('Päivitä nyt',()=>load(true));
   const oh=el('h3','sc-heading','Avoimet tilaukset');
   orders=el('div','sc-cards');
-  const ch=el('h3','sc-heading','Kutsu myyjä');
-  calls=el('div','sc-cards');
-  container.append(heading,p,b,feedback,oh,orders,ch,calls);
+  // Tilauskortit pysyvät Yhteistila-välilehdellä.
+  container.append(heading,p,b,feedback,oh,orders);
   parent.replaceChildren(container);
+
+  // Myyjäkutsut näytetään aina sivun yläosassa, näkymästä riippumatta.
+  globalCalls=el('section');
+  globalCalls.id='singboxCommonCallPanel';
+  globalCalls.setAttribute('aria-label','Yhteistilan myyjäkutsut');
+  globalCalls.setAttribute('aria-live','polite');
+  globalCalls.hidden=true;
+  const intro=document.querySelector('.staff-intro');
+  const app=document.getElementById('staffApp');
+  if(intro)intro.insertAdjacentElement('afterend',globalCalls);
+  else if(app)app.prepend(globalCalls);
+  else document.body.prepend(globalCalls);
+
   document.querySelectorAll('.staff-view-button').forEach(x=>x.addEventListener('click',()=>setTimeout(()=>load(),250)));
+  // Hae kutsut aina myös Huoneet-näkymässä.
   setInterval(()=>load(),7000);
+  window.addEventListener('focus',()=>load());
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)load()});
   setTimeout(()=>load(),700);
 }
 async function rpc(name,params){const {data,error}=await client.rpc(name,params);if(error)throw Error(error.message);return data}
@@ -60,17 +86,29 @@ async function action(name,params,ok){
 }
 async function load(force=false){
   const parent=document.getElementById('commonView');
-  if(!parent||!container||parent.hidden||lastLoading)return;
+  if(!parent||!container||!globalCalls||lastLoading)return;
   const uuid=localStorage.getItem(KEY);
-  if(!uuid){orders.replaceChildren(el('p','sc-quiet','Henkilökuntatablettia ei ole yhdistetty.'));return}
+  if(!uuid){
+    globalCalls.hidden=true;
+    if(!parent.hidden)orders.replaceChildren(el('p','sc-quiet','Henkilökuntatablettia ei ole yhdistetty.'));
+    return;
+  }
   lastLoading=true;
   try{
     const data=await rpc('staff_common_dashboard',{p_device_uuid:uuid});
     latest=Array.isArray(data?.orders)?data.orders:[];
-    showOrders(latest);
+    // Kutsut käsitellään riippumatta siitä, kumpi välilehti on auki.
     showCalls(Array.isArray(data?.calls)?data.calls:[]);
-    if(force)msg('Yhteistilan tiedot päivitetty.');
-  }catch(e){showError('Tietojen haku epäonnistui: '+e.message)}
+    if(!parent.hidden){
+      showOrders(latest);
+      if(force)msg('Yhteistilan tiedot päivitetty.');
+    }
+  }catch(e){
+    console.error('Yhteistilan ilmoitusten haku epäonnistui:',e);
+    if(!parent.hidden)showError('Tietojen haku epäonnistui: '+e.message);
+    globalCalls.hidden=false;
+    globalCalls.replaceChildren(el('div','sc-global-error','Yhteistilan kutsujen päivitys epäonnistui. Tarkista yhteys.'));
+  }
   finally{lastLoading=false}
 }
 function showOrders(list){
@@ -113,13 +151,36 @@ function showOrders(list){
   }
 }
 function showCalls(list){
-  calls.replaceChildren();
-  if(!list.length){calls.append(el('p','sc-quiet','Ei avoimia myyjäkutsuja.'));return}
+  if(!globalCalls)return;
+  globalCalls.replaceChildren();
+  if(!list.length){
+    globalCalls.hidden=true;
+    return;
+  }
+  globalCalls.hidden=false;
+  globalCalls.append(el('h2','sc-call-heading',
+    list.length===1?'Yhteistilan henkilökuntakutsu':'Yhteistilan henkilökuntakutsut ('+list.length+')'));
   for(const c of list){
-    const card=el('article','sc-card');
-    card.append(el('div','sc-main',c.table_name||'Pöytä'),el('p','sc-detail','Kutsu lähetetty '+when(c.created_at)));
-    card.append(btn('Kuitattu · hoidettu',()=>action('staff_common_resolve_call',{p_call_id:Number(c.id)},'Myyjäkutsu kuitattu.')));
-    calls.append(card)
+    const card=el('article','sc-global-card');
+    const info=el('div');
+    info.append(el('span','sc-global-label','KUTSU MYYJÄ · YHTEISTILA'));
+    info.append(el('strong','sc-global-name',c.table_name||'Pöytä'));
+    info.append(el('div','sc-global-time','Kutsuttu '+when(c.created_at)));
+    const button=el('button','sc-global-btn','Kuittaa hoidetuksi');
+    button.type='button';
+    button.addEventListener('click',async()=>{
+      button.disabled=true;
+      button.textContent='Kuitataan...';
+      try{
+        await action('staff_common_resolve_call',{p_call_id:Number(c.id)},'Myyjäkutsu kuitattu.');
+      }catch(err){
+        console.error('Myyjäkutsun kuittaus epäonnistui:',err);
+        button.disabled=false;
+        button.textContent='Yritä uudelleen';
+      }
+    });
+    card.append(info,button);
+    globalCalls.append(card);
   }
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
