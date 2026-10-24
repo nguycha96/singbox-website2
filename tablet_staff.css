@@ -972,3 +972,37 @@ body {
     opacity: 0.5;
     cursor: default;
 }
+
+.resolve-call-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 220px;
+    height: 56px;
+    padding: 0 28px;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.resolve-call-btn--room {
+    background: #ff00a8;
+    color: #0b0f0d;
+    border: 1px solid #ff00a8;
+}
+
+.resolve-call-btn--common {
+    background: transparent;
+    color: #e5c46a;
+    border: 1px solid #e5c46a;
+}
+
+.resolve-call-btn:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+}
