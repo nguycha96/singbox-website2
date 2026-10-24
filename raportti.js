@@ -1,3 +1,4 @@
+
 /* SiNG BOX yksityinen talousraportti – selainkoodi.
    Vain Supabasen julkinen publishable-avain täällä; EI salaista avainta.
    Taloustiedot haetaan tunnistautumisen ja ylläpitäjävaltuutuksen vaativasta
@@ -87,7 +88,6 @@
   }
   function render(data) {
     currentData = data;
-    $("printReportButton").disabled = false;
     const s = data.summary;
     value("revenueMetric", asAmount(s.revenue));
     value("costMetric", asAmount(s.productCost));
@@ -125,7 +125,6 @@
   }
   function clearReport() {
     currentData = null;
-    $("printReportButton").disabled = true;
     for (const id of ["revenueMetric", "costMetric", "marginMetric", "expensesMetric",
       "orderMetric", "qtyMetric", "resultMetric", "manualExpenseMetric",
       "stockExpenseMetric", "bookingValue", "bookingCount"]) value(id, "—");
@@ -228,11 +227,6 @@
   $("previousDate").addEventListener("click", () => stepAnchor(-1));
   $("nextDate").addEventListener("click", () => stepAnchor(1));
   $("refreshButton").addEventListener("click", fetchReport);
-  $("printReportButton").addEventListener("click", () => {
-    // Tulostetaan vain onnistuneesti ladattu ylläpitäjän raportti.
-    if (inFlight || !currentData || $("reportPanel").hidden || !$("reportError").hidden) return;
-    window.print();
-  });
   $("reportDate").addEventListener("change", () => {
     const val = $("reportDate").value;
     if (period === "day" && /^20\d\d-\d\d-\d\d$/.test(val)) anchor = val;
