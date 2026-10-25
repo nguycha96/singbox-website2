@@ -117,6 +117,51 @@
           <div id="warnings" class="warning-area" hidden></div>
         </section>
       </div>
+      
+      <!-- TESTIHISTORIA -->
+      <section
+        class="panel"
+        id="testHistoryPanel"
+        aria-label="Testihistoria"
+        hidden
+      >
+        <div class="panel-heading">
+          <div>
+            <div class="section-mark">TESTIHISTORIA</div>
+            <h2>Testikirjaukset</h2>
+          </div>
+        </div>
+
+        <p class="fineprint">
+          Nämä tapahtumat ovat testitietoja.
+          Ne eivät vaikuta viralliseen talousraporttiin.
+          Kumotut kirjaukset säilyvät historiassa.
+        </p>
+
+        <h3>Testimenot</h3>
+
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Päivä</th>
+                <th>Luokka ja selite</th>
+                <th>Summa</th>
+                <th>Tila</th>
+                <th>Toiminto</th>
+              </tr>
+            </thead>
+
+            <tbody id="testExpensesBody"></tbody>
+          </table>
+        </div>
+
+        <p id="noTestExpenses" class="empty-note">
+          Ei testimenoja näytettäväksi.
+        </p>
+      </section>
+      <!-- TESTIHISTORIA LOPPU -->
+
       <footer class="report-footer">SiNG BOX · Raportit ovat vain hyväksytyille ylläpitäjille · Päivittyy automaattisesti minuutin välein</footer>
     </section>
   </main>
