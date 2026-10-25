@@ -103,7 +103,125 @@
     drawChart(data.series || []);
     renderTable(data.products || [], "productsBody", (p) => [p.name, whole.format(p.quantity), asAmount(p.revenue), asAmount(p.margin)]);
     $("noProducts").hidden = !!(data.products && data.products.length);
-    renderTable(data.expenses || [], "expensesBody", (x) => [x.date, `${x.category}${x.note ? " – " + x.note : ""}`, asAmount(x.amount)]);
+    
+    // Menojen kumoaminen ja tulostusulkoasu.
+    if (!document.getElementById("singbox-expense-void-styles")) {
+      const style = document.createElement("style");
+      style.id = "singbox-expense-void-styles";
+      style.textContent = `
+        #expensesBody tr.expense-voided td {
+          opacity: 0.55;
+          text-decoration: line-through;
+        }
+
+        #expensesBody .expense-void-button {
+          margin-left: 10px;
+          padding: 5px 10px;
+          border: 1px solid currentColor;
+          border-radius: 6px;
+          background: transparent;
+          color: inherit;
+          cursor: pointer;
+        }
+
+        #expensesBody .expense-void-button:disabled {
+          opacity: 0.5;
+          cursor: wait;
+        }
+
+        @media print {
+          #expensesBody tr.expense-voided,
+          #expensesBody .expense-void-button {
+            display: none !important;
+          }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    const expenseBody = $("expensesBody");
+    expenseBody.replaceChildren();
+
+    for (const expense of (data.expenses || [])) {
+      const row = document.createElement("tr");
+
+      appendCell(row, expense.date || "");
+
+      const description =
+        expense.category +
+        (expense.note ? " – " + expense.note : "");
+
+      appendCell(
+        row,
+        expense.voided_at
+          ? description + " – Kumottu" +
+            (expense.void_reason
+              ? " (" + expense.void_reason + ")"
+              : "")
+          : description
+      );
+
+      const amountCell = document.createElement("td");
+      amountCell.textContent = asAmount(expense.amount);
+
+      if (expense.voided_at) {
+        row.classList.add("expense-voided");
+      } else {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "expense-void-button";
+        button.textContent = "Kumoa";
+
+        button.addEventListener("click", async () => {
+          const confirmed = window.confirm(
+            "Haluatko varmasti kumota tämän menokirjauksen?\n\n" +
+            description + "\n" +
+            asAmount(expense.amount)
+          );
+
+          if (!confirmed) return;
+
+          const reasonInput = window.prompt(
+            "Kirjoita kumoamisen syy (vähintään 3 merkkiä):"
+          );
+
+          if (reasonInput === null) return;
+
+          const reason = reasonInput.trim();
+
+          if (reason.length < 3 || reason.length > 500) {
+            window.alert(
+              "Kumoamisen syyn pitää olla 3–500 merkkiä."
+            );
+            return;
+          }
+
+          button.disabled = true;
+
+          try {
+            await functionRequest({
+              action: "void_expense",
+              id: expense.id,
+              reason: reason
+            });
+
+            await fetchReport();
+          } catch (error) {
+            button.disabled = false;
+            showError(
+              "reportError",
+              "Kumoaminen epäonnistui: " + errorText(error)
+            );
+          }
+        });
+
+        amountCell.appendChild(button);
+      }
+
+      row.appendChild(amountCell);
+      expenseBody.appendChild(row);
+    }
+
     const warnings = [];
     if (s.missingCostRows > 0) warnings.push(`${s.missingCostRows} myyntiriviltä puuttuu ostohinta. Kate voi olla liian suuri.`);
     if (s.unvaluedStockRows > 0) warnings.push(`${s.unvaluedStockRows} varastokirjaukselta puuttuu yksikkökustannus. Menot voivat olla puutteellisia.`);
