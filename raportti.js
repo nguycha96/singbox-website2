@@ -239,7 +239,194 @@
     $("logoutButton").hidden = false;
     value("modeFlag", "Ylläpitäjän näkymä");
     updateDateField();
+    
     render(reportData);
+
+    // TESTIHISTORIA
+    // Ei vaikuta virallisiin raporttilaskelmiin.
+
+    const testPanel = $("testHistoryPanel");
+    const testBody = $("testExpensesBody");
+    const testEmpty = $("noTestExpenses");
+
+    if (testPanel && testBody && testEmpty) {
+
+      // Tulostuksessa testihistoria piilotetaan.
+      if (!document.getElementById("testHistoryStyles")) {
+        const style = document.createElement("style");
+        style.id = "testHistoryStyles";
+
+        style.textContent = `
+          #testHistoryPanel[hidden] {
+            display: none !important;
+          }
+
+          #testExpensesBody tr.test-voided td:nth-child(-n+3) {
+            text-decoration: line-through;
+            opacity: 0.55;
+          }
+
+          #testExpensesBody .test-void-button {
+            padding: 6px 12px;
+            border: 1px solid currentColor;
+            border-radius: 6px;
+            background: transparent;
+            color: inherit;
+            cursor: pointer;
+          }
+
+          #testExpensesBody .test-void-button:disabled {
+            opacity: 0.5;
+            cursor: wait;
+          }
+
+          @media print {
+            #testHistoryPanel {
+              display: none !important;
+            }
+          }
+        `;
+
+        document.head.appendChild(style);
+      }
+
+      async function loadTestHistory() {
+
+        testPanel.hidden = false;
+        testBody.replaceChildren();
+
+        testEmpty.hidden = false;
+        testEmpty.textContent = "Ladataan testihistoriaa...";
+
+        try {
+
+          const result = await functionRequest({
+            action: "test_expenses"
+          });
+
+          const entries = Array.isArray(result.expenses)
+            ? result.expenses
+            : [];
+
+          testBody.replaceChildren();
+
+          testEmpty.hidden = entries.length > 0;
+          testEmpty.textContent =
+            "Ei testimenoja näytettäväksi.";
+
+          for (const expense of entries) {
+
+            const row = document.createElement("tr");
+
+            if (expense.voided_at) {
+              row.classList.add("test-voided");
+            }
+
+            appendCell(row, expense.date || "");
+
+            const description =
+              expense.category +
+              (expense.note ? " – " + expense.note : "");
+
+            appendCell(row, description);
+
+            appendCell(row, asAmount(expense.amount));
+
+            appendCell(
+              row,
+              expense.voided_at ? "Kumottu" : "Testi"
+            );
+
+            const actionCell = document.createElement("td");
+
+            if (expense.voided_at) {
+
+              actionCell.textContent =
+                expense.void_reason
+                  ? "Syy: " + expense.void_reason
+                  : "Kumottu";
+
+            } else {
+
+              const button = document.createElement("button");
+              button.type = "button";
+              button.className = "test-void-button";
+              button.textContent = "Kumoa";
+
+              button.addEventListener("click", async () => {
+
+                const confirmed = window.confirm(
+                  "Haluatko varmasti kumota testikirjauksen?\n\n" +
+                  description + "\n" +
+                  asAmount(expense.amount)
+                );
+
+                if (!confirmed) return;
+
+                const input = window.prompt(
+                  "Kirjoita kumoamisen syy:"
+                );
+
+                if (input === null) return;
+
+                const reason = input.trim();
+
+                if (
+                  reason.length < 3 ||
+                  reason.length > 500
+                ) {
+                  window.alert(
+                    "Kumoamisen syyn tulee olla 3–500 merkkiä."
+                  );
+                  return;
+                }
+
+                button.disabled = true;
+
+                try {
+
+                  await functionRequest({
+                    action: "void_expense",
+                    id: expense.id,
+                    reason: reason
+                  });
+
+                  await loadTestHistory();
+                  await fetchReport();
+
+                } catch (error) {
+
+                  button.disabled = false;
+
+                  window.alert(
+                    "Kumoaminen epäonnistui: " +
+                    errorText(error)
+                  );
+
+                }
+              });
+
+              actionCell.appendChild(button);
+            }
+
+            row.appendChild(actionCell);
+            testBody.appendChild(row);
+          }
+
+        } catch (error) {
+
+          testEmpty.hidden = false;
+
+          testEmpty.textContent =
+            "Testihistorian haku epäonnistui: " +
+            errorText(error);
+
+        }
+      }
+
+      void loadTestHistory();
+    }
+
   }
   function clearReport() {
     currentData = null;
