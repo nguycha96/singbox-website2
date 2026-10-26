@@ -89,6 +89,100 @@
   function render(data) {
     currentData = data;
     const s = data.summary;
+     
+    // ALV-ERITTELY
+    // Näytetään palvelimen laskemat ALV-tiedot.
+
+    const vatPanel = $("vatReportPanel");
+    const vat = data.vat;
+
+    if (vatPanel) {
+      if (vat && Array.isArray(vat.byRate)) {
+        const vat135 = vat.byRate.find(
+          (row) => Number(row.rate) === 13.5
+        );
+
+        const vat255 = vat.byRate.find(
+          (row) => Number(row.rate) === 25.5
+        );
+
+        value(
+          "vatGross135",
+          asAmount(vat135?.gross || 0)
+        );
+
+        value(
+          "vatAmount135",
+          asAmount(vat135?.vat || 0)
+        );
+
+        value(
+          "vatGross255",
+          asAmount(vat255?.gross || 0)
+        );
+
+        value(
+          "vatAmount255",
+          asAmount(vat255?.vat || 0)
+        );
+
+        value(
+          "vatGrossSales",
+          asAmount(vat.grossSales)
+        );
+
+        value(
+          "vatTotal",
+          asAmount(vat.vatTotal)
+        );
+
+        value(
+          "vatNetSales",
+          vat.netSales === null
+            ? "Ei laskettavissa"
+            : asAmount(vat.netSales)
+        );
+
+        const warning = $("vatMissingWarning");
+
+        const missing = Number(vat.missingVatRows || 0);
+
+        const otherRates = vat.byRate.filter(
+          (row) =>
+            Number(row.rate) !== 13.5 &&
+            Number(row.rate) !== 25.5
+        );
+
+        const messages = [];
+
+        if (missing > 0) {
+          messages.push(
+            missing +
+            " myyntiriviltä puuttuu ALV-erittely. " +
+            "Veroton myynti ei ole luotettavasti laskettavissa."
+          );
+        }
+
+        if (otherRates.length > 0) {
+          messages.push(
+            "Raportissa on myös muita ALV-kantoja, " +
+            "joita tämä taulukko ei erittele."
+          );
+        }
+
+        if (warning) {
+          warning.textContent = messages.join(" ");
+          warning.hidden = messages.length === 0;
+        }
+
+        vatPanel.hidden = false;
+
+      } else {
+        // Puuttuvaa ALV-dataa ei näytetä nollina.
+        vatPanel.hidden = true;
+      }
+    }
+
     value("revenueMetric", asAmount(s.revenue));
     value("costMetric", asAmount(s.productCost));
     value("marginMetric", asAmount(s.grossMargin));
