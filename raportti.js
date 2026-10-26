@@ -89,6 +89,98 @@
   function render(data) {
     currentData = data;
     const s = data.summary;
+
+     
+    // ALV-lisätiedot raportin neljään pääboksiin.
+
+    function setMetricVatDetail(metricId, lines) {
+      const metric = $(metricId);
+
+      if (!metric) return;
+
+      const detailId = metricId + "VatDetail";
+
+      let detail = document.getElementById(detailId);
+
+      if (!detail) {
+        detail = document.createElement("div");
+        detail.id = detailId;
+
+        detail.style.cssText =
+          "margin-top:10px;" +
+          "padding-top:9px;" +
+          "border-top:1px solid rgba(190,160,90,0.25);" +
+          "font-size:0.85rem;" +
+          "line-height:1.6;";
+
+        metric.insertAdjacentElement("afterend", detail);
+      }
+
+      detail.replaceChildren();
+
+      for (const [label, amount] of lines) {
+        const line = document.createElement("div");
+
+        line.style.cssText =
+          "display:flex;" +
+          "justify-content:space-between;" +
+          "align-items:center;" +
+          "gap:12px;";
+
+        const name = document.createElement("span");
+        name.textContent = label;
+
+        const number = document.createElement("strong");
+        number.textContent = amount;
+
+        line.append(name, number);
+        detail.appendChild(line);
+      }
+    }
+
+    const vat = data.vat;
+
+    const salesVatReady =
+      vat &&
+      Number(vat.missingVatRows) === 0 &&
+      vat.netSales !== null &&
+      Number.isFinite(Number(vat.netSales)) &&
+      Number.isFinite(Number(vat.vatTotal));
+
+    // TUOTEMYYNTI
+
+    setMetricVatDetail("revenueMetric", [
+      [
+        "Ilman ALV",
+        salesVatReady ? asAmount(vat.netSales) : "—"
+      ],
+      [
+        "Myynnin ALV",
+        salesVatReady ? asAmount(vat.vatTotal) : "—"
+      ]
+    ]);
+
+    // TUOTEKUSTANNUKSET
+
+    setMetricVatDetail("costMetric", [
+      ["Ilman ALV", "—"],
+      ["Ostojen ALV", "—"]
+    ]);
+
+    // MYYNTIKATE
+
+    setMetricVatDetail("marginMetric", [
+      ["Kate ilman ALV", "—"],
+      ["ALV-oikaisu", "—"]
+    ]);
+
+    // KIRJATUT MUUT MENOT
+
+    setMetricVatDetail("expensesMetric", [
+      ["Ilman ALV", "—"],
+      ["Menojen ALV", "—"]
+    ]);
+
      
     // ALV-ERITTELY
     // Näytetään palvelimen laskemat ALV-tiedot.
