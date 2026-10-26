@@ -182,14 +182,13 @@
     ]);
 
      
-    // ALV-ERITTELY
-    // Näytetään palvelimen laskemat ALV-tiedot.
+// ALV-ERITTELY
+// Näytetään palvelimen laskemat ALV-tiedot.
 
-    const vatPanel = $("vatReportPanel");
-    const vat = data.vat;
+const vatPanel = $("vatReportPanel");
 
-    if (vatPanel) {
-      if (vat && Array.isArray(vat.byRate)) {
+if (vatPanel) {
+  if (vat && Array.isArray(vat.byRate)) {
         const vat135 = vat.byRate.find(
           (row) => Number(row.rate) === 13.5
         );
