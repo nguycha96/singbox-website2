@@ -117,6 +117,76 @@
           <div id="warnings" class="warning-area" hidden></div>
         </section>
       </div>
+
+      
+      <!-- ALV-ERITTELY -->
+      <section
+        class="panel"
+        id="vatReportPanel"
+        aria-label="Myynnin ALV-erittely"
+        hidden
+      >
+        <div class="panel-heading">
+          <div>
+            <div class="section-mark">ARVONLISÄVERO</div>
+            <h2>Myynnin ALV-erittely</h2>
+          </div>
+        </div>
+
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>ALV-kanta</th>
+                <th>Myynti sis. ALV</th>
+                <th>ALV:n osuus</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>13,5 %</td>
+                <td id="vatGross135">—</td>
+                <td id="vatAmount135">—</td>
+              </tr>
+              <tr>
+                <td>25,5 %</td>
+                <td id="vatGross255">—</td>
+                <td id="vatAmount255">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="expense-total">
+          <span>Myynti sisältäen ALV:n</span>
+          <strong id="vatGrossSales">—</strong>
+        </div>
+
+        <div class="expense-total">
+          <span>Myynnin ALV yhteensä</span>
+          <strong id="vatTotal">—</strong>
+        </div>
+
+        <div class="expense-total">
+          <span>Myynti ilman ALV:tä</span>
+          <strong id="vatNetSales">—</strong>
+        </div>
+
+        <p
+          id="vatMissingWarning"
+          class="warning-area"
+          hidden
+        ></p>
+
+        <p class="fineprint">
+          ALV-erittely perustuu maksettuihin ja
+          toimitettuihin tuotteisiin. Ostojen
+          vähennettävää ALV:tä ei ole vielä huomioitu.
+          Raportti ei korvaa virallista ALV-kirjanpitoa.
+        </p>
+      </section>
+      <!-- ALV-ERITTELY LOPPU -->
+
       
       <!-- TESTIHISTORIA -->
       <section
