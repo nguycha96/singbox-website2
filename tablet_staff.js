@@ -724,12 +724,12 @@ async function loadRooms(force = false) {
             error: bookingsError
         } =
             await supabaseClient.rpc(
-                "staff_get_bookings",
-                {
-                    p_device_uuid:
-                        deviceUuid
-                }
-            );
+    "staff_get_bookings_v2",
+    {
+        p_device_uuid:
+            deviceUuid
+    }
+);
 
 
         if (bookingsError) {
