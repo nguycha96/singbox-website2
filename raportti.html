@@ -101,7 +101,31 @@
                 <option>Vuokra</option><option>Palkat</option><option>Sähkö ja vesi</option>
                 <option>Markkinointi</option><option>Palvelut ja ohjelmistot</option><option>Muut kulut</option>
               </select></label>
-              <label>Summa (€) <input id="expenseAmount" type="number" step="0.01" min="0.01" max="1000000" required placeholder="0,00"></label>
+              
+<label>
+  Summa (sis. ALV) €
+  <input
+    id="expenseAmount"
+    type="number"
+    step="0.01"
+    min="0.01"
+    max="1000000"
+    required
+    placeholder="0,00"
+  >
+</label>
+
+<label>
+  ALV-kanta
+  <select id="expenseVatRate" required>
+    <option value="">Valitse ALV</option>
+    <option value="0">0 % / Ei ALV:tä</option>
+    <option value="10">10 %</option>
+    <option value="13.5">13,5 %</option>
+    <option value="25.5">25,5 %</option>
+  </select>
+</label>
+
               <label class="full">Selite (valinnainen) <input id="expenseNote" maxlength="500" placeholder="Esim. lokakuun sähkölasku"></label>
               <button id="saveExpenseButton" class="primary-btn full" type="submit">Tallenna meno →</button>
             </form>
