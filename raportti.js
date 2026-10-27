@@ -966,6 +966,108 @@ if (vatPanel) {
   document.querySelectorAll("[data-period]").forEach((button) => button.addEventListener("click", () => {
     period = button.dataset.period; updateDateField(); fetchReport();
   }));
+   
+  // MENOKIRJAUSTEN ALV-ESIKATSELU
+  // Ei muuta raportin laskelmia tai tietokantaa.
+
+  {
+    const grossField = $("expenseAmount");
+    const vatField = $("expenseVatRate");
+
+    if (grossField && vatField) {
+
+      const preview = document.createElement("div");
+      preview.className = "expense-total full";
+
+      preview.style.cssText =
+        "display:flex;" +
+        "flex-direction:column;" +
+        "gap:10px;" +
+        "margin-top:8px;";
+
+      const netRow = document.createElement("div");
+      const vatRow = document.createElement("div");
+
+      for (const row of [netRow, vatRow]) {
+        row.style.cssText =
+          "display:flex;" +
+          "justify-content:space-between;" +
+          "gap:12px;" +
+          "align-items:center;";
+      }
+
+      const netLabel = document.createElement("span");
+      netLabel.textContent = "Summa ilman ALV:tä";
+
+      const netValue = document.createElement("strong");
+      netValue.textContent = "—";
+
+      netRow.append(netLabel, netValue);
+
+      const vatLabel = document.createElement("span");
+      vatLabel.textContent = "ALV:n osuus";
+
+      const vatValue = document.createElement("strong");
+      vatValue.textContent = "—";
+
+      vatRow.append(vatLabel, vatValue);
+
+      preview.append(netRow, vatRow);
+
+      vatField.closest("label")
+        ?.insertAdjacentElement("afterend", preview);
+
+      function updateExpenseVatPreview() {
+
+        const gross = Number(grossField.value);
+        const rate = Number(vatField.value);
+
+        if (
+          grossField.value === "" ||
+          vatField.value === "" ||
+          !Number.isFinite(gross) ||
+          gross < 0 ||
+          ![0, 10, 13.5, 25.5].includes(rate)
+        ) {
+          netValue.textContent = "—";
+          vatValue.textContent = "—";
+          return;
+        }
+
+        const grossCents = Math.round(gross * 100);
+
+        const vatCents = Math.round(
+          grossCents * rate / (100 + rate)
+        );
+
+        const netCents = grossCents - vatCents;
+
+        netValue.textContent =
+          asAmount(netCents / 100);
+
+        vatValue.textContent =
+          asAmount(vatCents / 100);
+
+        vatLabel.textContent =
+          "ALV " + String(rate).replace(".", ",") + " %";
+      }
+
+      grossField.addEventListener(
+        "input",
+        updateExpenseVatPreview
+      );
+
+      vatField.addEventListener(
+        "change",
+        updateExpenseVatPreview
+      );
+
+      updateExpenseVatPreview();
+    }
+  }
+
+  // MENOKIRJAUSTEN ALV-ESIKATSELU LOPPU
+
   $("expenseDate").value = anchor;
   // Automaattipäivitys vain kirjautuneessa oikeassa näkymässä.
   setInterval(() => {
