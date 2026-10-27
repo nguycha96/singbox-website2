@@ -925,8 +925,22 @@ if (vatPanel) {
     const amount = Number($("expenseAmount").value);
     try {
       if (!(amount > 0)) throw new Error("Syötä positiivinen summa.");
-      await functionRequest({ action: "add_expense", date: $("expenseDate").value,
-        category: $("expenseCategory").value, amount, note: $("expenseNote").value });
+
+      const vatField = $("expenseVatRate");
+
+      if (vatField && vatField.value === "") {
+        throw new Error("Valitse menon ALV-kanta.");
+      }
+
+      await functionRequest({
+        action: "add_expense",
+        date: $("expenseDate").value,
+        category: $("expenseCategory").value,
+        amount: amount,
+        vat_rate: vatField ? Number(vatField.value) : null,
+        note: $("expenseNote").value
+      });
+
       $("expenseAmount").value = ""; $("expenseNote").value = "";
       $("expenseMessage").textContent = "Meno tallennettu onnistuneesti.";
       $("expenseMessage").hidden = false;
