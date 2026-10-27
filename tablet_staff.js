@@ -1006,13 +1006,17 @@ roomsContainer.replaceChildren();
         );
 
        
-        // HUONEVARAUKSEN MAKSU
 
-        const roomFeeAmount =
-            Number(booking.total_price);
+        // HUONEVARAUKSEN MAKSU
 
         const roomFeePaid =
             booking.payment_status === "paid";
+
+        const roomFeeAmount = Number(
+            roomFeePaid
+                ? (booking.paid_amount ?? booking.total_price)
+                : booking.total_price
+        );
 
         const bookingCancelled =
             ["cancelled", "canceled"].includes(
@@ -1021,124 +1025,165 @@ roomsContainer.replaceChildren();
 
         if (!bookingCancelled) {
 
-            const roomFeeInfo =
+            const paymentBox =
                 document.createElement("div");
 
-            roomFeeInfo.className =
-                "staff-booking-label";
+            paymentBox.className =
+                "room-payment-box";
 
-            if (
-                !Number.isFinite(roomFeeAmount) ||
-                roomFeeAmount <= 0
-            ) {
-                roomFeeInfo.textContent =
-                    "Huonehinta puuttuu";
+            const paymentHeader =
+                document.createElement("div");
 
-            } else {
+            paymentHeader.className =
+                "room-payment-header";
 
-                const formattedAmount =
-                    roomFeeAmount.toLocaleString(
-                        "fi-FI",
-                        {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                        }
-                    );
+            const paymentDetails =
+                document.createElement("div");
 
-                roomFeeInfo.textContent =
-                    `HUONEMAKSU ${formattedAmount} € — ` +
-                    (roomFeePaid ? "MAKSETTU" : "MAKSAMATTA");
+            const paymentTitle =
+                document.createElement("div");
 
-                if (!roomFeePaid) {
+            paymentTitle.className =
+                "room-payment-title";
 
-                    const roomFeeButton =
-                        document.createElement("button");
+            paymentTitle.textContent =
+                "Huonemaksu";
 
-                    roomFeeButton.type = "button";
+            const paymentAmount =
+                document.createElement("div");
 
-                    roomFeeButton.className =
-                        "mark-order-delivered";
+            paymentAmount.className =
+                "room-payment-amount";
 
-                    roomFeeButton.textContent =
-                        "MERKITSE HUONE MAKSETUKSI";
+            const validAmount =
+                Number.isFinite(roomFeeAmount) &&
+                roomFeeAmount > 0;
 
-                    roomFeeButton.addEventListener(
-                        "click",
-                        async () => {
+            const formattedAmount = validAmount
+                ? roomFeeAmount.toLocaleString("fi-FI", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                  })
+                : null;
 
-                            const confirmed = window.confirm(
-                                `Onko huoneen maksu ${formattedAmount} € ` +
-                                `todella vastaanotettu?`
+            paymentAmount.textContent =
+                formattedAmount
+                    ? `${formattedAmount} €`
+                    : "Hinta puuttuu";
+
+            paymentDetails.append(
+                paymentTitle,
+                paymentAmount
+            );
+
+            const paymentStatus =
+                document.createElement("div");
+
+            paymentStatus.className =
+                "room-payment-status " +
+                (roomFeePaid ? "paid" : "unpaid");
+
+            paymentStatus.textContent =
+                roomFeePaid
+                    ? "MAKSETTU"
+                    : validAmount
+                        ? "MAKSAMATTA"
+                        : "HINTA PUUTTUU";
+
+            paymentHeader.append(
+                paymentDetails,
+                paymentStatus
+            );
+
+            paymentBox.appendChild(paymentHeader);
+
+            if (!roomFeePaid && validAmount) {
+
+                const roomFeeButton =
+                    document.createElement("button");
+
+                roomFeeButton.type = "button";
+
+                roomFeeButton.className =
+                    "mark-order-delivered room-payment-btn";
+
+                roomFeeButton.textContent =
+                    "MERKITSE HUONE MAKSETUKSI";
+
+                roomFeeButton.addEventListener(
+                    "click",
+                    async () => {
+
+                        const confirmed = window.confirm(
+                            `Onko huoneen maksu ${formattedAmount} € ` +
+                            `todella vastaanotettu?`
+                        );
+
+                        if (!confirmed) return;
+
+                        const deviceUuid =
+                            localStorage.getItem(
+                                STAFF_DEVICE_STORAGE_KEY
                             );
 
-                            if (!confirmed) return;
-
-                            const deviceUuid =
-                                localStorage.getItem(
-                                    STAFF_DEVICE_STORAGE_KEY
-                                );
-
-                            if (!deviceUuid) {
-                                showPairingScreen();
-                                return;
-                            }
-
-                            roomFeeButton.disabled = true;
-                            roomFeeButton.textContent =
-                                "MERKITÄÄN...";
-
-                            try {
-
-                                const { data, error } =
-                                    await staffSupabaseClient.rpc(
-                                        "staff_mark_room_fee_paid",
-                                        {
-                                            p_device_uuid: deviceUuid,
-                                            p_booking_id: Number(
-                                                booking.booking_id
-                                            )
-                                        }
-                                    );
-
-                                if (
-                                    error ||
-                                    Number(data) !== 1
-                                ) {
-                                    throw new Error(
-                                        error?.message ||
-                                        "Maksua ei voitu vahvistaa."
-                                    );
-                                }
-
-                                await loadRooms();
-
-                            } catch (error) {
-
-                                console.error(
-                                    "Huonemaksun vahvistus epäonnistui:",
-                                    error
-                                );
-
-                                alert(
-                                    "Huonemaksun vahvistus epäonnistui. " +
-                                    "Tarkista maksutila ennen uutta yritystä."
-                                );
-
-                                roomFeeButton.disabled = false;
-                                roomFeeButton.textContent =
-                                    "MERKITSE HUONE MAKSETUKSI";
-                            }
+                        if (!deviceUuid) {
+                            showPairingScreen();
+                            return;
                         }
-                    );
 
-                    block.appendChild(roomFeeButton);
-                }
+                        roomFeeButton.disabled = true;
+                        roomFeeButton.textContent =
+                            "MERKITÄÄN...";
+
+                        try {
+
+                            const { data, error } =
+                                await staffSupabaseClient.rpc(
+                                    "staff_mark_room_fee_paid",
+                                    {
+                                        p_device_uuid: deviceUuid,
+                                        p_booking_id: Number(
+                                            booking.booking_id
+                                        )
+                                    }
+                                );
+
+                            if (error || Number(data) !== 1) {
+                                throw new Error(
+                                    error?.message ||
+                                    "Maksua ei voitu vahvistaa."
+                                );
+                            }
+
+                            await loadRooms();
+
+                        } catch (error) {
+
+                            console.error(
+                                "Huonemaksun vahvistus epäonnistui:",
+                                error
+                            );
+
+                            alert(
+                                "Huonemaksun vahvistus epäonnistui. " +
+                                "Tarkista maksutila ennen uutta yritystä."
+                            );
+
+                            roomFeeButton.disabled = false;
+                            roomFeeButton.textContent =
+                                "MERKITSE HUONE MAKSETUKSI";
+                        }
+                    }
+                );
+
+                paymentBox.appendChild(roomFeeButton);
             }
 
-            block.appendChild(roomFeeInfo);
+            block.appendChild(paymentBox);
         }
 
         // HUONEVARAUKSEN MAKSU LOPPU
+
 
 
         return block;
