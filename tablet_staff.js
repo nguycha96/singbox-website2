@@ -1005,6 +1005,141 @@ roomsContainer.replaceChildren();
             customer
         );
 
+       
+        // HUONEVARAUKSEN MAKSU
+
+        const roomFeeAmount =
+            Number(booking.total_price);
+
+        const roomFeePaid =
+            booking.payment_status === "paid";
+
+        const bookingCancelled =
+            ["cancelled", "canceled"].includes(
+                String(booking.status || "").toLowerCase()
+            );
+
+        if (!bookingCancelled) {
+
+            const roomFeeInfo =
+                document.createElement("div");
+
+            roomFeeInfo.className =
+                "staff-booking-label";
+
+            if (
+                !Number.isFinite(roomFeeAmount) ||
+                roomFeeAmount <= 0
+            ) {
+                roomFeeInfo.textContent =
+                    "Huonehinta puuttuu";
+
+            } else {
+
+                const formattedAmount =
+                    roomFeeAmount.toLocaleString(
+                        "fi-FI",
+                        {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }
+                    );
+
+                roomFeeInfo.textContent =
+                    `HUONEMAKSU ${formattedAmount} € — ` +
+                    (roomFeePaid ? "MAKSETTU" : "MAKSAMATTA");
+
+                if (!roomFeePaid) {
+
+                    const roomFeeButton =
+                        document.createElement("button");
+
+                    roomFeeButton.type = "button";
+
+                    roomFeeButton.className =
+                        "mark-order-delivered";
+
+                    roomFeeButton.textContent =
+                        "MERKITSE HUONE MAKSETUKSI";
+
+                    roomFeeButton.addEventListener(
+                        "click",
+                        async () => {
+
+                            const confirmed = window.confirm(
+                                `Onko huoneen maksu ${formattedAmount} € ` +
+                                `todella vastaanotettu?`
+                            );
+
+                            if (!confirmed) return;
+
+                            const deviceUuid =
+                                localStorage.getItem(
+                                    STAFF_DEVICE_STORAGE_KEY
+                                );
+
+                            if (!deviceUuid) {
+                                showPairingScreen();
+                                return;
+                            }
+
+                            roomFeeButton.disabled = true;
+                            roomFeeButton.textContent =
+                                "MERKITÄÄN...";
+
+                            try {
+
+                                const { data, error } =
+                                    await staffSupabaseClient.rpc(
+                                        "staff_mark_room_fee_paid",
+                                        {
+                                            p_device_uuid: deviceUuid,
+                                            p_booking_id: Number(
+                                                booking.booking_id
+                                            )
+                                        }
+                                    );
+
+                                if (
+                                    error ||
+                                    Number(data) !== 1
+                                ) {
+                                    throw new Error(
+                                        error?.message ||
+                                        "Maksua ei voitu vahvistaa."
+                                    );
+                                }
+
+                                await loadRooms();
+
+                            } catch (error) {
+
+                                console.error(
+                                    "Huonemaksun vahvistus epäonnistui:",
+                                    error
+                                );
+
+                                alert(
+                                    "Huonemaksun vahvistus epäonnistui. " +
+                                    "Tarkista maksutila ennen uutta yritystä."
+                                );
+
+                                roomFeeButton.disabled = false;
+                                roomFeeButton.textContent =
+                                    "MERKITSE HUONE MAKSETUKSI";
+                            }
+                        }
+                    );
+
+                    block.appendChild(roomFeeButton);
+                }
+            }
+
+            block.appendChild(roomFeeInfo);
+        }
+
+        // HUONEVARAUKSEN MAKSU LOPPU
+
 
         return block;
     }
