@@ -427,6 +427,231 @@ if (vatPanel) {
     
     render(reportData);
 
+     
+    // OSTOHINTOJEN HALLINTA
+    // Alustetaan vain kerran kirjautumisen jälkeen.
+
+    const costPanel = $("costEditorPanel");
+
+    if (costPanel && costPanel.dataset.initialized !== "true") {
+
+      costPanel.dataset.initialized = "true";
+
+      const costForm = $("costEditorForm");
+      const productSelect = $("costProductSelect");
+      const netField = $("costNetPrice");
+      const rateField = $("costVatRate");
+      const currentGross = $("costCurrentGross");
+      const previewVat = $("costPreviewVat");
+      const previewGross = $("costPreviewGross");
+      const saveButton = $("costSaveButton");
+      const message = $("costSaveMessage");
+
+      let costProducts = [];
+      let savingCost = false;
+
+      function costMessage(text, isError = false) {
+        message.textContent = text;
+        message.hidden = !text;
+        message.style.color = isError ? "#ffb4b4" : "";
+      }
+
+      function updateCostPreview() {
+
+        const net = Number(netField.value);
+        const rate = Number(rateField.value);
+
+        const valid =
+          productSelect.value !== "" &&
+          netField.value.trim() !== "" &&
+          rateField.value !== "" &&
+          Number.isFinite(net) &&
+          net >= 0 &&
+          net <= 1000000 &&
+          [0, 13.5, 25.5].includes(rate) &&
+          Math.abs(net * 100 - Math.round(net * 100)) < 0.000001;
+
+        if (!valid) {
+          previewVat.textContent = "—";
+          previewGross.textContent = "—";
+          saveButton.disabled = true;
+          return null;
+        }
+
+        const netCents = Math.round(net * 100);
+        const vatCents = Math.round(netCents * rate / 100);
+
+        previewVat.textContent = asAmount(vatCents / 100);
+
+        previewGross.textContent =
+          asAmount((netCents + vatCents) / 100);
+
+        saveButton.disabled = savingCost;
+
+        return { netPrice: netCents / 100, vatRate: rate };
+      }
+
+      productSelect.addEventListener("change", () => {
+
+        const product = costProducts.find(
+          p => String(p.id) === productSelect.value
+        );
+
+        costMessage("");
+
+        currentGross.textContent =
+          product && product.cost_price !== null
+            ? asAmount(product.cost_price)
+            : "—";
+
+        // Vanhoista ostohinnoista ei arvata ALV-kantaa.
+
+        if (
+          product &&
+          product.cost_price !== null &&
+          product.cost_vat_amount !== null &&
+          product.cost_vat_rate !== null &&
+          [0, 13.5, 25.5].includes(Number(product.cost_vat_rate))
+        ) {
+
+          netField.value = (
+            Number(product.cost_price) -
+            Number(product.cost_vat_amount)
+          ).toFixed(2);
+
+          rateField.value = String(Number(product.cost_vat_rate));
+
+        } else {
+          netField.value = "";
+          rateField.value = "";
+        }
+
+        updateCostPreview();
+      });
+
+      netField.addEventListener("input", updateCostPreview);
+      rateField.addEventListener("change", updateCostPreview);
+
+      costForm.addEventListener("submit", async (event) => {
+
+        event.preventDefault();
+
+        if (savingCost) return;
+
+        const values = updateCostPreview();
+
+        if (!values) return;
+
+        const product = costProducts.find(
+          p => String(p.id) === productSelect.value
+        );
+
+        if (!product) return;
+
+        const confirmed = window.confirm(
+          "Tallennetaanko uusi ostohinta?\n\n" +
+          product.name + "\n" +
+          "Veroton: " + asAmount(values.netPrice) + "\n" +
+          "ALV: " + values.vatRate + " %\n" +
+          "Verollinen: " + previewGross.textContent
+        );
+
+        if (!confirmed) return;
+
+        savingCost = true;
+        saveButton.disabled = true;
+        costMessage("Tallennetaan ostohintaa...");
+
+        try {
+
+          const result = await functionRequest({
+            action: "update_product_cost",
+            product_id: Number(product.id),
+            net_price: values.netPrice,
+            vat_rate: values.vatRate
+          });
+
+          if (!result?.ok || !result.product) {
+            throw new Error("Palvelin ei vahvistanut tallennusta.");
+          }
+
+          Object.assign(product, result.product);
+
+          currentGross.textContent =
+            asAmount(product.cost_price);
+
+          costMessage("Ostohinta tallennettu onnistuneesti.");
+
+        } catch (error) {
+
+          costMessage(
+            "Tallennus epäonnistui: " + errorText(error),
+            true
+          );
+
+        } finally {
+          savingCost = false;
+          updateCostPreview();
+        }
+      });
+
+      // Haetaan tuotteet suojatulta raporttipalvelimelta.
+
+      costPanel.hidden = false;
+      saveButton.disabled = true;
+      productSelect.disabled = true;
+
+      costMessage("Haetaan tuoteluetteloa...");
+
+      void (async () => {
+
+        try {
+
+          const result = await functionRequest({
+            action: "list_product_costs"
+          });
+
+          if (!Array.isArray(result?.products)) {
+            throw new Error("Tuoteluetteloa ei saatu.");
+          }
+
+          costProducts = result.products;
+
+          productSelect.replaceChildren();
+
+          const placeholder = document.createElement("option");
+          placeholder.value = "";
+          placeholder.textContent = "Valitse tuote";
+          productSelect.appendChild(placeholder);
+
+          for (const product of costProducts) {
+
+            const option = document.createElement("option");
+
+            option.value = String(product.id);
+            option.textContent = product.name;
+
+            productSelect.appendChild(option);
+          }
+
+          productSelect.disabled = false;
+          costMessage("");
+
+          updateCostPreview();
+
+        } catch (error) {
+
+          costMessage(
+            "Tuotteiden haku epäonnistui: " + errorText(error),
+            true
+          );
+        }
+      })();
+    }
+
+    // OSTOHINTOJEN HALLINTA LOPPU
+
+
     // TESTIHISTORIA
     // Ei vaikuta virallisiin raporttilaskelmiin.
 
