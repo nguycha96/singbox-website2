@@ -188,6 +188,127 @@
       <!-- ALV-ERITTELY LOPPU -->
 
       
+      <!-- OSTOHINTOJEN HALLINTA -->
+
+      <style>
+        #costEditorPanel[hidden] {
+          display: none !important;
+        }
+
+        @media print {
+          #costEditorPanel {
+            display: none !important;
+          }
+        }
+      </style>
+
+      <section
+        class="panel"
+        id="costEditorPanel"
+        aria-label="Ostohintojen hallinta"
+        hidden
+      >
+
+        <div class="panel-heading">
+          <div>
+            <div class="section-mark">
+              TUOTTEIDEN HALLINTA
+            </div>
+
+            <h2>Ostohintojen muokkaus</h2>
+          </div>
+        </div>
+
+        <p class="fineprint">
+          Valitse tuote ja syötä ostohinta ilman ALV:tä.
+          Järjestelmä laskee verollisen ostohinnan
+          automaattisesti.
+        </p>
+
+        <form id="costEditorForm" class="expense-form">
+
+          <label class="full">
+            Valitse tuote
+
+            <select id="costProductSelect" required>
+              <option value="">
+                Valitse tuote
+              </option>
+            </select>
+          </label>
+
+          <div class="expense-total full">
+            <span>Nykyinen ostohinta sis. ALV</span>
+            <strong id="costCurrentGross">—</strong>
+          </div>
+
+          <label>
+            Ostohinta ilman ALV:tä (€)
+
+            <input
+              id="costNetPrice"
+              type="number"
+              step="0.01"
+              min="0"
+              max="1000000"
+              placeholder="0,00"
+              required
+            >
+          </label>
+
+          <label>
+            Ostohinnan ALV-prosentti
+
+            <select id="costVatRate" required>
+              <option value="">
+                Valitse ALV
+              </option>
+              <option value="0">0 %</option>
+              <option value="13.5">13,5 %</option>
+              <option value="25.5">25,5 %</option>
+            </select>
+          </label>
+
+          <div class="expense-total full">
+            <span>ALV:n osuus</span>
+            <strong id="costPreviewVat">—</strong>
+          </div>
+
+          <div class="expense-total full">
+            <span>Ostohinta sisältäen ALV:n</span>
+            <strong id="costPreviewGross">—</strong>
+          </div>
+
+          <button
+            id="costSaveButton"
+            class="primary-btn full"
+            type="submit"
+          >
+            Tallenna ostohinta
+          </button>
+
+        </form>
+
+        <p
+          id="costSaveMessage"
+          class="message"
+          hidden
+          role="status"
+        ></p>
+
+        <p class="fineprint">
+          Aiemmin tallennettujen tilausten
+          ostohinnat eivät muutu.
+
+          Useita ALV-kantoja sisältävien
+          tuotteiden ostokustannukset
+          käsitellään tarvittaessa erikseen.
+        </p>
+
+      </section>
+
+      <!-- OSTOHINTOJEN HALLINTA LOPPU -->
+
       <!-- TESTIHISTORIA -->
       <section
         class="panel"
