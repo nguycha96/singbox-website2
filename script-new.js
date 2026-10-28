@@ -1447,7 +1447,6 @@ async function updateActiveRoomsOnHomePage() {
         )
     );
 
-    let visibleCount = 0;
 
 
 /* CREATE ROOM CARDS FROM SUPABASE */
