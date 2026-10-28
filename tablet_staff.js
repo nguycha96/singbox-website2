@@ -681,7 +681,9 @@ async function loadRooms(force = false) {
     } =
         await supabaseClient
             .from("rooms")
-            .select("id, name")
+            
+.select("id, name, is_active")
+
             .order(
                 "id",
                 {
