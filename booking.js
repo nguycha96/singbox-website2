@@ -129,6 +129,11 @@ const translations = {
         "legend.booked":
             "Varattu",
 
+       
+"legend.cleaning":
+    "Siivousaika",
+
+
         "legend.help":
             "Valitse päivä nähdäksesi vapaat huoneet ja ajat.",
 
@@ -200,6 +205,11 @@ const translations = {
 
         "legend.booked":
             "Booked",
+
+       
+"legend.cleaning":
+    "Cleaning time",
+
 
         "legend.help":
             "Choose a date to see available rooms and times.",
