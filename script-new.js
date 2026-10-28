@@ -1452,9 +1452,51 @@ async function updateActiveRoomsOnHomePage() {
 
 /* CREATE ROOM CARDS FROM SUPABASE */
 
+
 const activeRooms = data || [];
 
+/* LOAD ROOM PRICING RULES */
+
+const activeRoomIds =
+    activeRooms.map(room => room.id);
+
+let roomPricingRules = [];
+
+if (activeRoomIds.length > 0) {
+
+    const {
+        data: pricingData,
+        error: pricingError
+    } =
+        await siteSupabaseClient
+            .from("pricing_rules")
+            .select(
+                "room_id, day_group, start_time, end_time, price"
+            )
+            .in("room_id", activeRoomIds)
+            .order("room_id", {
+                ascending: true
+            })
+            .order("start_time", {
+                ascending: true
+            });
+
+    if (pricingError) {
+
+        console.error(
+            "Could not load room pricing:",
+            pricingError
+        );
+
+    } else {
+
+        roomPricingRules = pricingData || [];
+
+    }
+}
+
 const visibleCount = activeRooms.length;
+
 
 grid.replaceChildren();
 
