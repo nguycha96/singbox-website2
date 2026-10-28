@@ -4137,3 +4137,39 @@ a.footer-contact-link:hover svg {
 
     line-height: 1.4;
 }
+
+
+/* =========================================================
+   ROOM CARDS - ALWAYS CENTERED
+========================================================= */
+
+.room-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.room-grid > .room-card {
+    flex: 0 0 calc((100% - 45px) / 4);
+    min-width: 0;
+}
+
+/* TABLET */
+
+@media (max-width: 1300px) {
+
+    .room-grid > .room-card {
+        flex-basis: calc((100% - 16px) / 2);
+    }
+
+}
+
+/* MOBILE */
+
+@media (max-width: 650px) {
+
+    .room-grid > .room-card {
+        flex-basis: 100%;
+    }
+
+}
