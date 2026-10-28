@@ -1600,18 +1600,219 @@ languageButtons.forEach(button => {
 });
 
 
-    headers.forEach((header, index) => {
 
-        const roomName =
-            [...header.childNodes]
-                .find(node => node.nodeType === 3)
-                ?.textContent.trim().toLowerCase();
+/* =========================================================
+   DYNAMIC ROOM PRICING TABLE
+========================================================= */
 
-        showPriceColumn(
-            index,
-            activeNames.has(roomName)
-        );
+const pricingHead =
+    pricingTable.querySelector("thead");
+
+const pricingBody =
+    pricingTable.querySelector("tbody");
+
+const pricingDays = [
+    { key: "mon_thu", fi: "Ma–To", en: "Mon–Thu" },
+    { key: "fri", fi: "Pe", en: "Fri" },
+    { key: "sat", fi: "La", en: "Sat" },
+    { key: "sun", fi: "Su", en: "Sun" }
+];
+
+function pricingMinutes(value) {
+
+    const parts =
+        String(value || "").split(":").map(Number);
+
+    if (
+        parts.length < 2 ||
+        !Number.isFinite(parts[0]) ||
+        !Number.isFinite(parts[1])
+    ) {
+        return NaN;
+    }
+
+    return parts[0] * 60 + parts[1];
+}
+
+function pricingClock(minutes) {
+
+    const value = minutes % 1440;
+
+    return (
+        String(Math.floor(value / 60)).padStart(2, "0") +
+        ":" +
+        String(value % 60).padStart(2, "0")
+    );
+}
+
+function renderRoomPricingTable() {
+
+    if (!pricingHead || !pricingBody) {
+        return;
+    }
+
+    const language =
+        document.documentElement.lang === "fi"
+            ? "fi"
+            : "en";
+
+    const headerRow =
+        document.createElement("tr");
+
+    const timeHeader =
+        document.createElement("th");
+
+    timeHeader.textContent =
+        language === "fi" ? "Aika" : "Time";
+
+    headerRow.appendChild(timeHeader);
+
+    activeRooms.forEach(room => {
+
+        const th = document.createElement("th");
+
+        th.textContent = room.name;
+
+        const capacity = document.createElement("small");
+
+        capacity.textContent =
+            language === "fi"
+                ? `Enintään ${room.capacity} henkilöä`
+                : `Up to ${room.capacity} guests`;
+
+        th.appendChild(capacity);
+        headerRow.appendChild(th);
     });
+
+    pricingHead.replaceChildren(headerRow);
+    pricingBody.replaceChildren();
+
+    let rowCount = 0;
+
+    pricingDays.forEach(day => {
+
+        const dayRules =
+            roomPricingRules
+                .filter(rule =>
+                    rule.day_group === day.key
+                )
+                .map(rule => {
+
+                    const start =
+                        pricingMinutes(rule.start_time);
+
+                    let end =
+                        pricingMinutes(rule.end_time);
+
+                    if (!Number.isFinite(start) ||
+                        !Number.isFinite(end)) {
+                        return null;
+                    }
+
+                    if (end <= start) {
+                        end += 1440;
+                    }
+
+                    return { ...rule, start, end };
+                })
+                .filter(Boolean);
+
+        const boundaries =
+            [...new Set(
+                dayRules.flatMap(rule => [
+                    rule.start,
+                    rule.end
+                ])
+            )].sort((a, b) => a - b);
+
+        for (let i = 0; i < boundaries.length - 1; i++) {
+
+            const start = boundaries[i];
+            const end = boundaries[i + 1];
+
+            const matchingRules =
+                dayRules.filter(rule =>
+                    rule.start <= start &&
+                    rule.end >= end
+                );
+
+            if (matchingRules.length === 0) {
+                continue;
+            }
+
+            const tr = document.createElement("tr");
+
+            if (rowCount % 2 === 1) {
+                tr.className = "pricing-highlight";
+            }
+
+            const label = document.createElement("th");
+
+            const dayName = document.createElement("span");
+            dayName.textContent = day[language];
+
+            const hours = document.createElement("small");
+
+            hours.textContent =
+                `${pricingClock(start)}–${pricingClock(end)}`;
+
+            label.append(dayName, hours);
+            tr.appendChild(label);
+
+            activeRooms.forEach(room => {
+
+                const rule = matchingRules.find(
+                    item =>
+                        Number(item.room_id) ===
+                        Number(room.id)
+                );
+
+                const td = document.createElement("td");
+
+                const price =
+                    rule && rule.price != null
+                        ? Number(rule.price)
+                        : NaN;
+
+                td.textContent =
+                    Number.isFinite(price) && price > 0
+                        ? `${price.toLocaleString("fi-FI")} €/h`
+                        : "—";
+
+                tr.appendChild(td);
+            });
+
+            pricingBody.appendChild(tr);
+            rowCount++;
+        }
+    });
+
+    if (rowCount === 0) {
+
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+
+        td.colSpan = activeRooms.length + 1;
+
+        td.textContent =
+            language === "fi"
+                ? "Hinnastoa ei ole saatavilla."
+                : "Pricing is currently unavailable.";
+
+        tr.appendChild(td);
+        pricingBody.appendChild(tr);
+    }
+}
+
+renderRoomPricingTable();
+
+languageButtons.forEach(button => {
+    button.addEventListener(
+        "click",
+        renderRoomPricingTable
+    );
+});
+
 
     // Päivitetään huoneiden lukumäärä molemmille kielille.
 
