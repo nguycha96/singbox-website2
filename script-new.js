@@ -1449,22 +1449,114 @@ async function updateActiveRoomsOnHomePage() {
 
     let visibleCount = 0;
 
-    cards.forEach(card => {
 
-        const name =
-            card.querySelector("h3")
-                ?.textContent.trim().toLowerCase();
+/* CREATE ROOM CARDS FROM SUPABASE */
 
-        const visible =
-            activeNames.has(name);
+const activeRooms = data || [];
 
-        card.style.display =
-            visible ? "" : "none";
+const visibleCount = activeRooms.length;
 
-        if (visible) {
-            visibleCount++;
-        }
+grid.replaceChildren();
+
+activeRooms.forEach((room, index) => {
+
+    const card = document.createElement("article");
+
+    card.className = "room-card reveal-item revealed";
+
+    card.innerHTML = `
+        <div class="room-image">
+            <img loading="lazy">
+        </div>
+
+        <div class="room-info">
+            <span class="room-number"></span>
+            <h3></h3>
+
+            <div class="room-meta">
+                <span class="room-capacity"></span>
+
+                <span class="room-price">
+                    <span class="room-from-label"></span>
+                    <strong></strong>
+                </span>
+            </div>
+        </div>
+    `;
+
+    const image = card.querySelector("img");
+
+    if (room.image_path) {
+        image.src = room.image_path;
+        image.alt = `${room.name} karaoke room`;
+    } else {
+        image.remove();
+    }
+
+    card.querySelector(".room-number").textContent =
+        String(index + 1).padStart(2, "0");
+
+    card.querySelector("h3").textContent =
+        room.name;
+
+    card.querySelector(".room-capacity").dataset.capacity =
+        room.capacity;
+
+    const prices = [
+        room.weekday_price,
+        room.weekend_price
+    ]
+        .map(Number)
+        .filter(price =>
+            Number.isFinite(price) && price > 0
+        );
+
+    card.querySelector(".room-price strong").textContent =
+        prices.length > 0
+            ? `${Math.min(...prices).toLocaleString("fi-FI")} €/h`
+            : "Hinta puuttuu";
+
+    grid.appendChild(card);
+});
+
+/* ROOM CARD LANGUAGE */
+
+function updateRoomCardLanguage() {
+
+    const language =
+        document.documentElement.lang === "fi"
+            ? "fi"
+            : "en";
+
+    grid.querySelectorAll(".room-card").forEach(card => {
+
+        const capacity =
+            Number(
+                card.querySelector(".room-capacity")
+                    .dataset.capacity
+            );
+
+        card.querySelector(".room-capacity").textContent =
+            language === "fi"
+                ? `Enintään ${capacity} henkilöä`
+                : `Up to ${capacity} guests`;
+
+        card.querySelector(".room-from-label").textContent =
+            language === "fi"
+                ? "Alkaen"
+                : "From";
     });
+}
+
+updateRoomCardLanguage();
+
+languageButtons.forEach(button => {
+    button.addEventListener(
+        "click",
+        updateRoomCardLanguage
+    );
+});
+
 
     headers.forEach((header, index) => {
 
