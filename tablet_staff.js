@@ -1478,14 +1478,18 @@ const unpaidBookingGroups =
                     "h2"
                 );
 
+            
             name.textContent =
-                room.name;
+                room.is_active === false
+                    ? `${room.name} · POIS KÄYTÖSTÄ`
+                    : room.name;
 
 
             const status =
                 document.createElement(
                     "span"
                 );
+
 
             status.className =
                 "room-status";
