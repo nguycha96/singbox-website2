@@ -274,7 +274,16 @@ if (vatPanel) {
       }
     }
 
-    value("revenueMetric", asAmount(s.revenue));
+    
+    value(
+      "revenueMetric",
+      data.totalSales?.complete === true &&
+      typeof data.totalSales.gross === "number" &&
+      Number.isFinite(data.totalSales.gross)
+        ? asAmount(data.totalSales.gross)
+        : "—"
+    );
+
     value("costMetric", asAmount(s.productCost));
     value("marginMetric", asAmount(s.grossMargin));
     value("expensesMetric", asAmount(Number(s.manualExpenses) + Number(s.stockCost)));
