@@ -1358,6 +1358,148 @@ const siteSupabaseClient =
     );
 
 
+/* =========================================================
+   ACTIVE ROOMS ON HOME PAGE
+========================================================= */
+
+async function updateActiveRoomsOnHomePage() {
+
+    const grid =
+        document.querySelector("#rooms .room-grid");
+
+    const pricingTable =
+        document.querySelector("#pricing .pricing-table");
+
+    if (!grid || !pricingTable) {
+        return;
+    }
+
+    const cards =
+        [...grid.querySelectorAll(".room-card")];
+
+    const headers =
+        [...pricingTable.querySelectorAll("thead th")]
+            .slice(1);
+
+    const rows =
+        [...pricingTable.querySelectorAll("tbody tr")];
+
+    function showPriceColumn(index, visible) {
+
+        headers[index].style.display =
+            visible ? "" : "none";
+
+        rows.forEach(row => {
+
+            const cell =
+                row.querySelectorAll("td")[index];
+
+            if (cell) {
+                cell.style.display =
+                    visible ? "" : "none";
+            }
+        });
+    }
+
+    // Piilotetaan huoneet, kunnes Supabase vastaa.
+
+    cards.forEach(card => {
+        card.style.display = "none";
+    });
+
+    headers.forEach((header, index) => {
+        showPriceColumn(index, false);
+    });
+
+    const { data, error } =
+        await siteSupabaseClient
+            .from("rooms")
+            .select("name")
+            .eq("is_active", true);
+
+    if (error) {
+
+        console.error(
+            "Could not load active rooms:",
+            error
+        );
+
+        grid.insertAdjacentText(
+            "afterbegin",
+            "Huonetietoja ei voitu ladata."
+        );
+
+        return;
+    }
+
+    const activeNames = new Set(
+        (data || []).map(room =>
+            room.name.trim().toLowerCase()
+        )
+    );
+
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+
+        const name =
+            card.querySelector("h3")
+                ?.textContent.trim().toLowerCase();
+
+        const visible =
+            activeNames.has(name);
+
+        card.style.display =
+            visible ? "" : "none";
+
+        if (visible) {
+            visibleCount++;
+        }
+    });
+
+    headers.forEach((header, index) => {
+
+        const roomName =
+            [...header.childNodes]
+                .find(node => node.nodeType === 3)
+                ?.textContent.trim().toLowerCase();
+
+        showPriceColumn(
+            index,
+            activeNames.has(roomName)
+        );
+    });
+
+    // Päivitetään huoneiden lukumäärä molemmille kielille.
+
+    translations.fi["roomList.text"] =
+        `${visibleCount} yksityistä karaokehuonetta. ` +
+        "Jokaisessa oma tunnelmansa.";
+
+    translations.en["roomList.text"] =
+        `${visibleCount} private karaoke rooms. ` +
+        "Each with its own atmosphere.";
+
+    const description =
+        document.querySelector(
+            '#rooms [data-i18n="roomList.text"]'
+        );
+
+    if (description) {
+
+        const language =
+            document.documentElement.lang === "fi"
+                ? "fi"
+                : "en";
+
+        description.textContent =
+            translations[language]["roomList.text"];
+    }
+}
+
+updateActiveRoomsOnHomePage();
+
+
 let activeBrunchOffer = null;
 
 
