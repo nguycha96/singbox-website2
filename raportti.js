@@ -330,13 +330,14 @@ if (vatPanel) {
 
       } else {
 
-        const lines = [
-          "MAKSETTU HUONEMYYNTI",
-          "Sis. ALV: " + asAmount(roomSales.gross),
-          "ALV 25,5 %: " + asAmount(roomSales.vat),
-          "Ilman ALV:tä: " + asAmount(roomSales.net),
-          "Palautukset: " + asAmount(roomSales.refundsGross)
-        ];
+
+const lines = [
+  "MAKSETTU HUONEMYYNTI",
+  "Huonemyynti sis. ALV: " + asAmount(roomSales.gross),
+  "ALV 25,5 %: " + asAmount(roomSales.vat),
+  "Huonemyynti ilman ALV:tä: " + asAmount(roomSales.net)
+];
+
 
         roomDetails.replaceChildren();
 
