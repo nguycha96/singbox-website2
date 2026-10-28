@@ -1411,11 +1411,20 @@ async function updateActiveRoomsOnHomePage() {
         showPriceColumn(index, false);
     });
 
+
     const { data, error } =
         await siteSupabaseClient
             .from("rooms")
-            .select("name")
-            .eq("is_active", true);
+            .select(
+                "id, name, capacity, image_path, display_order, weekday_price, weekend_price"
+            )
+            .eq("is_active", true)
+            .order("display_order", {
+                ascending: true
+            })
+            .order("id", {
+                ascending: true
+            });
 
     if (error) {
 
