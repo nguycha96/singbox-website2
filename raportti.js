@@ -619,10 +619,8 @@ const lines = [
           [0, 13.5, 25.5].includes(Number(product.cost_vat_rate))
         ) {
 
-          netField.value = (
-            Number(product.cost_price) -
-            Number(product.cost_vat_amount)
-          ).toFixed(2);
+          netField.value =
+    Number(product.cost_price).toFixed(2);
 
           rateField.value = String(Number(product.cost_vat_rate));
 
