@@ -2463,7 +2463,123 @@ if (pendingItems.length > 0) {
 ========================================================= */
 
 
+
+async function loadRoomRefunds() {
+
+    const roomsContainer =
+        document.getElementById("staffRooms");
+
+    const deviceUuid =
+        localStorage.getItem(
+            STAFF_DEVICE_STORAGE_KEY
+        );
+
+    if (!roomsContainer || !deviceUuid) {
+        return;
+    }
+
+    let panel =
+        document.getElementById("roomRefundPanel");
+
+    if (!panel) {
+
+        panel = document.createElement("details");
+        panel.id = "roomRefundPanel";
+        panel.style.marginTop = "24px";
+
+        const heading =
+            document.createElement("summary");
+
+        heading.textContent =
+            "HUONEMAKSUJEN PALAUTUKSET";
+
+        heading.style.cursor = "pointer";
+        heading.style.fontWeight = "700";
+        heading.style.padding = "16px";
+
+        const content =
+            document.createElement("div");
+
+        content.className = "room-payment-box";
+
+        const explanation =
+            document.createElement("p");
+
+        explanation.textContent =
+            "Maksetut huonevaraukset, joista voidaan vielä kirjata palautus.";
+
+        const list =
+            document.createElement("div");
+
+        list.id = "roomRefundList";
+
+        content.append(explanation, list);
+        panel.append(heading, content);
+
+        roomsContainer.insertAdjacentElement(
+            "afterend",
+            panel
+        );
+    }
+
+    const list =
+        document.getElementById("roomRefundList");
+
+    list.textContent = "Ladataan...";
+
+    const { data, error } =
+        await staffSupabaseClient.rpc(
+            "staff_get_refundable_room_payments",
+            {
+                p_device_uuid: deviceUuid
+            }
+        );
+
+    if (error) {
+        console.error("Palautusten haku epäonnistui:", error);
+        list.textContent =
+            "Palautettavia maksuja ei voitu hakea.";
+        return;
+    }
+
+    list.replaceChildren();
+
+    if (!data || data.length === 0) {
+        list.textContent =
+            "Ei palautettavia huonemaksuja.";
+        return;
+    }
+
+    for (const booking of data) {
+
+        const row =
+            document.createElement("div");
+
+        row.style.padding = "12px 0";
+        row.style.borderBottom =
+            "1px solid rgba(255,255,255,0.15)";
+
+        const remaining =
+            Number(booking.remaining_amount)
+                .toLocaleString("fi-FI", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+
+        row.textContent =
+            `Varaus #${booking.booking_id} — ` +
+            `${booking.customer_name || "Ei nimeä"} — ` +
+            `${booking.room_name || "Huone"} — ` +
+            `Palautettavissa ${remaining} €` +
+            (booking.is_test ? " — TESTI" : "");
+
+        list.appendChild(row);
+    }
+}
+
 loadRooms();
+loadRoomRefunds();
+
 
 /* AUTOMATIC REFRESH */
 
