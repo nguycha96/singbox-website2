@@ -285,45 +285,22 @@ if (vatPanel) {
     );
 
 
-    // HUONEMYYNNIN LISÄYS KATTEESEEN JA TULOKSEEN
-    // Huonemyynnin palautukset on jo vähennetty gross-summasta.
-
-    const roomGrossForMetrics =
-      typeof data.roomSales?.gross === "number" &&
-      Number.isFinite(data.roomSales.gross)
-        ? data.roomSales.gross
-        : null;
+  
+    // TUOTTEIDEN KATE JA TULOS
+    // Huonemyynti lisätään näihin vasta,
+    // kun kaikkien kustannusten ALV-käsittely on tarkistettu.
 
     value("costMetric", asAmount(s.productCost));
-
-    value(
-      "marginMetric",
-      roomGrossForMetrics !== null &&
-      Number.isFinite(Number(s.grossMargin))
-        ? asAmount(Number(s.grossMargin) + roomGrossForMetrics)
-        : "—"
-    );
-
+    value("marginMetric", asAmount(s.grossMargin));
     value(
       "expensesMetric",
       asAmount(Number(s.manualExpenses) + Number(s.stockCost))
     );
-
     value("orderMetric", whole.format(s.orderCount));
     value("qtyMetric", `${whole.format(s.soldQuantity)} kpl`);
-
-    value(
-      "resultMetric",
-      roomGrossForMetrics !== null &&
-      Number.isFinite(Number(s.resultAfterCosts))
-        ? asAmount(Number(s.resultAfterCosts) + roomGrossForMetrics)
-        : "—"
-    );
-
+    value("resultMetric", asAmount(s.resultAfterCosts));
     value("manualExpenseMetric", asAmount(s.manualExpenses));
     value("stockExpenseMetric", asAmount(s.stockCost));
-
-    // HUONEMYYNNIN LISÄYS LOPPU
 
     
     value(
