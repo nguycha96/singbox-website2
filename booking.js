@@ -26,10 +26,13 @@ let rooms = [];
 
 async function loadRoomsFromSupabase() {
 
+    
     const { data, error } = await supabaseClient
         .from("rooms")
         .select("id, name, capacity")
+        .eq("is_active", true)
         .order("id", { ascending: true });
+
 
 
     if (error) {
