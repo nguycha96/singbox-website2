@@ -1280,6 +1280,18 @@ const roomUnpaidOrders =
             Number(room.id)
     );
 
+           
+/* HIDE INACTIVE ROOMS WITHOUT PENDING WORK */
+
+if (
+    room.is_active === false &&
+    relevantBookings.length === 0 &&
+    roomUnpaidOrders.length === 0
+) {
+    return;
+}
+
+
 
 const unpaidBookingsMap =
     new Map();
