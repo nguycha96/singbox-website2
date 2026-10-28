@@ -283,8 +283,22 @@ if (vatPanel) {
     value("resultMetric", asAmount(s.resultAfterCosts));
     value("manualExpenseMetric", asAmount(s.manualExpenses));
     value("stockExpenseMetric", asAmount(s.stockCost));
-    value("bookingValue", asAmount(s.bookingValue));
-    value("bookingCount", `${whole.format(s.bookingCount)} varausta · ei sisälly myyntiin`);
+    
+    value(
+      "bookingValue",
+      typeof data.roomSales?.gross === "number" &&
+      Number.isFinite(data.roomSales.gross)
+        ? asAmount(data.roomSales.gross)
+        : "—"
+    );
+
+    value(
+      "bookingCount",
+      Number.isInteger(data.roomSales?.paidBookings)
+        ? `${whole.format(data.roomSales.paidBookings)} maksettua varausta`
+        : "Varausmäärää ei saatavilla"
+    );
+
      
     // HUONEMYYNNIN ALV-ERITTELY
 
@@ -331,12 +345,12 @@ if (vatPanel) {
       } else {
 
 
+
 const lines = [
-  "MAKSETTU HUONEMYYNTI",
-  "Huonemyynti sis. ALV: " + asAmount(roomSales.gross),
   "ALV 25,5 %: " + asAmount(roomSales.vat),
   "Huonemyynti ilman ALV:tä: " + asAmount(roomSales.net)
 ];
+
 
 
         roomDetails.replaceChildren();
