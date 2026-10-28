@@ -1070,16 +1070,27 @@ a {
         0 auto;
 
     display:
-        grid;
+        flex;
 
-    grid-template-columns:
-        repeat(4, minmax(0, 1fr));
+    flex-wrap:
+        wrap;
+
+    justify-content:
+        center;
 
     gap:
         1px;
 
     background:
-        var(--border);
+        transparent;
+}
+
+.rooms-grid > .room-card {
+    width:
+        calc((100% - 3px) / 4);
+
+    flex:
+        0 0 calc((100% - 3px) / 4);
 }
 
 
@@ -1578,10 +1589,10 @@ a {
             35px;
     }
 
-    .rooms-grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-    }
+    .rooms-grid > .room-card {
+    width: calc((100% - 1px) / 2);
+    flex: 0 0 calc((100% - 1px) / 2);
+}
 
 }
 
@@ -1823,13 +1834,10 @@ a {
             0.9rem;
     }
 
-    .rooms-grid {
-        grid-template-columns:
-            1fr;
-
-        gap:
-            1px;
-    }
+    .rooms-grid > .room-card {
+    width: 100%;
+    flex: 0 0 100%;
+}
 
     .room-image {
         aspect-ratio:
