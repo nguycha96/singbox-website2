@@ -285,6 +285,77 @@ if (vatPanel) {
     value("stockExpenseMetric", asAmount(s.stockCost));
     value("bookingValue", asAmount(s.bookingValue));
     value("bookingCount", `${whole.format(s.bookingCount)} varausta · ei sisälly myyntiin`);
+     
+    // HUONEMYYNNIN ALV-ERITTELY
+
+    const roomSales = data.roomSales;
+    const bookingCountElement = $("bookingCount");
+
+    if (bookingCountElement) {
+
+      let roomDetails =
+        document.getElementById("roomSalesDetails");
+
+      if (!roomDetails) {
+
+        roomDetails = document.createElement("div");
+        roomDetails.id = "roomSalesDetails";
+
+        roomDetails.style.cssText =
+          "margin-top:14px;" +
+          "padding:12px;" +
+          "border:1px solid rgba(150,150,150,0.35);" +
+          "border-radius:10px;" +
+          "line-height:1.8;" +
+          "font-size:0.9rem;";
+
+        bookingCountElement.insertAdjacentElement(
+          "afterend",
+          roomDetails
+        );
+      }
+
+      const validRoomSales =
+        roomSales &&
+        ["gross", "vat", "net", "refundsGross"].every(
+          key =>
+            typeof roomSales[key] === "number" &&
+            Number.isFinite(roomSales[key])
+        );
+
+      if (!validRoomSales) {
+
+        roomDetails.textContent =
+          "Huonemyynnin ALV-erittely on puutteellinen.";
+
+      } else {
+
+        const lines = [
+          "MAKSETTU HUONEMYYNTI",
+          "Sis. ALV: " + asAmount(roomSales.gross),
+          "ALV 25,5 %: " + asAmount(roomSales.vat),
+          "Ilman ALV:tä: " + asAmount(roomSales.net),
+          "Palautukset: " + asAmount(roomSales.refundsGross)
+        ];
+
+        roomDetails.replaceChildren();
+
+        lines.forEach((line, index) => {
+
+          const item = document.createElement("div");
+          item.textContent = line;
+
+          if (index === 0) {
+            item.style.fontWeight = "700";
+          }
+
+          roomDetails.appendChild(item);
+        });
+      }
+    }
+
+    // HUONEMYYNNIN ALV-ERITTELY LOPPU
+
     drawChart(data.series || []);
     renderTable(data.products || [], "productsBody", (p) => [p.name, whole.format(p.quantity), asAmount(p.revenue), asAmount(p.margin)]);
     $("noProducts").hidden = !!(data.products && data.products.length);
