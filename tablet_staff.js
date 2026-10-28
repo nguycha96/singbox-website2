@@ -2550,31 +2550,245 @@ async function loadRoomRefunds() {
         return;
     }
 
+
+    // HUONEMAKSUN PALAUTUSLOMAKE
+
     for (const booking of data) {
 
+        const remainingAmount =
+            Number(booking.remaining_amount);
+
+        const remainingCents =
+            Math.round(remainingAmount * 100);
+
+        if (
+            !Number.isFinite(remainingAmount) ||
+            remainingCents <= 0
+        ) {
+            continue;
+        }
+
+        const euro = (amount) =>
+            Number(amount).toLocaleString("fi-FI", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
         const row =
-            document.createElement("div");
+            document.createElement("details");
 
-        row.style.padding = "12px 0";
-        row.style.borderBottom =
-            "1px solid rgba(255,255,255,0.15)";
+        row.className = "room-payment-box";
 
-        const remaining =
-            Number(booking.remaining_amount)
-                .toLocaleString("fi-FI", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
+        row.style.marginTop = "12px";
 
-        row.textContent =
+        const heading =
+            document.createElement("summary");
+
+        heading.style.cursor = "pointer";
+        heading.style.fontWeight = "700";
+
+        heading.textContent =
             `Varaus #${booking.booking_id} — ` +
             `${booking.customer_name || "Ei nimeä"} — ` +
-            `${booking.room_name || "Huone"} — ` +
-            `Palautettavissa ${remaining} €` +
+            `${euro(remainingAmount)} € palautettavissa` +
             (booking.is_test ? " — TESTI" : "");
+
+        const info =
+            document.createElement("p");
+
+        info.textContent =
+            `${booking.room_name || "Huone"} | ` +
+            `Maksettu ${euro(booking.paid_amount)} € | ` +
+            `Aiemmin palautettu ${euro(booking.refunded_amount)} €`;
+
+        const form =
+            document.createElement("form");
+
+        form.style.cssText =
+            "display:flex;" +
+            "flex-direction:column;" +
+            "gap:12px;" +
+            "margin-top:14px;";
+
+        const amountLabel =
+            document.createElement("label");
+
+        amountLabel.textContent =
+            "Palautettu summa (€)";
+
+        const amountInput =
+            document.createElement("input");
+
+        amountInput.type = "number";
+        amountInput.min = "0.01";
+        amountInput.max =
+            (remainingCents / 100).toFixed(2);
+        amountInput.step = "0.01";
+        amountInput.placeholder = "0,00";
+        amountInput.required = true;
+
+        amountInput.style.width = "100%";
+
+        amountLabel.appendChild(amountInput);
+
+        const reasonLabel =
+            document.createElement("label");
+
+        reasonLabel.textContent =
+            "Palautuksen syy";
+
+        const reasonInput =
+            document.createElement("textarea");
+
+        reasonInput.rows = 2;
+        reasonInput.maxLength = 500;
+        reasonInput.required = true;
+
+        reasonInput.placeholder =
+            "Esim. asiakkaan varauksen peruutus";
+
+        reasonInput.style.width = "100%";
+
+        reasonLabel.appendChild(reasonInput);
+
+        const notice =
+            document.createElement("p");
+
+        notice.textContent =
+            "Kirjaa vain jo toteutunut palautus. " +
+            "Tämä toiminto ei siirrä rahaa asiakkaalle.";
+
+        notice.style.fontSize = "0.85rem";
+
+        const button =
+            document.createElement("button");
+
+        button.type = "submit";
+
+        button.className =
+            "mark-order-delivered room-payment-btn";
+
+        button.textContent =
+            "KIRJAA PALAUTUS";
+
+        const message =
+            document.createElement("div");
+
+        form.append(
+            amountLabel,
+            reasonLabel,
+            notice,
+            button,
+            message
+        );
+
+        form.addEventListener(
+            "submit",
+            async (event) => {
+
+                event.preventDefault();
+
+                const amount =
+                    Number(amountInput.value);
+
+                const cents =
+                    Math.round(amount * 100);
+
+                const reason =
+                    reasonInput.value.trim();
+
+                if (
+                    !Number.isFinite(amount) ||
+                    cents < 1 ||
+                    cents > remainingCents ||
+                    Math.abs(amount * 100 - cents) > 0.00001
+                ) {
+                    message.textContent =
+                        "Tarkista palautettava summa.";
+                    return;
+                }
+
+                if (!reason) {
+                    message.textContent =
+                        "Kirjoita palautuksen syy.";
+                    return;
+                }
+
+                const confirmed = window.confirm(
+                    `Kirjataanko ${euro(cents / 100)} € ` +
+                    `palautetuksi varauksesta #${booking.booking_id}? ` +
+                    "Vahvista vain, jos palautus on tehty " +
+                    "tai kyseessä on testivaraus."
+                );
+
+                if (!confirmed) return;
+
+                button.disabled = true;
+                button.textContent = "TALLENNETAAN...";
+                message.textContent = "";
+
+                try {
+
+                    const { data: refundId, error } =
+                        await staffSupabaseClient.rpc(
+                            "staff_record_room_refund",
+                            {
+                                p_device_uuid: deviceUuid,
+                                p_booking_id:
+                                    Number(booking.booking_id),
+                                p_amount: cents / 100,
+                                p_reason: reason
+                            }
+                        );
+
+                    if (
+                        error ||
+                        refundId === null ||
+                        refundId === undefined
+                    ) {
+                        throw new Error(
+                            error?.message ||
+                            "Palautuksen kirjaus epäonnistui."
+                        );
+                    }
+
+                    window.alert(
+                        "Palautus kirjattu onnistuneesti."
+                    );
+
+                    await loadRoomRefunds();
+
+                } catch (error) {
+
+                    console.error(
+                        "Palautuksen tallennus epäonnistui:",
+                        error
+                    );
+
+                    message.textContent =
+                        "Tallennus epäonnistui. " +
+                        "Tarkista palautushistoria ennen uutta yritystä.";
+
+                } finally {
+
+                    button.disabled = false;
+                    button.textContent =
+                        "KIRJAA PALAUTUS";
+                }
+            }
+        );
+
+        row.append(
+            heading,
+            info,
+            form
+        );
 
         list.appendChild(row);
     }
+
+    // HUONEMAKSUN PALAUTUSLOMAKE LOPPU
+
 }
 
 loadRooms();
