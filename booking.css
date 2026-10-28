@@ -2136,7 +2136,7 @@ a {
 
 /* Korttien väliset jakoviivat */
 .rooms-grid {
-    background: rgba(216, 170, 43, 0.18);
+    background: transparent;
 }
 
 
