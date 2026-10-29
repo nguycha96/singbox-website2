@@ -165,14 +165,10 @@
 
     setMetricVatDetail("costMetric", [
   [
-    "Ilman ALV",
-    s.missingCostRows === 0
-      ? asAmount(s.productCost)
+    "Myytyjen tuotteiden ostojen ALV",
+    s.missingCostVatRows === 0
+      ? asAmount(s.productCostVat)
       : "—"
-  ],
-  [
-    "Ostojen ALV",
-    "Ei vielä laskettu"
   ]
 ]);
 
