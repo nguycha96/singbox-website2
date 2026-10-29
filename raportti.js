@@ -1044,6 +1044,13 @@ const lines = [
     value("updatedText", "Haetaan ajantasaiset tiedot…");
     try {
       const data = await functionRequest({ action: "report", period, anchor, is_test: reportIsTest });
+       console.log("HUONEMYYNNIN TARKISTUS", {
+  reportIsTest: reportIsTest,
+  serverIsTest: data.is_test,
+  start: data.start,
+  end: data.end,
+  roomSales: data.roomSales
+});
       render(data);
     } catch (error) {
       showError("reportError", `Raporttia ei voitu hakea: ${errorText(error)}`);
