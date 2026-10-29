@@ -60,55 +60,74 @@
     value("periodTitle", label.charAt(0).toUpperCase() + label.slice(1));
     value("chartTitle", period === "day" ? "Tuntikohtainen myynti" : period === "month" ? "Päivittäinen myynti" : "Kuukausittainen myynti");
   }
-      function drawChart(series) {
+  function drawChart(series) {
     const chart = $("chart");
 
-    // Jos pylväiden myyntiluvut eivät ole muuttuneet,
-    // säilytetään nykyinen diagrammi.
+    // Piirretään uudelleen vain, jos myyntiluvut muuttuvat.
     const chartKey = JSON.stringify(
-      series.map((item) => [
-        item.key,
-        item.label,
-        item.revenue
-      ])
+      series.map((item) => [item.key, item.label, item.revenue])
     );
-
-    if (chart.dataset.lastKey === chartKey) {
+    if (chart.dataset.lastKey === chartKey && chart.children.length === series.length) {
       return;
     }
 
-    chart.dataset.lastKey = chartKey;
-
-    // Varataan ylätilaa pylväiden euromäärille.
+    // Säilytetään pylväiden päällä olevien euromäärien ylätila.
     chart.style.paddingTop = "65px";
     chart.style.boxSizing = "border-box";
 
-    chart.replaceChildren();
-    const max = Math.max(1, ...series.map((x) => Number(x.revenue) || 0));
+    const amounts = series.map((item) => Number(item.revenue) || 0);
+    const hasNegative = amounts.some((amount) => amount < 0);
+    const maxPositive = Math.max(1, ...amounts.filter((amount) => amount > 0));
+    const maxNegative = Math.max(1, ...amounts.filter((amount) => amount < 0).map(Math.abs));
+
+    const fragment = document.createDocumentFragment();
     for (const item of series) {
-      const cell = document.createElement("div"); cell.className = "bar-cell";
-      const track = document.createElement("div"); track.className = "bar-track";
-      const bar = document.createElement("span"); bar.className = "bar";
-      bar.style.height = `${Math.max(1, Math.min(100, (Number(item.revenue || 0) / max) * 100))}%`;
-            const amount = Number(item.revenue) || 0;
+      const amount = Number(item.revenue) || 0;
+      const cell = document.createElement("div");
+      cell.className = "bar-cell";
+      const track = document.createElement("div");
+      track.className = "bar-track";
+      const bar = document.createElement("span");
+      bar.className = "bar";
 
-      bar.title =
-        `${item.label}: ${asAmount(amount)} (sis. ALV)`;
+      if (hasNegative) {
+        // Nollaviiva on alueen keskellä. Pluspylväät nousevat
+        // nollaviivalta, miinuspylväät laskevat sen alapuolelle.
+        track.classList.add("has-negative");
+        track.style.position = "relative";
+        bar.style.position = "absolute";
+        bar.style.left = "50%";
+        bar.style.transform = "translateX(-50%)";
+        bar.style.width = "100%";
+        bar.style.maxWidth = "33px";
+        bar.style.minHeight = "0";
 
-      cell.title =
-        `${item.label}: ${asAmount(amount)} (sis. ALV)`;
+        if (amount > 0) {
+          bar.style.bottom = "50%";
+          bar.style.height = `${Math.max(2, (amount / maxPositive) * 47)}%`;
+        } else if (amount < 0) {
+          bar.classList.add("negative");
+          bar.style.top = "50%";
+          bar.style.height = `${Math.max(2, (Math.abs(amount) / maxNegative) * 47)}%`;
+        } else {
+          bar.style.display = "none";
+        }
+      } else {
+        // Jos palautukset eivät vie myyntiä miinukselle,
+        // vanha positiivisten pylväiden asettelu säilyy.
+        bar.style.height = `${Math.max(1, Math.min(100, (amount / maxPositive) * 100))}%`;
+        if (amount === 0) bar.style.visibility = "hidden";
+      }
 
-            // Näytetään tarkka myyntisumma pylvään yläpuolella.
+      bar.title = `${item.label}: ${asAmount(amount)} (sis. ALV)`;
+      cell.title = bar.title;
+
       if (amount !== 0) {
         const amountLabel = document.createElement("span");
-                amountLabel.className = "bar-amount";
-                amountLabel.textContent =
-          Math.round(amount) + "€";
+        amountLabel.className = "bar-amount";
+        amountLabel.textContent = Math.round(amount) + "€";
         amountLabel.style.position = "absolute";
-                        amountLabel.style.bottom = "100%";
         amountLabel.style.left = "50%";
-        amountLabel.style.transform =
-          "translateX(-50%) translateY(-6px) rotate(-90deg)";
         amountLabel.style.transformOrigin = "center center";
         amountLabel.style.whiteSpace = "nowrap";
         amountLabel.style.fontSize = "12px";
@@ -118,16 +137,31 @@
         amountLabel.style.pointerEvents = "none";
         amountLabel.style.zIndex = "2";
 
-        bar.style.position = "relative";
+        if (amount < 0) {
+          // Miinusmerkkinen summa sijoittuu pylvään alapuolelle.
+          amountLabel.style.top = "100%";
+          amountLabel.style.transform =
+            "translateX(-50%) translateY(6px) rotate(-90deg)";
+        } else {
+          amountLabel.style.bottom = "100%";
+          amountLabel.style.transform =
+            "translateX(-50%) translateY(-6px) rotate(-90deg)";
+        }
+
         bar.style.overflow = "visible";
         bar.appendChild(amountLabel);
       }
 
       track.append(bar);
-      const label = document.createElement("span"); label.className = "bar-label";
+      const label = document.createElement("span");
+      label.className = "bar-label";
       label.textContent = item.label;
-      cell.append(track, label); chart.append(cell);
+      cell.append(track, label);
+      fragment.append(cell);
     }
+
+    chart.replaceChildren(fragment);
+    chart.dataset.lastKey = chartKey;
   }
   function appendCell(row, text) {
     const td = document.createElement("td"); td.textContent = String(text); row.append(td);
@@ -1053,6 +1087,7 @@ const lines = [
       "orderMetric", "qtyMetric", "resultMetric", "manualExpenseMetric",
       "stockExpenseMetric", "bookingValue", "bookingCount"]) value(id, "—");
     $("chart").replaceChildren();
+    delete $("chart").dataset.lastKey;
     $("productsBody").replaceChildren();
     $("expensesBody").replaceChildren();
     $("noProducts").hidden = true;
