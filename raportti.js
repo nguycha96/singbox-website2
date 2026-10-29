@@ -203,11 +203,11 @@
       : asAmount(data.expenseVat.vat)
   ],
   [
-    "Muut varastokulut ilman ALV",
-    s.unvaluedStockRows > 0
-      ? "—"
-      : asAmount(s.stockCost)
-  ]
+  "Hävikki (ilman ALV)",
+  s.unvaluedStockRows > 0
+    ? "—"
+    : asAmount(s.stockCost)
+]
 ]);
 
      
