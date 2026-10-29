@@ -69,7 +69,14 @@
       const track = document.createElement("div"); track.className = "bar-track";
       const bar = document.createElement("span"); bar.className = "bar";
       bar.style.height = `${Math.max(1, Math.min(100, (Number(item.revenue || 0) / max) * 100))}%`;
-      bar.title = `${item.label}: ${asAmount(item.revenue)}`;
+            const amount = Number(item.revenue) || 0;
+
+      bar.title =
+        `${item.label}: ${asAmount(amount)} (sis. ALV)`;
+
+      cell.title =
+        `${item.label}: ${asAmount(amount)} (sis. ALV)`;
+
       track.append(bar);
       const label = document.createElement("span"); label.className = "bar-label";
       label.textContent = item.label;
