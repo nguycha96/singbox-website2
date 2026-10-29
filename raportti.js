@@ -1120,6 +1120,74 @@ const lines = [
   $("logoutButton").addEventListener("click", async () => {
     if (client) await client.auth.signOut(); exitDashboard();
   });
+   // OIKEA RAPORTTI / TESTIRAPORTTI
+
+const reportModeButtons = document.createElement("div");
+
+reportModeButtons.style.cssText =
+  "display:flex;" +
+  "flex-wrap:wrap;" +
+  "gap:10px;" +
+  "margin-bottom:18px;";
+
+const realReportButton = document.createElement("button");
+const testReportButton = document.createElement("button");
+
+realReportButton.type = "button";
+testReportButton.type = "button";
+
+realReportButton.textContent = "OIKEA RAPORTTI";
+testReportButton.textContent = "TESTIRAPORTTI";
+
+function updateReportModeButtons() {
+  for (const [button, isTest] of [
+    [realReportButton, false],
+    [testReportButton, true]
+  ]) {
+    const selected = reportIsTest === isTest;
+
+    button.style.cssText =
+      "padding:12px 18px;" +
+      "border-radius:8px;" +
+      "cursor:pointer;" +
+      "border:1px solid #b39535;" +
+      "background:" + (selected ? "#e1b747" : "transparent") + ";" +
+      "color:" + (selected ? "#001c12" : "#e1b747") + ";" +
+      "font-weight:700;";
+
+    button.setAttribute("aria-pressed", String(selected));
+  }
+}
+
+realReportButton.addEventListener("click", () => {
+  reportIsTest = false;
+  updateReportModeButtons();
+  fetchReport();
+});
+
+testReportButton.addEventListener("click", () => {
+  reportIsTest = true;
+  updateReportModeButtons();
+  fetchReport();
+});
+
+reportModeButtons.append(
+  realReportButton,
+  testReportButton
+);
+
+const reportDate = $("reportDate");
+
+if (reportDate?.parentElement) {
+  reportDate.parentElement.insertAdjacentElement(
+    "beforebegin",
+    reportModeButtons
+  );
+}
+
+updateReportModeButtons();
+
+// RAPORTTITILAN VALINTA LOPPU
   $("previousDate").addEventListener("click", () => stepAnchor(-1));
   $("nextDate").addEventListener("click", () => stepAnchor(1));
   $("refreshButton").addEventListener("click", fetchReport);
