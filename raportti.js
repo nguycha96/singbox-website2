@@ -85,9 +85,9 @@
             // Näytetään tarkka myyntisumma pylvään yläpuolella.
       if (amount !== 0) {
         const amountLabel = document.createElement("span");
-        amountLabel.className = "bar-amount";
-        amountLabel.textContent = asAmount(amount);
-
+                amountLabel.className = "bar-amount";
+                amountLabel.textContent =
+          Math.round(amount) + "€";
         amountLabel.style.position = "absolute";
         amountLabel.style.bottom = "100%";
         amountLabel.style.left = "50%";
