@@ -151,15 +151,19 @@
     // TUOTEMYYNTI
 
     setMetricVatDetail("revenueMetric", [
-      [
-        "Ilman ALV",
-        salesVatReady ? asAmount(vat.netSales) : "—"
-      ],
-      [
-        "Myynnin ALV",
-        salesVatReady ? asAmount(vat.vatTotal) : "—"
-      ]
-    ]);
+  [
+    "Ilman ALV",
+    data.totalSales?.complete === true
+      ? asAmount(data.totalSales.net)
+      : "—"
+  ],
+  [
+    "Myynnin ALV",
+    data.totalSales?.complete === true
+      ? asAmount(data.totalSales.vat)
+      : "—"
+  ]
+]);
 
     // TUOTEKUSTANNUKSET
 
