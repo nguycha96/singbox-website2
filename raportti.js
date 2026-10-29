@@ -86,9 +86,11 @@
         amountLabel.style.position = "absolute";
         amountLabel.style.bottom = "100%";
         amountLabel.style.left = "50%";
-        amountLabel.style.transform = "translateX(-50%)";
+                amountLabel.style.transform =
+          "translateX(-50%) rotate(-55deg)";
+        amountLabel.style.transformOrigin = "bottom center";
         amountLabel.style.whiteSpace = "nowrap";
-        amountLabel.style.fontSize = "11px";
+        amountLabel.style.fontSize = "10px";
         amountLabel.style.fontWeight = "700";
         amountLabel.style.color = "#f0dcb5";
         amountLabel.style.paddingBottom = "5px";
