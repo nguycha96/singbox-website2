@@ -1116,12 +1116,31 @@ roomsContainer.replaceChildren();
                     "click",
                     async () => {
 
-                        const confirmed = window.confirm(
-                            `Onko huoneen maksu ${formattedAmount} € ` +
-                            `todella vastaanotettu?`
-                        );
+                        if (!roomFeeButton.dataset.confirming) {
+    roomFeeButton.dataset.confirming = "true";
+    roomFeeButton.textContent =
+        `VAHVISTA ${formattedAmount} € MAKSU`;
 
-                        if (!confirmed) return;
+    const cancelButton = document.createElement("button");
+    cancelButton.type = "button";
+    cancelButton.className =
+        "mark-order-delivered room-payment-btn";
+    cancelButton.textContent = "PERUUTA";
+
+    cancelButton.addEventListener("click", () => {
+        delete roomFeeButton.dataset.confirming;
+        roomFeeButton.textContent =
+            "MERKITSE HUONE MAKSETUKSI";
+        cancelButton.remove();
+    });
+
+    roomFeeButton.insertAdjacentElement(
+        "afterend",
+        cancelButton
+    );
+
+    return;
+}
 
                         const deviceUuid =
                             localStorage.getItem(
@@ -1157,14 +1176,14 @@ roomsContainer.replaceChildren();
                                 );
                             }
 
-                                                        try {
-                                await loadRooms();
-                            } catch (refreshError) {
-                                console.error(
-                                    "Huonenäkymän päivitys epäonnistui:",
-                                    refreshError
-                                );
-                            }
+try {
+    await loadRooms(true);
+} catch (refreshError) {
+    console.error(
+        "Huonenäkymän päivitys epäonnistui:",
+        refreshError
+    );
+}
 
                             roomFeeButton.disabled = true;
                             roomFeeButton.textContent =
