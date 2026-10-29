@@ -1232,6 +1232,13 @@ realReportButton.textContent = "OIKEA RAPORTTI";
 testReportButton.textContent = "TESTIRAPORTTI";
 
 function updateReportModeButtons() {
+  // Testimenojen historia näkyy vain testiraportissa.
+  const testHistoryPanel = $("testHistoryPanel");
+
+  if (testHistoryPanel) {
+    testHistoryPanel.hidden = !reportIsTest;
+  }
+
   for (const [button, isTest] of [
     [realReportButton, false],
     [testReportButton, true]
