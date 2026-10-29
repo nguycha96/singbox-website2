@@ -169,7 +169,7 @@
 
     setMetricVatDetail("costMetric", [
   [
-    "Myytyjen tuotteiden ostojen ALV",
+    "Ostojen ALV",
     s.missingCostVatRows === 0
       ? asAmount(s.productCostVat)
       : "—"
