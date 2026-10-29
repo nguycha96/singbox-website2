@@ -163,23 +163,57 @@
     // TUOTEKUSTANNUKSET
 
     setMetricVatDetail("costMetric", [
-      ["Ilman ALV", "—"],
-      ["Ostojen ALV", "—"]
-    ]);
+  [
+    "Ilman ALV",
+    s.missingCostRows === 0
+      ? asAmount(s.productCost)
+      : "—"
+  ],
+  [
+    "Ostojen ALV",
+    "Ei vielä laskettu"
+  ]
+]);
 
     // MYYNTIKATE
 
     setMetricVatDetail("marginMetric", [
-      ["Kate ilman ALV", "—"],
-      ["ALV-oikaisu", "—"]
-    ]);
+  [
+    "Kate ilman ALV",
+    s.grossMargin === null
+      ? "—"
+      : asAmount(s.grossMargin)
+  ],
+  [
+    "Myynnistä poistettu ALV",
+    salesVatReady
+      ? asAmount(vat.vatTotal)
+      : "—"
+  ]
+]);
 
     // KIRJATUT MUUT MENOT
 
     setMetricVatDetail("expensesMetric", [
-      ["Ilman ALV", "—"],
-      ["Menojen ALV", "—"]
-    ]);
+  [
+    "Kirjatut menot ilman ALV",
+    data.expenseVat?.net == null
+      ? "—"
+      : asAmount(data.expenseVat.net)
+  ],
+  [
+    "Kirjattujen menojen ALV",
+    data.expenseVat?.vat == null
+      ? "—"
+      : asAmount(data.expenseVat.vat)
+  ],
+  [
+    "Muut varastokulut ilman ALV",
+    s.unvaluedStockRows > 0
+      ? "—"
+      : asAmount(s.stockCost)
+  ]
+]);
 
      
 // ALV-ERITTELY
