@@ -60,8 +60,24 @@
     value("periodTitle", label.charAt(0).toUpperCase() + label.slice(1));
     value("chartTitle", period === "day" ? "Tuntikohtainen myynti" : period === "month" ? "Päivittäinen myynti" : "Kuukausittainen myynti");
   }
-    function drawChart(series) {
+      function drawChart(series) {
     const chart = $("chart");
+
+    // Jos pylväiden myyntiluvut eivät ole muuttuneet,
+    // säilytetään nykyinen diagrammi.
+    const chartKey = JSON.stringify(
+      series.map((item) => [
+        item.key,
+        item.label,
+        item.revenue
+      ])
+    );
+
+    if (chart.dataset.lastKey === chartKey) {
+      return;
+    }
+
+    chart.dataset.lastKey = chartKey;
 
     // Varataan ylätilaa pylväiden euromäärille.
     chart.style.paddingTop = "65px";
