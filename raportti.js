@@ -60,8 +60,13 @@
     value("periodTitle", label.charAt(0).toUpperCase() + label.slice(1));
     value("chartTitle", period === "day" ? "Tuntikohtainen myynti" : period === "month" ? "Päivittäinen myynti" : "Kuukausittainen myynti");
   }
-  function drawChart(series) {
+    function drawChart(series) {
     const chart = $("chart");
+
+    // Varataan ylätilaa pylväiden euromäärille.
+    chart.style.paddingTop = "65px";
+    chart.style.boxSizing = "border-box";
+
     chart.replaceChildren();
     const max = Math.max(1, ...series.map((x) => Number(x.revenue) || 0));
     for (const item of series) {
@@ -86,12 +91,12 @@
         amountLabel.style.position = "absolute";
         amountLabel.style.bottom = "100%";
         amountLabel.style.left = "50%";
-                amountLabel.style.transform =
+                        amountLabel.style.transform =
           "translateX(-50%) rotate(-55deg)";
         amountLabel.style.transformOrigin = "bottom center";
         amountLabel.style.whiteSpace = "nowrap";
-        amountLabel.style.fontSize = "10px";
-        amountLabel.style.fontWeight = "700";
+        amountLabel.style.fontSize = "8px";
+        amountLabel.style.fontWeight = "400";
         amountLabel.style.color = "#f0dcb5";
         amountLabel.style.paddingBottom = "5px";
         amountLabel.style.pointerEvents = "none";
