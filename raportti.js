@@ -180,12 +180,6 @@
 
     setMetricVatDetail("marginMetric", [
   [
-    "Kate ilman ALV",
-    s.grossMargin === null
-      ? "—"
-      : asAmount(s.grossMargin)
-  ],
-  [
     "Myynnistä poistettu ALV",
     salesVatReady
       ? asAmount(vat.vatTotal)
