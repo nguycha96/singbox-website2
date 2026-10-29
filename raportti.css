@@ -198,3 +198,98 @@
   .warning-area{color:#522!important;border-color:#b76!important;padding:2mm!important}
   a{color:#162019!important;text-decoration:none!important}
 }
+
+/* SiNG BOX – A4-tulosteen asettelun korjaus.
+   Vain tulostuksessa: tavallisen sivun tyylit säilyvät ennallaan. */
+@media print {
+  /* Yksi pääsumma ja sitä vastaava ALV-erittely saavat kumpikin
+     enemmän leveyttä kuin alkuperäisessä nelipalstaisessa asettelussa. */
+  .summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: 3mm !important;
+    row-gap: 2mm !important;
+    align-items: start !important;
+  }
+
+  .summary-grid > * {
+    min-width: 0 !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .metric {
+    padding: 3mm !important;
+  }
+
+  /* Summat ja euro-merkki pidetään samalla rivillä. */
+  .metric strong,
+  .metric.featured strong {
+    font-size: 12pt !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+  }
+
+  .metric-label {
+    font-size: 7pt !important;
+    letter-spacing: 0 !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+  }
+
+  /* ALV-erittelyjen nimikkeet eivät saa katketa sanan keskeltä. */
+  .metric + [id$="VatDetail"] {
+    font-size: 8pt !important;
+    line-height: 1.45 !important;
+    padding: 2mm 1mm !important;
+    margin-top: 0 !important;
+    border-top: 0 !important;
+  }
+
+  .metric + [id$="VatDetail"] > div {
+    gap: 3mm !important;
+    align-items: baseline !important;
+  }
+
+  .metric + [id$="VatDetail"] span {
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+  }
+
+  .metric + [id$="VatDetail"] strong {
+    font-family: Arial, sans-serif !important;
+    font-size: 8pt !important;
+    white-space: nowrap !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+    flex-shrink: 0 !important;
+  }
+
+  .secondary-strip > div {
+    min-width: 0 !important;
+  }
+
+  .secondary-strip strong {
+    font-size: 9pt !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+  }
+
+  /* Diagrammi säilyy tulosteessa, mutta sen pystysuuntaiset
+     euromäärät eivät leikkaudu kiinteäkorkuiseen tulostusalueeseen. */
+  .chart-wrap {
+    height: 58mm !important;
+    max-height: none !important;
+    overflow: hidden !important;
+    padding-top: 13mm !important;
+  }
+
+  /* Mahdollisimman selkeät tuotetaulukot paperilla. */
+  .table-scroll { max-width: 100% !important; }
+  table { width: 100% !important; }
+  td, th {
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+  }
+}
