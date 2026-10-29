@@ -163,10 +163,18 @@
 
     // TUOTEKUSTANNUKSET
 
-    // Tuotekustannus on jo veroton.
-// Ei lisätä päällekkäistä ALV-erittelyä.
-
-document.getElementById("costMetricVatDetail")?.remove();
+    setMetricVatDetail("costMetric", [
+  [
+    "Ilman ALV",
+    s.missingCostRows === 0
+      ? asAmount(s.productCost)
+      : "—"
+  ],
+  [
+    "Ostojen ALV",
+    "Ei vielä laskettu"
+  ]
+]);
 
     // MYYNTIKATE
 
