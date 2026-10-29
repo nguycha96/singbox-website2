@@ -291,14 +291,38 @@ if (vatPanel) {
     // kun kaikkien kustannusten ALV-käsittely on tarkistettu.
 
     value("costMetric", asAmount(s.productCost));
-    value("marginMetric", asAmount(s.grossMargin));
-    value(
-      "expensesMetric",
-      asAmount(Number(s.manualExpenses) + Number(s.stockCost))
-    );
-    value("orderMetric", whole.format(s.orderCount));
-    value("qtyMetric", `${whole.format(s.soldQuantity)} kpl`);
-    value("resultMetric", asAmount(s.resultAfterCosts));
+
+value(
+  "marginMetric",
+  s.grossMargin === null
+    ? "—"
+    : asAmount(s.grossMargin)
+);
+
+value(
+  "expensesMetric",
+  data.expenseVat?.net === null ||
+  data.expenseVat?.net === undefined
+    ? "—"
+    : asAmount(
+        Number(data.expenseVat.net) +
+        Number(s.stockCost)
+      )
+);
+
+value("orderMetric", whole.format(s.orderCount));
+
+value(
+  "qtyMetric",
+  `${whole.format(s.soldQuantity)} kpl`
+);
+
+value(
+  "resultMetric",
+  s.resultAfterCosts === null
+    ? "—"
+    : asAmount(s.resultAfterCosts)
+);
     value("manualExpenseMetric", asAmount(s.manualExpenses));
     value("stockExpenseMetric", asAmount(s.stockCost));
 
