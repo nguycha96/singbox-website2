@@ -89,7 +89,7 @@
                 amountLabel.textContent =
           Math.round(amount) + "€";
         amountLabel.style.position = "absolute";
-                amountLabel.style.bottom = "100%";
+                        amountLabel.style.bottom = "100%";
         amountLabel.style.left = "50%";
         amountLabel.style.transform =
           "translateX(-50%) translateY(-6px) rotate(-90deg)";
