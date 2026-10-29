@@ -77,6 +77,29 @@
       cell.title =
         `${item.label}: ${asAmount(amount)} (sis. ALV)`;
 
+            // Näytetään tarkka myyntisumma pylvään yläpuolella.
+      if (amount !== 0) {
+        const amountLabel = document.createElement("span");
+        amountLabel.className = "bar-amount";
+        amountLabel.textContent = asAmount(amount);
+
+        amountLabel.style.position = "absolute";
+        amountLabel.style.bottom = "100%";
+        amountLabel.style.left = "50%";
+        amountLabel.style.transform = "translateX(-50%)";
+        amountLabel.style.whiteSpace = "nowrap";
+        amountLabel.style.fontSize = "11px";
+        amountLabel.style.fontWeight = "700";
+        amountLabel.style.color = "#f0dcb5";
+        amountLabel.style.paddingBottom = "5px";
+        amountLabel.style.pointerEvents = "none";
+        amountLabel.style.zIndex = "2";
+
+        bar.style.position = "relative";
+        bar.style.overflow = "visible";
+        bar.appendChild(amountLabel);
+      }
+
       track.append(bar);
       const label = document.createElement("span"); label.className = "bar-label";
       label.textContent = item.label;
@@ -1036,13 +1059,16 @@ const lines = [
     if (data?.error) throw new Error(data.error);
     return data;
   }
-  async function fetchReport() {
+    async function fetchReport() {
     if (inFlight) { pendingRefresh = true; return; }
     inFlight = true;
     $("refreshButton").disabled = true;
     showError("reportError", "");
-    clearReport();
-    value("updatedText", "Haetaan ajantasaiset tiedot…");
+
+    // Säilytetään vanhat luvut näkyvissä,
+    // kun uusia tietoja haetaan palvelimelta.
+    // Raporttia ei enää tyhjennetä päivityksen aikana.
+       
     try {
       const data = await functionRequest({ action: "report", period, anchor, is_test: reportIsTest });
        console.log("HUONEMYYNNIN TARKISTUS", {
