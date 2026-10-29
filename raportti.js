@@ -16,6 +16,7 @@
   const monthLabel = new Intl.DateTimeFormat("fi-FI", { month: "long", year: "numeric", timeZone: "UTC" });
   let period = "day";
   let anchor = HELSINKI_DATE.format(new Date());
+  let reportIsTest = false;
   let client = null;
   let currentData = null;
   let inFlight = false;
@@ -1042,7 +1043,7 @@ const lines = [
     clearReport();
     value("updatedText", "Haetaan ajantasaiset tiedot…");
     try {
-      const data = await functionRequest({ action: "report", period, anchor });
+      const data = await functionRequest({ action: "report", period, anchor, is_test: reportIsTest });
       render(data);
     } catch (error) {
       showError("reportError", `Raporttia ei voitu hakea: ${errorText(error)}`);
@@ -1073,7 +1074,12 @@ const lines = [
         email: $("email").value.trim(), password: $("password").value,
       });
       if (error) throw error;
-      const firstReport = await functionRequest({ action: "report", period, anchor });
+      const firstReport = await functionRequest({
+  action: "report",
+  period,
+  anchor,
+  is_test: reportIsTest
+});
       if (!firstReport?.summary) throw new Error("Raporttipalvelin ei palauttanut raporttitietoja.");
       enterDashboard(firstReport);
     } catch (error) { showError("loginError", errorText(error)); }
