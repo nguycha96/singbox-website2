@@ -1157,7 +1157,18 @@ roomsContainer.replaceChildren();
                                 );
                             }
 
-                            await loadRooms();
+                                                        try {
+                                await loadRooms();
+                            } catch (refreshError) {
+                                console.error(
+                                    "Huonenäkymän päivitys epäonnistui:",
+                                    refreshError
+                                );
+                            }
+
+                            roomFeeButton.disabled = true;
+                            roomFeeButton.textContent =
+                                "MAKSETTU";
 
                         } catch (error) {
 
@@ -1167,7 +1178,7 @@ roomsContainer.replaceChildren();
                             );
 
                             alert(
-                                "Huonemaksun vahvistus epäonnistui. " +
+                                "Maksun tilaa ei voitu vahvistaa. " +
                                 "Tarkista maksutila ennen uutta yritystä."
                             );
 
