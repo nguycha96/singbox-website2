@@ -943,9 +943,10 @@ const lines = [
         document.head.appendChild(style);
       }
 
-      async function loadTestHistory() {
+            async function loadTestHistory() {
 
-        testPanel.hidden = false;
+        // Testihistoria näytetään vain testiraportissa.
+        testPanel.hidden = !reportIsTest;
         testBody.replaceChildren();
 
         testEmpty.hidden = false;
