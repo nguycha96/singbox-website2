@@ -324,7 +324,7 @@
    Raportin tuoterivit tulevat palvelimelta suosion mukaisessa järjestyksessä. */
 @media screen {
   .panel[aria-label="Suosituimmat tuotteet"] .table-scroll {
-    max-height: 590px; /* otsikkorivi + noin 10 tuoteriviä */
+    max-height: 428px; /* otsikkorivi + noin 7 tuoteriviä */
     overflow-y: auto;
     overflow-x: auto;
     scrollbar-gutter: stable;
