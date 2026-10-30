@@ -655,6 +655,26 @@ const lines = [
       expenseBody.appendChild(row);
     }
 
+    // Tulosteeseen vain valitun raportin ja ajanjakson aktiiviset menot.
+    // Summa on menokirjauksen alkuperäinen ALV:n sisältävä summa.
+    const printExpensesBody = $("printExpensesBody");
+    if (printExpensesBody) {
+      const activePrintExpenses = (data.expenses || []).filter((expense) => !expense.voided_at);
+      printExpensesBody.replaceChildren();
+      let printExpensesGross = 0;
+      for (const expense of activePrintExpenses) {
+        const row = document.createElement("tr");
+        appendCell(row, expense.date || "");
+        appendCell(row, expense.category + (expense.note ? " – " + expense.note : ""));
+        appendCell(row, asAmount(expense.amount));
+        printExpensesBody.appendChild(row);
+        printExpensesGross += Number(expense.amount) || 0;
+      }
+      $("printExpensesEmpty").hidden = activePrintExpenses.length > 0;
+      $("printExpensesTotal").hidden = activePrintExpenses.length === 0;
+      value("printExpensesTotalAmount", asAmount(printExpensesGross));
+    }
+
     const warnings = [];
     if (s.missingCostRows > 0) warnings.push(`${s.missingCostRows} myyntiriviltä puuttuu ostohinta. Kate voi olla liian suuri.`);
     if (s.unvaluedStockRows > 0) warnings.push(`${s.unvaluedStockRows} varastokirjaukselta puuttuu yksikkökustannus. Menot voivat olla puutteellisia.`);
