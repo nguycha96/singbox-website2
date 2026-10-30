@@ -293,3 +293,19 @@
     word-break: normal !important;
   }
 }
+
+/* Vaihe 196: myyntikaavion selite boksin alareunaan (vain näyttö). */
+@media screen {
+  .two-columns > .panel[aria-label="Myynti ajanjaksolla"] {
+    display: flex;
+    flex-direction: column;
+  }
+  .two-columns > .panel[aria-label="Myynti ajanjaksolla"] > .chart-wrap {
+    flex: 1 1 auto;
+    min-height: 215px;
+  }
+  .two-columns > .panel[aria-label="Myynti ajanjaksolla"] > .chart-note {
+    margin-top: auto;
+    padding-top: 12px;
+  }
+}
