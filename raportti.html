@@ -9,6 +9,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="raportti.css">
+  <!-- Tulostus: selitteet ja verkkosivun kaksi alalaatikkoa pois; menot omana taulukkona. -->
+  <style>
+    @media print {
+      .print-hide-booking-explanation { display: none !important; }
+      #reportLowerPanels { display: none !important; }
+      #printExpensesPanel { display: block !important; }
+    }
+  </style>
 </head>
 <body>
   <header class="site-header">
@@ -84,14 +92,26 @@
         <section class="panel">
           <div class="panel-heading"><div><div class="section-mark">HUONEVARAUKSET</div><h2>Huonemyynti (sis. ALV)</h2></div></div>
           <div class="booking-value" id="bookingValue">—</div><p id="bookingCount" class="booking-count">—</p>
-          <div class="disclaimer"><strong>Miten huonemyynti lasketaan?</strong><p>
+          <div class="disclaimer print-hide-booking-explanation"><strong>Miten huonemyynti lasketaan?</strong><p>
 Huonemyyntiin lasketaan maksetut huonemaksut. Maksunpalautukset vähennetään niiden palautuspäivän mukaan. ALV 25,5 % eritellään huonemaksuista. Raportti näyttää valitun raporttitilan (oikea raportti tai testiraportti) tapahtumat. Huonemyynti sisältyy kokonaismyyntiin ja sen veroton osuus kirjattujen kulujen jälkeiseen tulokseen.
 </p></div>
-          <div class="disclaimer"><strong>Mitä ”kate” tarkoittaa?</strong><p>Raportti ei ole virallinen kirjanpidon tuloslaskelma. Siitä voi puuttua kuluja, palautuksia ja ALV-oikaisuja. Luvut perustuvat järjestelmään kirjattuihin tapahtumiin.</p></div>
+          <div class="disclaimer print-hide-booking-explanation"><strong>Mitä ”kate” tarkoittaa?</strong><p>Raportti ei ole virallinen kirjanpidon tuloslaskelma. Siitä voi puuttua kuluja, palautuksia ja ALV-oikaisuja. Luvut perustuvat järjestelmään kirjattuihin tapahtumiin.</p></div>
           <div id="warnings" class="warning-area" hidden></div>
         </section>
       </div>
-      <div class="two-columns lower">
+      <!-- Vain A4/PDF-tuloste: voimassa olevat menokirjaukset. -->
+      <section id="printExpensesPanel" class="panel print-expenses-panel" aria-label="Kirjatut menot tulosteessa">
+        <div class="panel-heading"><div><div class="section-mark">MENOKIRJAUKSET</div><h2>Kirjatut menot</h2></div></div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Päivä</th><th>Menolaji ja selite</th><th>Summa (sis. ALV)</th></tr></thead>
+            <tbody id="printExpensesBody"></tbody>
+          </table>
+        </div>
+        <p id="printExpensesEmpty" class="empty-note" hidden>Ei voimassa olevia menokirjauksia valitulla ajanjaksolla.</p>
+        <div id="printExpensesTotal" class="expense-total" hidden><span>Kirjatut menot yhteensä (sis. ALV)</span><strong id="printExpensesTotalAmount">—</strong></div>
+      </section>
+      <div class="two-columns lower" id="reportLowerPanels">
         <section class="panel">
           <div class="panel-heading"><div><div class="section-mark">MENOKIRJAUKSET</div><h2>Lisää meno</h2></div></div>
           <!-- Nämä elementit säilyvät raportti.js:n käyttöön, mutta eivät näy sivulla. -->
