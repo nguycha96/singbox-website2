@@ -62,7 +62,7 @@
       <p class="period-title" id="periodTitle"></p>
       <p class="updated" id="updatedText" aria-live="polite">Tietoja haetaan…</p>
       <p id="reportError" class="message error" hidden role="alert"></p>
-      <p class="print-note" aria-label="Tulosteen huomautus">SiNG BOX · Sisäinen talousraportti. Arvonlisäveroa ei vielä eritellä tässä versiossa. Huonevarausten arvo ei ole vahvistettua maksettua myyntiä. Raportti ei ole virallinen kirjanpidon tai ALV-ilmoituksen peruste.</p>
+      <p class="print-note" aria-label="Tulosteen huomautus">SiNG BOX · Sisäinen talousraportti. Kokonaismyynti sisältää maksetut tuotteet ja huonemaksut, palautukset vähennettyinä. ALV eritellään käytettävissä olevien tietojen perusteella. Raportti ei korvaa virallista kirjanpitoa tai ALV-ilmoitusta.</p>
 
       <div class="summary-grid">
         <article class="metric"><span class="metric-label">KOKONAISMYYNTI (sis. ALV)</span><strong id="revenueMetric">—</strong><small>Maksetut tuotteet ja huonevaraukset</small></article>
@@ -73,7 +73,7 @@
       <div class="secondary-strip">
         <div><span>Maksetut tuotetilaukset</span><strong id="orderMetric">—</strong></div>
         <div><span>Myytyjä tuotteita</span><strong id="qtyMetric">—</strong></div>
-        <div><span>Kate kirjattujen kulujen jälkeen</span><strong id="resultMetric">—</strong></div>
+        <div><span>Tulos kirjattujen kulujen jälkeen</span><strong id="resultMetric">—</strong></div>
       </div>
       <div class="two-columns">
         <section class="panel" aria-label="Myynti ajanjaksolla">
@@ -85,7 +85,7 @@
           <div class="panel-heading"><div><div class="section-mark">HUONEVARAUKSET</div><h2>Huonemyynti (sis. ALV)</h2></div></div>
           <div class="booking-value" id="bookingValue">—</div><p id="bookingCount" class="booking-count">—</p>
           <div class="disclaimer"><strong>Miten huonemyynti lasketaan?</strong><p>
-Huonemyyntiin lasketaan vahvistetut huonemaksut. Mahdolliset maksunpalautukset vähennetään myynnistä niiden palautuspäivän mukaan. ALV 25,5 % eritellään tämän perusteella. Testivaraukset eivät vaikuta lukuihin. Huonemyyntiä ei ole vielä yhdistetty raportin kokonaismyyntiin ja tulokseen.
+Huonemyyntiin lasketaan maksetut huonemaksut. Maksunpalautukset vähennetään niiden palautuspäivän mukaan. ALV 25,5 % eritellään huonemaksuista. Raportti näyttää valitun raporttitilan (oikea raportti tai testiraportti) tapahtumat. Huonemyynti sisältyy kokonaismyyntiin ja sen veroton osuus kirjattujen kulujen jälkeiseen tulokseen.
 </p></div>
           <div class="disclaimer"><strong>Mitä ”kate” tarkoittaa?</strong><p>Raportti ei ole virallinen kirjanpidon tuloslaskelma. Siitä voi puuttua kuluja, palautuksia ja ALV-oikaisuja. Luvut perustuvat järjestelmään kirjattuihin tapahtumiin.</p></div>
           <div id="warnings" class="warning-area" hidden></div>
@@ -207,9 +207,10 @@ Huonemyyntiin lasketaan vahvistetut huonemaksut. Mahdolliset maksunpalautukset v
         ></p>
 
         <p class="fineprint">
-          ALV-erittely perustuu maksettuihin ja
-          toimitettuihin tuotteisiin. Ostojen
-          vähennettävää ALV:tä ei ole vielä huomioitu.
+          Tämä ALV-taulukko perustuu maksettuihin ja
+          toimitettuihin tuotteisiin. Huonemyynnin ALV näkyy
+          erikseen huonemyyntiosiossa ja sisältyy kokonaismyynnin ALV-lukuihin.
+          Ostojen vähennettävää ALV:tä ei ole huomioitu tässä myynnin ALV-taulukossa.
           Raportti ei korvaa virallista ALV-kirjanpitoa.
         </p>
       </section>
