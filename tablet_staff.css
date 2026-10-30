@@ -1106,3 +1106,95 @@ html body #singboxCommonCallPanel .sc-global-btn {
   align-self: flex-start;
   min-width: 220px;
 }
+
+.staff-modal-overlay[hidden] {
+    display: none;
+}
+
+.staff-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+}
+
+.staff-modal {
+    width: min(520px, 100%);
+    background: #042f26;
+    border: 1px solid rgba(212, 168, 55, 0.75);
+    border-radius: 22px;
+    padding: 28px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+}
+
+.staff-modal-eyebrow {
+    margin-bottom: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #d4a837;
+}
+
+.staff-modal h3 {
+    margin: 0 0 12px;
+    font-size: 30px;
+    line-height: 1.1;
+    color: #f4e7c2;
+}
+
+.staff-modal p {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.5;
+    color: #f4e7c2;
+}
+
+.staff-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.staff-modal-cancel,
+.staff-modal-confirm {
+    min-width: 130px;
+    padding: 14px 20px;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.staff-modal-cancel {
+    background: transparent;
+    color: #f4e7c2;
+    border: 1px solid rgba(244, 231, 194, 0.5);
+}
+
+.staff-modal-cancel:hover {
+    border-color: #f4e7c2;
+    transform: translateY(-1px);
+}
+
+.staff-modal-confirm {
+    background: #ff0a9f;
+    color: #081f1a;
+    border: 1px solid #ff0a9f;
+}
+
+.staff-modal-confirm:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+}
+
+body.staff-modal-open {
+    overflow: hidden;
+}
