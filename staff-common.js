@@ -260,10 +260,14 @@ function showOrders(list){
       const actions=el('div','sc-actions');
       if(remaining){
         actions.append(btn('Toimita 1',()=>action('staff_common_update_item',{p_item_id:Number(i.id),p_action:'deliver',p_quantity:1},'Tuote toimitettu.')));
-        actions.append(btn('Peruuta 1',()=>{
-          if(!confirm('Peruutetaanko yksi kappale?'))return;
-          return action('staff_common_update_item',{p_item_id:Number(i.id),p_action:'cancel',p_quantity:1},'Tuote peruutettu.');
-        }));
+        actions.append(btn('Peruuta 1',async()=>{
+  const confirmed = await openStaffConfirm(
+    'Peruutetaanko yksi kappale?',
+    'Vahvista peruutus'
+  );
+  if(!confirmed)return;
+  return action('staff_common_update_item',{p_item_id:Number(i.id),p_action:'cancel',p_quantity:1},'Tuote peruutettu.');
+}));
       }else actions.append(el('span','sc-detail','Käsitelty'));
       row.append(info,actions);card.append(row);
     }
