@@ -273,10 +273,15 @@ function showOrders(list){
     }
     const foot=el('div','sc-top');foot.append(el('strong','sc-main','Maksettavaa '+money(total)));
     const bottom=el('div','sc-actions');
-    const pay=btn('Vahvista maksu lopussa',()=>{
-      if(!confirm('Onko asiakas maksanut tämän tilauksen?'))return;
-      return action('staff_common_mark_paid',{p_order_id:Number(o.id)},'Maksu vahvistettu.');
-    });pay.classList.add('sc-paid');pay.disabled=!complete||!deliveredSomething;
+    const pay=btn('Vahvista maksu lopussa',async()=>{
+  const confirmed = await openStaffConfirm(
+    'Onko asiakas maksanut tämän tilauksen?',
+    'Vahvista maksu'
+  );
+  if(!confirmed)return;
+  return action('staff_common_mark_paid',{p_order_id:Number(o.id)},'Maksu vahvistettu.');
+});
+        pay.classList.add('sc-paid');pay.disabled=!complete||!deliveredSomething;
     bottom.append(pay);
     if(!complete)bottom.append(el('span','sc-detail','Toimita tai peruuta kaikki tuotteet ennen maksun vahvistamista.'));
     if(complete&&!deliveredSomething)bottom.append(el('span','sc-detail','Kaikki tuotteet on peruutettu: maksua ei voi vahvistaa.'));
