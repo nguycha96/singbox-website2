@@ -277,6 +277,50 @@
     <script src="tablet_staff.js?v=9"></script>
     
     <script src="staff-common.js"></script>
+
+    <div
+    id="staffConfirmModal"
+    class="staff-modal-overlay"
+    hidden
+>
+    <div
+        class="staff-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="staffConfirmTitle"
+        aria-describedby="staffConfirmMessage"
+    >
+        <div class="staff-modal-eyebrow">
+            VAHVISTUS
+        </div>
+
+        <h3 id="staffConfirmTitle">
+            Vahvista toiminto
+        </h3>
+
+        <p id="staffConfirmMessage">
+            Haluatko varmasti jatkaa?
+        </p>
+
+        <div class="staff-modal-actions">
+            <button
+                type="button"
+                class="staff-modal-cancel"
+                id="staffConfirmCancel"
+            >
+                Peruuta
+            </button>
+
+            <button
+                type="button"
+                class="staff-modal-confirm"
+                id="staffConfirmOk"
+            >
+                OK
+            </button>
+        </div>
+    </div>
+</div>
     
 </body>
 
