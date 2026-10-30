@@ -78,8 +78,10 @@
 
     const amounts = series.map((item) => Number(item.revenue) || 0);
     const hasNegative = amounts.some((amount) => amount < 0);
-    const maxPositive = Math.max(1, ...amounts.filter((amount) => amount > 0));
-    const maxNegative = Math.max(1, ...amounts.filter((amount) => amount < 0).map(Math.abs));
+    // Sama euroasteikko molemmille suunnille: -10 € on yhtä suuri
+    // suhteessa nollaviivaan kuin +10 €, ei kuin suurin miinusarvo.
+    const maxMagnitude = Math.max(1, ...amounts.map(Math.abs));
+    const maxPositive = maxMagnitude;
 
     const fragment = document.createDocumentFragment();
     for (const item of series) {
@@ -105,11 +107,11 @@
 
         if (amount > 0) {
           bar.style.bottom = "50%";
-          bar.style.height = `${Math.max(2, (amount / maxPositive) * 47)}%`;
+          bar.style.height = `${Math.max(2, (amount / maxMagnitude) * 47)}%`;
         } else if (amount < 0) {
           bar.classList.add("negative");
           bar.style.top = "50%";
-          bar.style.height = `${Math.max(2, (Math.abs(amount) / maxNegative) * 47)}%`;
+          bar.style.height = `${Math.max(2, (Math.abs(amount) / maxMagnitude) * 47)}%`;
         } else {
           bar.style.display = "none";
         }
