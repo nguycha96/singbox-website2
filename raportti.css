@@ -318,3 +318,83 @@
     page-break-before: always !important;
   }
 }
+
+
+/* Vaihe 200: Suosituimmat tuotteet -järjestysnumerot ja vieritys.
+   Raportin tuoterivit tulevat palvelimelta suosion mukaisessa järjestyksessä. */
+@media screen {
+  .panel[aria-label="Suosituimmat tuotteet"] .table-scroll {
+    max-height: 428px; /* otsikkorivi + noin 7 tuoteriviä */
+    overflow-y: auto;
+    overflow-x: auto;
+    scrollbar-gutter: stable;
+  }
+
+  .panel[aria-label="Suosituimmat tuotteet"] thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #00150f;
+  }
+
+  .panel[aria-label="Suosituimmat tuotteet"] tbody tr {
+    height: 54px;
+  }
+
+  #productsBody {
+    counter-reset: singbox-product-rank;
+  }
+
+  #productsBody tr {
+    counter-increment: singbox-product-rank;
+  }
+
+  #productsBody td:first-child::before {
+    content: counter(singbox-product-rank) ". ";
+    display: inline-block;
+    min-width: 2.1em;
+    color: var(--gold);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* A4-tulosteeseen ei tarvita menon lisäyslomaketta eikä tuotelistaa.
+   Näyttönäkymään nämä piilotukset eivät vaikuta. */
+@media print {
+  .two-columns.lower {
+    display: none !important;
+  }
+}
+
+/* Vaihe 203: kirjatut voimassa olevat menot vain A4/PDF-tulosteeseen. */
+.print-expenses-panel { display: none; }
+@media print {
+  #printExpensesPanel {
+    display: block !important;
+    margin-top: 3mm !important;
+    break-before: auto !important;
+    page-break-before: auto !important;
+  }
+  #printExpensesPanel .panel-heading,
+  #printExpensesPanel .expense-total {
+    break-inside: avoid !important;
+  }
+  #printExpensesPanel tr { break-inside: avoid !important; }
+  #printExpensesPanel td:last-child,
+  #printExpensesPanel th:last-child { white-space: nowrap !important; }
+}
+
+/* Tulosteesta pois huonemyynnin pitkät selitetekstit; sivustolla säilyvät. */
+@media print {
+  .two-columns:not(.lower) > .panel .disclaimer { display: none !important; }
+}
+
+/* Tulosteen lopulliset näkyvyyssäännöt (vakaat tunnisteet). */
+@media print {
+  #reportLowerPanels,
+  .print-hide-booking-explanation {
+    display: none !important;
+  }
+  #printExpensesPanel { display: block !important; }
+}
