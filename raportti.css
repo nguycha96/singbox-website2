@@ -309,3 +309,12 @@
     padding-top: 12px;
   }
 }
+
+/* Vaihe 199: A4-tulosteessa myyntidiagrammi päättää ensimmäisen sivun.
+   Huonemyynti alkaa aina seuraavalta sivulta. Ei vaikuta näyttönäkymään. */
+@media print {
+  .two-columns:not(.lower) > .panel:nth-child(2) {
+    break-before: page !important;
+    page-break-before: always !important;
+  }
+}
