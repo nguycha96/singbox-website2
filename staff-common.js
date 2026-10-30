@@ -4,6 +4,52 @@
  * Ei korvaa vanhaa huoneiden JavaScriptiä.
  */
 (()=>{'use strict';
+      const staffConfirmModal = document.getElementById("staffConfirmModal");
+const staffConfirmMessage = document.getElementById("staffConfirmMessage");
+const staffConfirmOk = document.getElementById("staffConfirmOk");
+const staffConfirmCancel = document.getElementById("staffConfirmCancel");
+
+function openStaffConfirm(message, confirmLabel = "OK") {
+    return new Promise((resolve) => {
+        staffConfirmMessage.textContent = message;
+        staffConfirmOk.textContent = confirmLabel;
+
+        staffConfirmModal.hidden = false;
+        document.body.classList.add("staff-modal-open");
+
+        const close = (result) => {
+            staffConfirmModal.hidden = true;
+            document.body.classList.remove("staff-modal-open");
+
+            staffConfirmOk.removeEventListener("click", onOk);
+            staffConfirmCancel.removeEventListener("click", onCancel);
+            staffConfirmModal.removeEventListener("click", onOverlay);
+            document.removeEventListener("keydown", onKeyDown);
+
+            resolve(result);
+        };
+
+        const onOk = () => close(true);
+        const onCancel = () => close(false);
+
+        const onOverlay = (event) => {
+            if (event.target === staffConfirmModal) {
+                close(false);
+            }
+        };
+
+        const onKeyDown = (event) => {
+            if (event.key === "Escape") {
+                close(false);
+            }
+        };
+
+        staffConfirmOk.addEventListener("click", onOk);
+        staffConfirmCancel.addEventListener("click", onCancel);
+        staffConfirmModal.addEventListener("click", onOverlay);
+        document.addEventListener("keydown", onKeyDown);
+    });
+}
 const KEY='singbox-staff-device-uuid';
 const URL='https://tikatiahzawstvrdqfix.supabase.co';
 const PUBKEY='sb_publishable_ZfYe1fy7Dxu59HfTLSQ7Cw_EK0xGl34';
