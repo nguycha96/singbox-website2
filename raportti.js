@@ -21,6 +21,7 @@
   let currentData = null;
   let inFlight = false;
   let pendingRefresh = false;
+  let refreshTestExpenseHistory = null;
 
   function errorText(err) {
     if (!err) return "Tuntematon virhe.";
@@ -1078,6 +1079,7 @@ const lines = [
         }
       }
 
+      refreshTestExpenseHistory = loadTestHistory;
       void loadTestHistory();
     }
 
@@ -1206,6 +1208,10 @@ const lines = [
       $("expenseMessage").textContent = "Meno tallennettu onnistuneesti.";
       $("expenseMessage").hidden = false;
       await fetchReport();
+      // Päivitetään myös sivun lopussa oleva erillinen testimenojen historia.
+      if (reportIsTest && typeof refreshTestExpenseHistory === "function") {
+        await refreshTestExpenseHistory();
+      }
     } catch (err) { showError("expenseMessage", `Tallennus epäonnistui: ${errorText(err)}`); }
     finally { button.disabled = false; }
   }
