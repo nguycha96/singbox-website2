@@ -318,3 +318,11 @@
     page-break-before: always !important;
   }
 }
+
+/* Menojen lisäyslomaketta ei näytetä tulosteessa. */
+@media print {
+  #expenseFormWrap,
+  .two-columns.lower > .panel:first-child {
+    display: none !important;
+  }
+}
