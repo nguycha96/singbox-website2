@@ -1194,6 +1194,7 @@ const lines = [
 
       await functionRequest({
         action: "add_expense",
+        is_test: reportIsTest,
         date: $("expenseDate").value,
         category: $("expenseCategory").value,
         amount: amount,
