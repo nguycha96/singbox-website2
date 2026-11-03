@@ -2054,14 +2054,16 @@ function renderGroupedRows(
                         return;
                     }
 
-                    if (
-                        needsConfirmation &&
-                        !window.confirm(
-                            `${label}: ${item.name}, 1 kpl?`
-                        )
-                    ) {
-                        return;
-                    }
+                   if (needsConfirmation) {
+    const confirmed = await openStaffConfirm(
+        `${label}: ${item.name}, 1 kpl?`,
+        'Vahvista'
+    );
+
+    if (!confirmed) {
+        return;
+    }
+}
 
                     actionButtons.forEach(
                         b => b.disabled = true
