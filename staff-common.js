@@ -307,8 +307,15 @@ function showCalls(list){
     const button=el('button','sc-global-btn','Kuittaa hoidetuksi');
     button.type='button';
     button.addEventListener('click',async()=>{
-      button.disabled=true;
-      button.textContent='Kuitataan...';
+  const confirmed = await openStaffConfirm(
+    'Merkitäänkö henkilökuntakutsu hoidetuksi?',
+    'Kuittaa hoidetuksi'
+  );
+
+  if(!confirmed)return;
+
+  button.disabled=true;
+  button.textContent='Kuitataan...';
       try{
         await action('staff_common_resolve_call',{p_call_id:Number(c.id)},'Myyjäkutsu kuitattu.');
       }catch(err){
