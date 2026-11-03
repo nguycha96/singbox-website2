@@ -50,6 +50,7 @@ function openStaffConfirm(message, confirmLabel = "OK") {
         document.addEventListener("keydown", onKeyDown);
     });
 }
+      window.openStaffConfirm = openStaffConfirm;
 const KEY='singbox-staff-device-uuid';
 const URL='https://tikatiahzawstvrdqfix.supabase.co';
 const PUBKEY='sb_publishable_ZfYe1fy7Dxu59HfTLSQ7Cw_EK0xGl34';
