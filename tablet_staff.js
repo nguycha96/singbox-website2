@@ -1116,31 +1116,14 @@ roomsContainer.replaceChildren();
                     "click",
                     async () => {
 
-                        if (!roomFeeButton.dataset.confirming) {
-    roomFeeButton.dataset.confirming = "true";
-    roomFeeButton.textContent =
-        `VAHVISTA ${formattedAmount} € MAKSU`;
+                        const confirmed = await window.openStaffConfirm(
+                            `Onko ${formattedAmount} € huonemaksu vastaanotettu?`,
+                            "Vahvista maksu"
+                        );
 
-    const cancelButton = document.createElement("button");
-    cancelButton.type = "button";
-    cancelButton.className =
-        "mark-order-delivered room-payment-btn";
-    cancelButton.textContent = "PERUUTA";
-
-    cancelButton.addEventListener("click", () => {
-        delete roomFeeButton.dataset.confirming;
-        roomFeeButton.textContent =
-            "MERKITSE HUONE MAKSETUKSI";
-        cancelButton.remove();
-    });
-
-    roomFeeButton.insertAdjacentElement(
-        "afterend",
-        cancelButton
-    );
-
-    return;
-}
+                        if (!confirmed) {
+                            return;
+                        }
 
                         const deviceUuid =
                             localStorage.getItem(
@@ -2055,9 +2038,10 @@ function renderGroupedRows(
                     }
 
                    if (needsConfirmation) {
-    const confirmed = await openStaffConfirm(
+
+    const confirmed = await window.openStaffConfirm(
         `${label}: ${item.name}, 1 kpl?`,
-        'Vahvista'
+        "Vahvista"
     );
 
     if (!confirmed) {
@@ -2251,12 +2235,15 @@ if (pendingItems.length > 0) {
                 return;
             }
 
-            if (!window.confirm(
-                "Kuitataanko kaikki tämän asiakkaan " +
-                "toimittamattomat tuotteet toimitetuiksi?"
-            )) {
-                return;
-            }
+            const confirmed = await window.openStaffConfirm(
+    "Kuitataanko kaikki tämän asiakkaan " +
+    "toimittamattomat tuotteet toimitetuiksi?",
+    "Vahvista toimitus"
+);
+
+if (!confirmed) {
+    return;
+}
 
             batchRunning = true;
             deliverAllButton.disabled = true;
