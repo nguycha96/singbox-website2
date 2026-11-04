@@ -2638,7 +2638,7 @@ async function loadRoomRefunds() {
 
     const { data, error } =
         await staffSupabaseClient.rpc(
-            "staff_get_refundable_room_payments",
+            "staff_get_refundable_room_payments_v2",
             {
                 p_device_uuid: deviceUuid
             }
@@ -2705,7 +2705,25 @@ async function loadRoomRefunds() {
         const info =
             document.createElement("p");
 
+        const paymentDate = booking.paid_at
+            ? new Date(booking.paid_at)
+            : null;
+
+        const paymentDateText =
+            paymentDate && !Number.isNaN(paymentDate.getTime())
+                ? new Intl.DateTimeFormat("fi-FI", {
+                    timeZone: "Europe/Helsinki",
+                    day: "numeric",
+                    month: "numeric",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit"
+                }).format(paymentDate)
+                : "Ei saatavilla";
+
         info.textContent =
+            `Maksupäivä: ${paymentDateText} | ` +
+            `Varauspäivä: ${booking.booking_date || "Ei saatavilla"} | ` +
             `${booking.room_name || "Huone"} | ` +
             `Maksettu ${euro(booking.paid_amount)} € | ` +
             `Aiemmin palautettu ${euro(booking.refunded_amount)} €`;
