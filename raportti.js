@@ -64,7 +64,6 @@
   function drawChart(series) {
     const chart = $("chart");
 
-    // Piirretään uudelleen vain, jos myyntiluvut muuttuvat.
     const chartKey = JSON.stringify(
       series.map((item) => [item.key, item.label, item.revenue])
     );
@@ -72,16 +71,14 @@
       return;
     }
 
-    // Säilytetään pylväiden päällä olevien euromäärien ylätila.
+    // Jätetään tilaa suurimman pylvään yläpuolella olevalle euromäärälle.
     chart.style.paddingTop = "65px";
     chart.style.boxSizing = "border-box";
 
     const amounts = series.map((item) => Number(item.revenue) || 0);
     const hasNegative = amounts.some((amount) => amount < 0);
-    // Sama euroasteikko molemmille suunnille: -10 € on yhtä suuri
-    // suhteessa nollaviivaan kuin +10 €, ei kuin suurin miinusarvo.
+    // Positiiviset ja negatiiviset arvot käyttävät samaa euromitta-asteikkoa.
     const maxMagnitude = Math.max(1, ...amounts.map(Math.abs));
-    const maxPositive = maxMagnitude;
 
     const fragment = document.createDocumentFragment();
     for (const item of series) {
@@ -90,72 +87,74 @@
       cell.className = "bar-cell";
       const track = document.createElement("div");
       track.className = "bar-track";
+      track.style.position = "relative";
+      track.style.overflow = "visible";
+
       const bar = document.createElement("span");
       bar.className = "bar";
+      bar.style.position = "absolute";
+      bar.style.left = "50%";
+      bar.style.transform = "translateX(-50%)";
+      bar.style.width = "100%";
+      bar.style.maxWidth = "33px";
+      bar.style.minHeight = "0";
+
+      // Bar-korkeus ja lukeman sijainti lasketaan täsmälleen samasta arvosta.
+      const barHeight = hasNegative
+        ? Math.max(2, Math.abs(amount) / maxMagnitude * 47)
+        : Math.max(1, Math.min(100, amount / maxMagnitude * 100));
 
       if (hasNegative) {
-        // Nollaviiva on alueen keskellä. Pluspylväät nousevat
-        // nollaviivalta, miinuspylväät laskevat sen alapuolelle.
         track.classList.add("has-negative");
-        track.style.position = "relative";
-        bar.style.position = "absolute";
-        bar.style.left = "50%";
-        bar.style.transform = "translateX(-50%)";
-        bar.style.width = "100%";
-        bar.style.maxWidth = "33px";
-        bar.style.minHeight = "0";
-
         if (amount > 0) {
           bar.style.bottom = "50%";
-          bar.style.height = `${Math.max(2, (amount / maxMagnitude) * 47)}%`;
+          bar.style.height = `${barHeight}%`;
         } else if (amount < 0) {
           bar.classList.add("negative");
           bar.style.top = "50%";
-          bar.style.height = `${Math.max(2, (Math.abs(amount) / maxMagnitude) * 47)}%`;
+          bar.style.height = `${barHeight}%`;
         } else {
           bar.style.display = "none";
         }
       } else {
-        // Jos palautukset eivät vie myyntiä miinukselle,
-        // vanha positiivisten pylväiden asettelu säilyy.
-        bar.style.height = `${Math.max(1, Math.min(100, (amount / maxPositive) * 100))}%`;
+        bar.style.bottom = "0";
+        bar.style.height = `${barHeight}%`;
         if (amount === 0) bar.style.visibility = "hidden";
       }
 
       bar.title = `${item.label}: ${asAmount(amount)} (sis. ALV)`;
       cell.title = bar.title;
+      track.append(bar);
 
       if (amount !== 0) {
+        // Lukema sijoitetaan pylvään ulkopuolelle track-elementtiin,
+        // jolloin sen sijainti riippuu oman pylvään korkeudesta.
         const amountLabel = document.createElement("span");
-        amountLabel.className = "bar-amount";
+        amountLabel.className = "singbox-bar-value";
         amountLabel.textContent = Math.round(amount) + "€";
         amountLabel.style.position = "absolute";
         amountLabel.style.left = "50%";
-        amountLabel.style.transformOrigin = "center center";
         amountLabel.style.whiteSpace = "nowrap";
+        amountLabel.style.writingMode = "vertical-rl";
+        amountLabel.style.transform = "translateX(-50%) rotate(180deg)";
         amountLabel.style.fontSize = "12px";
         amountLabel.style.fontWeight = "400";
+        amountLabel.style.lineHeight = "1";
         amountLabel.style.color = "#f0dcb5";
-        amountLabel.style.paddingBottom = "5px";
         amountLabel.style.pointerEvents = "none";
         amountLabel.style.zIndex = "2";
 
         if (amount < 0) {
-          // Miinusmerkkinen summa sijoittuu pylvään alapuolelle.
-          amountLabel.style.top = "100%";
-          amountLabel.style.transform =
-            "translateX(-50%) translateY(6px) rotate(-90deg)";
+          // Palautus: summa oman negatiivisen pylvään alapuolella.
+          amountLabel.style.top = `calc(50% + ${barHeight}% + 8px)`;
         } else {
-          amountLabel.style.bottom = "100%";
-          amountLabel.style.transform =
-            "translateX(-50%) translateY(-6px) rotate(-90deg)";
+          // Myynti: summa oman positiivisen pylvään yläpuolella.
+          const base = hasNegative ? "50%" : "0%";
+          amountLabel.style.bottom = `calc(${base} + ${barHeight}% + 8px)`;
         }
-
-        bar.style.overflow = "visible";
-        bar.appendChild(amountLabel);
+        track.append(amountLabel);
       }
 
-      track.append(bar);
       const label = document.createElement("span");
       label.className = "bar-label";
       label.textContent = item.label;
