@@ -233,6 +233,69 @@ const supabaseClient =
 
 
 /* =========================================================
+   STAFF — INTEGRATED NOTICE (replaces browser alerts)
+   Uses the existing confirmation modal's visual styles.
+========================================================= */
+
+function showStaffNotice(message, title = "Ilmoitus") {
+    return new Promise((resolve) => {
+        const overlay = document.createElement("div");
+        overlay.className = "staff-modal-overlay";
+        overlay.setAttribute("role", "presentation");
+
+        const modal = document.createElement("div");
+        modal.className = "staff-modal";
+        modal.setAttribute("role", "alertdialog");
+        modal.setAttribute("aria-modal", "true");
+
+        const eyebrow = document.createElement("div");
+        eyebrow.className = "staff-modal-eyebrow";
+        eyebrow.textContent = "SiNG BOX";
+
+        const heading = document.createElement("h3");
+        heading.textContent = title;
+
+        const detail = document.createElement("p");
+        detail.textContent = message;
+
+        const actions = document.createElement("div");
+        actions.className = "staff-modal-actions";
+
+        const dismissButton = document.createElement("button");
+        dismissButton.type = "button";
+        dismissButton.className = "staff-modal-confirm";
+        dismissButton.textContent = "OK";
+
+        actions.appendChild(dismissButton);
+        modal.append(eyebrow, heading, detail, actions);
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+        document.body.classList.add("staff-modal-open");
+
+        const previousFocus = document.activeElement;
+        const close = () => {
+            document.removeEventListener("keydown", onKeyDown);
+            overlay.remove();
+            document.body.classList.remove("staff-modal-open");
+            if (previousFocus?.isConnected && previousFocus.focus) {
+                previousFocus.focus();
+            }
+            resolve();
+        };
+        const onKeyDown = (event) => {
+            if (event.key === "Escape") {
+                event.preventDefault();
+                close();
+            }
+        };
+
+        dismissButton.addEventListener("click", close, { once: true });
+        document.addEventListener("keydown", onKeyDown);
+        dismissButton.focus();
+    });
+}
+
+/* =========================================================
    CLOCK
 ========================================================= */
 
@@ -1179,7 +1242,7 @@ try {
                                 error
                             );
 
-                            alert(
+                            await showStaffNotice(
                                 "Maksun tilaa ei voitu vahvistaa. " +
                                 "Tarkista maksutila ennen uutta yritystä."
                             );
@@ -2062,7 +2125,7 @@ function renderGroupedRows(
                             );
 
                         if (!success) {
-                            window.alert(
+                            await showStaffNotice(
                                 "Toiminto epäonnistui. " +
                                 "Tarkista tilauksen tila."
                             );
@@ -2075,7 +2138,7 @@ function renderGroupedRows(
                             error
                         );
 
-                        window.alert(
+                        await showStaffNotice(
                             "Toiminto epäonnistui."
                         );
 
@@ -2311,7 +2374,7 @@ if (!confirmed) {
                 );
 
                 if (total === 0) {
-                    window.alert(
+                    await showStaffNotice(
                         "Ei enää toimittamattomia tuotteita."
                     );
                     return;
@@ -2359,7 +2422,7 @@ if (!confirmed) {
 
                 if (failure) {
 
-                    window.alert(
+                    await showStaffNotice(
                         "Kuittaus keskeytyi. " +
                         "Onnistuneita kirjauksia: " +
                         completed + "/" + total + " kpl. " +
@@ -2379,7 +2442,7 @@ if (!confirmed) {
                     error
                 );
 
-                window.alert(
+                await showStaffNotice(
                     "Kuittauksen tilaa ei voitu varmistaa. " +
                     "Tarkista toimitetut tuotteet " +
                     "ennen uutta yritystä."
@@ -2427,11 +2490,20 @@ if (!confirmed) {
 
 
             paidButton.addEventListener(
-                "click",
-                async () => {
+    "click",
+    async () => {
 
-                    paidButton.disabled =
-                        true;
+        const confirmed = await window.openStaffConfirm(
+            `Merkitäänkö asiakkaan ${billTotal.toFixed(2)} € tuotetilaukset maksetuiksi?`,
+            "Vahvista maksu"
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        paidButton.disabled =
+            true;
 
                     paidButton.textContent =
                         "MERKITÄÄN...";
@@ -2751,11 +2823,12 @@ async function loadRoomRefunds() {
                     return;
                 }
 
-                const confirmed = window.confirm(
+                const confirmed = await window.openStaffConfirm(
                     `Kirjataanko ${euro(cents / 100)} € ` +
                     `palautetuksi varauksesta #${booking.booking_id}? ` +
                     "Vahvista vain, jos palautus on tehty " +
-                    "tai kyseessä on testivaraus."
+                    "tai kyseessä on testivaraus.",
+                    "Vahvista palautus"
                 );
 
                 if (!confirmed) return;
@@ -2789,7 +2862,7 @@ async function loadRoomRefunds() {
                         );
                     }
 
-                    window.alert(
+                    await showStaffNotice(
                         "Palautus kirjattu onnistuneesti."
                     );
 
@@ -3427,14 +3500,23 @@ function renderServiceCalls(calls) {
 
 
             button.addEventListener(
-                "click",
-                async () => {
+    "click",
+    async () => {
 
-                    button.disabled =
-                        true;
+        const confirmed = await window.openStaffConfirm(
+            "Merkitäänkö henkilökuntakutsu hoidetuksi?",
+            "Kuittaa hoidetuksi"
+        );
 
-                    button.textContent =
-                        "Kuitataan...";
+        if (!confirmed) {
+            return;
+        }
+
+        button.disabled =
+            true;
+
+        button.textContent =
+            "Kuitataan...";
 
 
                     const success =
