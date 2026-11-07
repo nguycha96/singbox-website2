@@ -698,6 +698,171 @@ async function markBookingPaid(
     return true;
 }
 
+/* =========================================================
+   ORDER DISCOUNTS — staged user interface
+   The read-only preview RPC must be installed before controls appear.
+   Existing payment flow remains unchanged if that RPC is unavailable.
+========================================================= */
+
+function staffEuro(value) {
+    return Number(value).toLocaleString("fi-FI", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }) + " €";
+}
+
+async function showStaffOrderDiscountDialog(order) {
+    const deviceUuid = localStorage.getItem(STAFF_DEVICE_STORAGE_KEY);
+    if (!deviceUuid) {
+        showPairingScreen();
+        return;
+    }
+
+    const original = Number(order.original_amount);
+    if (!Number.isFinite(original) || original <= 0 ||
+        Number(order.pending_quantity) !== 0) {
+        await showStaffNotice("Tilauksen kaikki tuotteet on käsiteltävä ennen alennusta.");
+        return;
+    }
+
+    const overlay = document.createElement("div");
+    overlay.className = "staff-modal-overlay";
+    overlay.setAttribute("role", "presentation");
+
+    const modal = document.createElement("div");
+    modal.className = "staff-modal";
+    modal.setAttribute("role", "dialog");
+    modal.setAttribute("aria-modal", "true");
+    modal.setAttribute("aria-label", "Tilauksen alennus");
+
+    const eyebrow = document.createElement("div");
+    eyebrow.className = "staff-modal-eyebrow";
+    eyebrow.textContent = "SiNG BOX";
+
+    const heading = document.createElement("h3");
+    heading.textContent = `Tilauksen #${order.order_id} alennus`;
+
+    const form = document.createElement("form");
+    form.style.cssText = "display:flex;flex-direction:column;gap:12px;";
+
+    const percentLabel = document.createElement("label");
+    percentLabel.textContent = "Alennus (%)";
+    const percentInput = document.createElement("input");
+    percentInput.type = "number";
+    percentInput.min = "0";
+    percentInput.max = "100";
+    percentInput.step = "0.01";
+    percentInput.required = true;
+    percentInput.value = String(order.discount_percent ?? 0);
+    percentInput.style.width = "100%";
+    percentLabel.appendChild(percentInput);
+
+    const reasonLabel = document.createElement("label");
+    reasonLabel.textContent = "Alennuksen syy (pakollinen, jos alennus yli 0 %)";
+    const reasonInput = document.createElement("textarea");
+    reasonInput.rows = 2;
+    reasonInput.maxLength = 500;
+    reasonInput.value = order.discount_reason || "";
+    reasonInput.placeholder = "Esim. ystäväalennus";
+    reasonInput.style.width = "100%";
+    reasonLabel.appendChild(reasonInput);
+
+    const preview = document.createElement("p");
+    preview.style.fontWeight = "700";
+    const message = document.createElement("p");
+    message.setAttribute("role", "status");
+
+    function updatePreview() {
+        const percent = Number(percentInput.value);
+        if (!Number.isFinite(percent) || percent < 0 || percent > 100 ||
+            Math.round(percent * 100) !== percent * 100) {
+            preview.textContent = "Anna alennus välillä 0–100 % (enintään 2 desimaalia).";
+            return;
+        }
+        const cents = Math.round(original * (100 - percent));
+        preview.textContent = `Alkuperäinen ${staffEuro(original)} → maksettava ${staffEuro(cents / 100)}`;
+    }
+    percentInput.addEventListener("input", updatePreview);
+    updatePreview();
+
+    const actions = document.createElement("div");
+    actions.className = "staff-modal-actions";
+    const cancel = document.createElement("button");
+    cancel.type = "button";
+    cancel.textContent = "PERUUTA";
+    const save = document.createElement("button");
+    save.type = "submit";
+    save.className = "staff-modal-confirm";
+    save.textContent = "TALLENNA ALENNUS";
+    actions.append(cancel, save);
+    form.append(percentLabel, reasonLabel, preview, message, actions);
+    modal.append(eyebrow, heading, form);
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+    document.body.classList.add("staff-modal-open");
+
+    const previousFocus = document.activeElement;
+    let busy = false;
+    const onKeyDown = (event) => {
+        if (event.key === "Escape" && !busy) close();
+    };
+    function close() {
+        if (busy) return;
+        document.removeEventListener("keydown", onKeyDown);
+        overlay.remove();
+        document.body.classList.remove("staff-modal-open");
+        if (previousFocus?.isConnected && previousFocus.focus) previousFocus.focus();
+    }
+    document.addEventListener("keydown", onKeyDown);
+    cancel.addEventListener("click", close);
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (busy) return;
+        const percent = Number(percentInput.value);
+        const reason = reasonInput.value.trim();
+        if (!Number.isFinite(percent) || percent < 0 || percent > 100 ||
+            Math.abs(percent * 100 - Math.round(percent * 100)) > 0.000001) {
+            message.textContent = "Tarkista alennusprosentti.";
+            return;
+        }
+        if (percent > 0 && (reason.length < 3 || reason.length > 500)) {
+            message.textContent = "Kirjoita alennuksen syy (3–500 merkkiä).";
+            return;
+        }
+        const payableCents = Math.round(original * (100 - percent));
+        const confirmed = await window.openStaffConfirm(
+            `Tallennetaanko tilaukselle #${order.order_id} ${percent} % alennus? Maksettava ${staffEuro(payableCents / 100)}.`,
+            "Vahvista alennus"
+        );
+        if (!confirmed) return;
+        busy = true;
+        save.disabled = true;
+        cancel.disabled = true;
+        message.textContent = "Tallennetaan...";
+        try {
+            const { error } = await staffSupabaseClient.rpc("staff_set_order_discount", {
+                p_device_uuid: deviceUuid,
+                p_order_id: Number(order.order_id),
+                p_discount_percent: percent,
+                p_reason: percent === 0 ? null : reason
+            });
+            if (error) throw error;
+            message.textContent = "Alennus tallennettu.";
+            busy = false;
+            close();
+            await loadRooms(true);
+        } catch (error) {
+            console.error("Alennuksen tallennus epäonnistui:", error);
+            message.textContent = "Alennusta ei voitu tallentaa. Tarkista tilauksen tila.";
+            busy = false;
+            save.disabled = false;
+            cancel.disabled = false;
+        }
+    });
+    percentInput.focus();
+}
+
 let lastRoomsRenderKey =
     null;
 
@@ -813,6 +978,10 @@ async function loadRooms(force = false) {
 
 /* ROOM ORDERS */
 
+// A separate, authorized payment preview prevents the UI from
+// mistaking pre-discount totals for amounts due.
+let staffOrderPaymentPreviews = null;
+
 let roomOrders = [];
 
 
@@ -844,7 +1013,21 @@ if (deviceUuid) {
             roomOrdersData || [];
     }
 }
-   
+
+// Safe rollout: until this RPC exists, discount controls stay hidden.
+// The current payment controls continue operating as before.
+staffOrderPaymentPreviews = null;
+if (deviceUuid) {
+    const { data: previews, error: previewError } =
+        await staffSupabaseClient.rpc(
+            "staff_get_booking_payment_previews",
+            { p_device_uuid: deviceUuid }
+        );
+    if (!previewError && Array.isArray(previews)) {
+        staffOrderPaymentPreviews = previews;
+    }
+}
+
     const now =
     new Date();
    
@@ -887,6 +1070,7 @@ const renderKey = JSON.stringify({
     rooms: rooms || [],
     bookings: bookings || [],
     roomOrders: roomOrders || [],
+    orderPaymentPreviews: staffOrderPaymentPreviews,
     bookingPhases
 });
 
@@ -1870,19 +2054,32 @@ if (
             );
 
 
-            let billTotal =
-                0;
-           
-billTotal = group.orderItems.reduce(
-    (sum, item) => {
-        const payableQuantity =
-            item.quantity - item.cancelledQuantity;
+            let billTotal = group.orderItems.reduce(
+                (sum, item) =>
+                    sum + (item.quantity - item.cancelledQuantity) * item.unitPrice,
+                0
+            );
 
-        return sum +
-            payableQuantity * item.unitPrice;
-    },
-    0
-);
+            const groupOrderIds = [...new Set(group.orderIds)];
+            const groupPreviews = Array.isArray(staffOrderPaymentPreviews)
+                ? staffOrderPaymentPreviews.filter((item) =>
+                    groupOrderIds.includes(Number(item.order_id))
+                )
+                : [];
+            const previewsComplete =
+                groupPreviews.length === groupOrderIds.length &&
+                groupPreviews.every((item) =>
+                    item.final_amount !== null &&
+                    item.original_amount !== null &&
+                    Number.isFinite(Number(item.final_amount)) &&
+                    Number.isFinite(Number(item.original_amount))
+                );
+
+            if (previewsComplete) {
+                billTotal = groupPreviews.reduce(
+                    (sum, order) => sum + Number(order.final_amount), 0
+                );
+            }
 
            
 const pendingItems =
@@ -2234,7 +2431,7 @@ renderGroupedRows(
                 );
 
             totalLabel.textContent =
-                "Yhteensä";
+                "Yhteensä maksettavaa";
 
 
             const totalPrice =
@@ -2264,12 +2461,37 @@ if (cancelledItems.length > 0) {
 }
 
 
-            bill.appendChild(
-                total
-            );
+            bill.appendChild(total);
 
-
-            
+            // Discount editing is only shown once the safe payment preview
+            // endpoint is deployed. Each order has its own discount.
+            if (previewsComplete) {
+                const sortedPreviews = [...groupPreviews].sort(
+                    (a, b) => Number(a.order_id) - Number(b.order_id)
+                );
+                for (const orderPreview of sortedPreviews) {
+                    const original = Number(orderPreview.original_amount);
+                    const pending = Number(orderPreview.pending_quantity);
+                    if (!(original > 0) || pending !== 0) continue;
+                    const row = document.createElement("div");
+                    row.className = "room-payment-box";
+                    row.style.marginTop = "8px";
+                    const amount = document.createElement("span");
+                    const discount = Number(orderPreview.discount_percent || 0);
+                    amount.textContent =
+                        `Tilaus #${orderPreview.order_id} · ` +
+                        `${discount} % alennus · ${staffEuro(Number(orderPreview.final_amount))}`;
+                    const discountButton = document.createElement("button");
+                    discountButton.type = "button";
+                    discountButton.className = "mark-order-delivered";
+                    discountButton.textContent = "MUOKKAA ALENNUSTA";
+                    discountButton.addEventListener("click", () =>
+                        showStaffOrderDiscountDialog(orderPreview)
+                    );
+                    row.append(amount, discountButton);
+                    bill.appendChild(row);
+                }
+            }
 
 /* =====================================================
    DELIVER ALL PENDING ITEMS
@@ -2476,7 +2698,10 @@ if (!confirmed) {
 
             // Kokonaan peruutetulle 0,00 € tilaukselle ei näytetä
             // turhaa maksupainiketta. Peruutushistoria jää näkyviin.
-            if (billTotal > 0) {
+            const hasChargeableOrder = previewsComplete
+                ? groupPreviews.some((o) => Number(o.original_amount) > 0)
+                : billTotal > 0;
+            if (hasChargeableOrder) {
 
             const paidButton =
                 document.createElement(
@@ -2492,10 +2717,43 @@ if (!confirmed) {
             paidButton.textContent =
                 "MERKITSE MAKSETUKSI";
 
+            if (previewsComplete && groupPreviews.some(
+                (o) => Number(o.pending_quantity) > 0
+            )) {
+                paidButton.disabled = true;
+                paidButton.textContent = "KÄSITTELE TUOTTEET ENNEN MAKSUA";
+            }
 
             paidButton.addEventListener(
     "click",
     async () => {
+
+        // Verify that the displayed discounted total is still current.
+        if (previewsComplete) {
+            const deviceUuid = localStorage.getItem(STAFF_DEVICE_STORAGE_KEY);
+            const { data: latest, error: previewError } =
+                await staffSupabaseClient.rpc(
+                    "staff_get_booking_payment_previews",
+                    { p_device_uuid: deviceUuid }
+                );
+            if (previewError || !Array.isArray(latest)) {
+                await showStaffNotice("Maksusummaa ei voitu tarkistaa. Päivitä tilanne.");
+                return;
+            }
+            const matching = latest.filter((item) =>
+                groupOrderIds.includes(Number(item.order_id))
+            );
+            const freshTotal = matching.reduce(
+                (sum, item) => sum + Number(item.final_amount), 0
+            );
+            if (matching.length !== groupOrderIds.length ||
+                !Number.isFinite(freshTotal) ||
+                Math.abs(freshTotal - billTotal) > 0.001) {
+                await showStaffNotice("Tilauksen summa on muuttunut. Päivitä lasku ennen maksua.");
+                await loadRooms(true);
+                return;
+            }
+        }
 
         const confirmed = await window.openStaffConfirm(
             `Merkitäänkö asiakkaan ${billTotal.toFixed(2)} € tuotetilaukset maksetuiksi?`,
