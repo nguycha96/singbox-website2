@@ -720,7 +720,7 @@ async function showStaffOrderDiscountDialog(order) {
 
     const original = Number(order.original_amount);
     if (!Number.isFinite(original) || original <= 0 ||
-        Number(order.pending_quantity) !== 0) {
+        order.fully_processed !== true) {
         await showStaffNotice("Tilauksen kaikki tuotteet on käsiteltävä ennen alennusta.");
         return;
     }
@@ -794,6 +794,10 @@ async function showStaffOrderDiscountDialog(order) {
     save.type = "submit";
     save.className = "staff-modal-confirm";
     save.textContent = "TALLENNA ALENNUS";
+    // Tallennus avataan vasta, kun alennus-RPC:n käyttöoikeus on turvallisesti myönnetty.
+    save.disabled = true;
+    save.title = "Alennusten tallennus ei ole vielä käytössä";
+    message.textContent = "Alennuksen tallennus avataan seuraavassa vaiheessa.";
     actions.append(cancel, save);
     form.append(percentLabel, reasonLabel, preview, message, actions);
     modal.append(eyebrow, heading, form);
@@ -1014,13 +1018,13 @@ if (deviceUuid) {
     }
 }
 
-// Safe rollout: until this RPC exists, discount controls stay hidden.
+// Read-only preview RPC deployed in step 284.
 // The current payment controls continue operating as before.
 staffOrderPaymentPreviews = null;
 if (deviceUuid) {
     const { data: previews, error: previewError } =
         await staffSupabaseClient.rpc(
-            "staff_get_booking_payment_previews",
+            "staff_get_order_discount_totals",
             { p_device_uuid: deviceUuid }
         );
     if (!previewError && Array.isArray(previews)) {
@@ -2471,8 +2475,7 @@ if (cancelledItems.length > 0) {
                 );
                 for (const orderPreview of sortedPreviews) {
                     const original = Number(orderPreview.original_amount);
-                    const pending = Number(orderPreview.pending_quantity);
-                    if (!(original > 0) || pending !== 0) continue;
+                    if (!(original > 0) || orderPreview.fully_processed !== true) continue;
                     const row = document.createElement("div");
                     row.className = "room-payment-box";
                     row.style.marginTop = "8px";
@@ -2718,7 +2721,7 @@ if (!confirmed) {
                 "MERKITSE MAKSETUKSI";
 
             if (previewsComplete && groupPreviews.some(
-                (o) => Number(o.pending_quantity) > 0
+                (o) => o.fully_processed !== true
             )) {
                 paidButton.disabled = true;
                 paidButton.textContent = "KÄSITTELE TUOTTEET ENNEN MAKSUA";
@@ -2733,7 +2736,7 @@ if (!confirmed) {
             const deviceUuid = localStorage.getItem(STAFF_DEVICE_STORAGE_KEY);
             const { data: latest, error: previewError } =
                 await staffSupabaseClient.rpc(
-                    "staff_get_booking_payment_previews",
+                    "staff_get_order_discount_totals",
                     { p_device_uuid: deviceUuid }
                 );
             if (previewError || !Array.isArray(latest)) {
@@ -2747,6 +2750,7 @@ if (!confirmed) {
                 (sum, item) => sum + Number(item.final_amount), 0
             );
             if (matching.length !== groupOrderIds.length ||
+                matching.some((item) => item.fully_processed !== true) ||
                 !Number.isFinite(freshTotal) ||
                 Math.abs(freshTotal - billTotal) > 0.001) {
                 await showStaffNotice("Tilauksen summa on muuttunut. Päivitä lasku ennen maksua.");
