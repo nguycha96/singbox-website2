@@ -2474,6 +2474,10 @@ if (!confirmed) {
 
             /* PAYMENT */
 
+            // Kokonaan peruutetulle 0,00 € tilaukselle ei näytetä
+            // turhaa maksupainiketta. Peruutushistoria jää näkyviin.
+            if (billTotal > 0) {
+
             const paidButton =
                 document.createElement(
                     "button"
@@ -2530,6 +2534,7 @@ if (!confirmed) {
             bill.appendChild(
                 paidButton
             );
+            }
 
 
             ordersColumn.appendChild(
