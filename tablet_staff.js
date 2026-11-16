@@ -867,6 +867,124 @@ async function showStaffOrderDiscountDialog(order) {
     percentInput.focus();
 }
 
+/* =========================================================
+   ITEM DISCOUNTS — read-only preview (step 310)
+   Saving remains disabled until backend accounting checks finish.
+========================================================= */
+
+async function showStaffItemDiscountPreview(item, currentDiscounts = []) {
+    const qty = Number(item.deliveredQuantity);
+    const unitPrice = Number(item.unitPrice);
+    if (!Number.isInteger(qty) || qty < 1 || !Number.isFinite(unitPrice)) {
+        await showStaffNotice("Tuotteen toimitettu määrä tai hinta puuttuu.");
+        return;
+    }
+
+    const overlay = document.createElement("div");
+    overlay.className = "staff-modal-overlay";
+    const modal = document.createElement("div");
+    modal.className = "staff-modal";
+    modal.setAttribute("role", "dialog");
+    modal.setAttribute("aria-modal", "true");
+    modal.setAttribute("aria-label", "Tuotekohtaisen alennuksen esikatselu");
+    const heading = document.createElement("h3");
+    heading.textContent = `Tuotealennus · ${item.productName}`;
+    const description = document.createElement("p");
+    description.textContent = `Toimitettu ${qty} kpl · ${staffEuro(unitPrice)} / kpl`;
+
+    const form = document.createElement("form");
+    form.style.cssText = "display:flex;flex-direction:column;gap:12px;";
+    const quantityLabel = document.createElement("label");
+    quantityLabel.textContent = "Alennettavien kappaleiden määrä";
+    const quantityInput = document.createElement("input");
+    quantityInput.type = "number";
+    quantityInput.min = "1";
+    quantityInput.max = String(qty);
+    quantityInput.step = "1";
+    quantityInput.value = "1";
+    quantityInput.style.width = "100%";
+    quantityLabel.appendChild(quantityInput);
+
+    const percentLabel = document.createElement("label");
+    percentLabel.textContent = "Alennus (%)";
+    const percentInput = document.createElement("input");
+    percentInput.type = "number";
+    percentInput.min = "1";
+    percentInput.max = "100";
+    percentInput.step = "0.01";
+    percentInput.value = "50";
+    percentInput.style.width = "100%";
+    percentLabel.appendChild(percentInput);
+
+    const reasonLabel = document.createElement("label");
+    reasonLabel.textContent = "Alennuksen syy";
+    const reasonInput = document.createElement("textarea");
+    reasonInput.rows = 2;
+    reasonInput.maxLength = 500;
+    reasonInput.placeholder = "Esim. henkilökuntaetu";
+    reasonInput.style.width = "100%";
+    reasonLabel.appendChild(reasonInput);
+
+    const preview = document.createElement("p");
+    preview.style.fontWeight = "700";
+    const existing = document.createElement("p");
+    existing.style.fontSize = "0.85rem";
+    const existingQty = currentDiscounts.reduce((total, d) => total + Number(d.quantity || 0), 0);
+    existing.textContent = existingQty > 0
+        ? `Tälle tuoteriville on jo kirjattu ${existingQty} kpl alennuksia. Jäljellä ${Math.max(0, qty - existingQty)} kpl.`
+        : "Tälle tuoteriville ei ole kirjattu alennuksia.";
+    const notice = document.createElement("p");
+    notice.textContent = "Esikatselu: tallennus ei ole vielä käytössä.";
+    function refresh() {
+        const count = Number(quantityInput.value);
+        const percent = Number(percentInput.value);
+        if (!Number.isInteger(count) || count < 1 || count > qty - existingQty ||
+            !Number.isFinite(percent) || percent <= 0 || percent > 100 ||
+            Math.abs(percent * 100 - Math.round(percent * 100)) > 0.000001) {
+            preview.textContent = "Tarkista määrä ja alennusprosentti.";
+            return;
+        }
+        const originalCents = Math.round(unitPrice * 100) * count;
+        const discountCents = Math.round(originalCents * percent / 100);
+        preview.textContent =
+            `${count} kpl: ${staffEuro(originalCents / 100)} → ${staffEuro((originalCents - discountCents) / 100)}`;
+    }
+    quantityInput.addEventListener("input", refresh);
+    percentInput.addEventListener("input", refresh);
+    refresh();
+
+    const actions = document.createElement("div");
+    actions.className = "staff-modal-actions";
+    const closeButton = document.createElement("button");
+    closeButton.type = "button";
+    closeButton.textContent = "SULJE";
+    const saveButton = document.createElement("button");
+    saveButton.type = "button";
+    saveButton.className = "staff-modal-confirm";
+    saveButton.textContent = "TALLENNA ALENNUS";
+    saveButton.disabled = true;
+    saveButton.title = "Tallennus ei ole vielä käytössä";
+    actions.append(closeButton, saveButton);
+    form.append(quantityLabel, percentLabel, reasonLabel, preview, existing, notice, actions);
+    modal.append(heading, description, form);
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+    document.body.classList.add("staff-modal-open");
+    const oldFocus = document.activeElement;
+    function close() {
+        document.removeEventListener("keydown", onKeyDown);
+        overlay.remove();
+        document.body.classList.remove("staff-modal-open");
+        if (oldFocus?.isConnected && oldFocus.focus) oldFocus.focus();
+    }
+    function onKeyDown(event) {
+        if (event.key === "Escape") close();
+    }
+    document.addEventListener("keydown", onKeyDown);
+    closeButton.addEventListener("click", close);
+    quantityInput.focus();
+}
+
 let lastRoomsRenderKey =
     null;
 
@@ -985,6 +1103,7 @@ async function loadRooms(force = false) {
 // A separate, authorized payment preview prevents the UI from
 // mistaking pre-discount totals for amounts due.
 let staffOrderPaymentPreviews = null;
+let staffItemDiscountDetails = [];
 
 let roomOrders = [];
 
@@ -1032,6 +1151,21 @@ if (deviceUuid) {
     }
 }
 
+// Read existing per-item discounts without opening any write permissions.
+staffItemDiscountDetails = [];
+if (deviceUuid) {
+    const { data: discounts, error: detailsError } =
+        await staffSupabaseClient.rpc(
+            "staff_get_item_discount_details",
+            { p_device_uuid: deviceUuid }
+        );
+    if (!detailsError && Array.isArray(discounts)) {
+        staffItemDiscountDetails = discounts;
+    } else if (detailsError) {
+        console.error("Could not read item discount details:", detailsError);
+    }
+}
+
     const now =
     new Date();
    
@@ -1075,6 +1209,7 @@ const renderKey = JSON.stringify({
     bookings: bookings || [],
     roomOrders: roomOrders || [],
     orderPaymentPreviews: staffOrderPaymentPreviews,
+    itemDiscountDetails: staffItemDiscountDetails,
     bookingPhases
 });
 
@@ -2391,7 +2526,45 @@ function renderGroupedRows(
             row.appendChild(actions);
         }
 
-        destination.appendChild(row);
+        if (quantityField === "delivered" && previewsComplete) {
+            // Keep a separate control per underlying order item ID.
+            // Grouped rows can combine items from different orders.
+            for (const entry of item.orderItems) {
+                const sourceItem = group.orderItems.find(
+                    x => Number(x.orderItemId) === Number(entry.orderItemId)
+                );
+                if (!sourceItem) continue;
+                const discounts = staffItemDiscountDetails.filter(
+                    d => Number(d.order_item_id) === Number(entry.orderItemId)
+                );
+                const discountedQty = discounts.reduce(
+                    (sum, d) => sum + Number(d.quantity || 0), 0
+                );
+                const perItemRow = document.createElement("div");
+                perItemRow.style.cssText =
+                    "display:flex;align-items:center;justify-content:space-between;gap:8px;margin:4px 0 8px 12px;flex-wrap:wrap;";
+                const note = document.createElement("span");
+                note.style.fontSize = "0.85rem";
+                const discountAmount = discounts.reduce(
+                    (sum, d) => sum + Number(d.discount_amount || 0), 0
+                );
+                note.textContent = discountedQty > 0
+                    ? `${discountedQty} kpl alennettu · −${staffEuro(discountAmount)}`
+                    : `${sourceItem.deliveredQuantity} kpl · ei alennusta`;
+                const button = document.createElement("button");
+                button.type = "button";
+                button.className = "mark-order-delivered";
+                button.textContent = "TUOTEALENNUS";
+                button.style.cssText = "width:auto;padding:8px 12px;font-size:0.8rem;";
+                button.addEventListener("click", () =>
+                    showStaffItemDiscountPreview(sourceItem, discounts)
+                );
+                perItemRow.append(note, button);
+                if (!row.isConnected) destination.appendChild(row);
+                destination.appendChild(perItemRow);
+            }
+        }
+        if (!row.isConnected) destination.appendChild(row);
     });
 }
 
